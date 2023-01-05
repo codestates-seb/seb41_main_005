@@ -1,0 +1,60 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.7'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.gigker'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'	//jpa
+	implementation 'org.springframework.boot:spring-boot-starter-web'		//spring web
+	implementation 'org.springframework.boot:spring-boot-starter-validation'// validation
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-mail' 		// mail
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final' // mapper
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'com.google.code.gson:gson'	// gson
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// sql 쿼리 파라미터에 실제 값을 넣기 위한 라이브러리
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1' // 쿼리문을 예쁘게 표시해주는? 설정을 하기 위한 dependency
+
+	// 랜덤 비밀번호 생성하기위한 utility
+	implementation 'org.apache.commons:commons-lang3'
+
+	// 인증 관련
+//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+//	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+//	runtimeOnly	'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	compileOnly 'org.projectlombok:lombok'			//lombok
+	annotationProcessor 'org.projectlombok:lombok'	//lombok
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final' 	// mapper
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'	// mapper
+
+	runtimeOnly 'com.h2database:h2'					//h2 database
+	runtimeOnly 'com.mysql:mysql-connector-j'		//mysql database
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testImplementation 'org.springframework.security:spring-security-test'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
