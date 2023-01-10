@@ -83,6 +83,6 @@ public class Member extends BaseEntity {
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ContentApply> schedules = new ArrayList<>();
 }
