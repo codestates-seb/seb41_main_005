@@ -2,10 +2,10 @@ package com.gigker.server;
 
 import org.junit.jupiter.api.Test;
 
-// @SpringBootTest
+//@SpringBootTest
 class ServerApplicationTests {
 
-	@Test
+	//@Test
 	void contextLoads() {
 	}
 
