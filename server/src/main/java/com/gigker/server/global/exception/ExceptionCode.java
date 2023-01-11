@@ -17,7 +17,7 @@ public enum ExceptionCode {
 	EXISTS_MEMBER(409,"Member exists"),
 	EXISTS_EMAIL(409, "This Email is already in use"),
 	EXISTS_NICKNAME(409, "This nickname is already in use"),
-  EXISTS_APPLY(409, "Applicant already applied");
+  	EXISTS_APPLY(409, "Applicant already applied");
 
 	int code;
 	String message;
