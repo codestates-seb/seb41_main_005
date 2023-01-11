@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ExceptionCode {
 
+	NO_PERMISSION(400, "No permission"), //권한이 없는 사용자의 요청
 	// 404
 	NOT_FOUND_MEMBER(404, "Member not found"),
 	NOT_FOUND_CONTENT(404, "Content not found"),

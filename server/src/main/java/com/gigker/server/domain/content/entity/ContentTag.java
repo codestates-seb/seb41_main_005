@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class ContentTag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long tagContentId;
+	private Long contentTagId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tag_id")
