@@ -23,7 +23,7 @@ public class MemberPostDto {
 
     //닉네임
     @NotBlank(message = "닉네임은 공백 없이 5-16자여야 합니다.")
-    @Length(min = 5, max = 16)
+    @Length(min = 2, max = 16)
     private String nickName;
 
     //사진Url
@@ -32,6 +32,6 @@ public class MemberPostDto {
 
     //자기소개
     @NotBlank
-    @Length(max = 200)
+    @Length(max = 150)
     private String about;
 }
