@@ -3,15 +3,7 @@ package com.gigker.server.domain.member.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import com.gigker.server.domain.common.BaseEntity;
 import com.gigker.server.domain.content.entity.Bookmark;
@@ -19,18 +11,35 @@ import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.review.entity.Review;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Getter
+@Getter @Builder
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class Member extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "member_id")
 	private Long memberId;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "profile_id" )
+	private Profile profile;
+	public void addProfile(Profile profile){this.profile = profile;}
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Content> contents = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Bookmark> bookmarks = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Review> reviews = new ArrayList<>();
+
+	@OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ContentApply> schedules = new ArrayList<>();
 
 	//이메일
 	@Column(nullable = false, unique = true)
@@ -52,12 +61,10 @@ public class Member extends BaseEntity {
 	@Column(nullable = false)
 	private String about;
 
-	@OneToOne
-	@JoinColumn(name = "profile_id", nullable = false)
-	private Profile profile;
-
 	//회원 기본 상태 = 활동중
-	private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
+	@Enumerated(value = EnumType.STRING)
+	@Column(length = 20, nullable = false)
+	private MemberStatus memberStatus;
 
 	//회원 상태
 	public enum MemberStatus {
@@ -73,16 +80,4 @@ public class Member extends BaseEntity {
 			this.status = status;
 		}
 	}
-
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Content> contents = new ArrayList<>();
-
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Bookmark> bookmarks = new ArrayList<>();
-
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Review> reviews = new ArrayList<>();
-
-	@OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ContentApply> schedules = new ArrayList<>();
 }
