@@ -23,7 +23,7 @@ public class ContentApply {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", nullable = false)
-	private Member applicantId;
+	private Member applicant;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "content_id", nullable = false)

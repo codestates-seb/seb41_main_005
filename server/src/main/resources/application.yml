@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: gigker
   h2:
     console:
       enabled: true
@@ -7,34 +9,46 @@ spring:
     url: jdbc:h2:mem:test
   jpa:
     hibernate:
-      ddl-auto: create  # (1) 스키마 자동 생성
-    show-sql: true      # (2) SQL 쿼리 출력
+      ddl-auto: create  # auto create schema
+    show-sql: true      # show sql query
+    properties:
+      hibernate:
+        format_sql: true  # SQL pretty print
+  output:
+    ansi:
+      enabled: always   # colorful console
 
+server:
+  port: 8080
+  servlet:
+    encoding:
+      force-response: true
+
+# configuration to put the actual value in sql query parameter
+decorator.datasource.p6spy:
+  enable-logging: true
+  multiline: true
+
+# logging above debugs
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
 
 #spring:
-#  application:
-#    name: gigker
 #  jpa:
-#    hibernate:
-#      ddl-auto: create-drop  # ??? ?? ??
-#    show-sql: true      # SQL ?? ??
-#    properties:
-#      hibernate:
-#        format_sql: true  # SQL pretty print
-#    database: mysql   # ?? ?? ??
+#    database: mysql
 #    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 #
 #
 ##  datasource:
 ##    driver-class-name: com.mysql.cj.jdbc.Driver
-##    url: jdbc:mysql://localhost:3306/gigkerdev?allowPublicKeyRetrieval=true&characterEncoding=UTF-8 # ????, ?????
-##    username: ${MYSQL_NAME} #root # ????? ?????.
-##    password: ${MYSQL_SECRET} #?? mysql ??? ??? ????
+##    url: jdbc:mysql://localhost:3306/gigkerdev?allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+##    username: ${MYSQL_NAME}
+##    password: ${MYSQL_SECRET}
 #
-#server:
-#  servlet:
-#    encoding:
-#      force-response: true
 ##  ssl:
 ##    key-store-type: PKCS12
 ##    key-store: classpath:localhost.p12      #HTTPS SETTING
@@ -43,15 +57,14 @@ spring:
 #mail:
 #  address:
 #    admin: admin@gmail.com
+#  smtp:
+#    host: smtp.gmail.com
+#    port: 587
+#    auth: true
+#    starttls:
+#      enable: true
+#
 #jwt:
-#  key: ${JWT_SECRET_KEY} #???? ??
+#  key: ${JWT_SECRET_KEY}
 #  access-token-expiration-minutes: 40
 #  refresh-token-expiration-minutes: 420
-#
-## ??
-#logging:
-#  level:
-#    org:
-#      springframework:
-#        orm:
-#          jpa: DEBUG
