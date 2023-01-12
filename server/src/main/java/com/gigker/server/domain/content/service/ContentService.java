@@ -5,6 +5,7 @@ import com.gigker.server.domain.content.repository.ContentRepository;
 import com.gigker.server.domain.common.CustomBeanUtils;
 import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.repository.MemberRepository;
+import com.gigker.server.domain.member.service.MemberService;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ContentService {
     private final ContentRepository contentRepository;
-    private final MemberRepository memberRepository;
-//    private final MemberService memberService;
+    private final MemberService memberService;
     private final CustomBeanUtils beanUtils;
 
     public Content createContent(Content content) {
-//        Member member = memberService.findMember(getCurrentMember().getMemberId());
-//        content.setMember(member);
+        Member member = memberService.findMemberById(content.getMember().getMemberId());
+        content.setMember(member);
 
         return contentRepository.save(content);
     }

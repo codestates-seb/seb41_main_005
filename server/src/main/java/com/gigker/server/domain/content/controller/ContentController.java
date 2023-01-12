@@ -20,7 +20,7 @@ public class ContentController {
     private final ContentMapper contentMapper;
 
     @PostMapping
-    public ResponseEntity postContent(@Valid @RequestBody ContentDto.Post contentPostDto) {
+    public ResponseEntity contentPostDtoToContent(@Valid @RequestBody ContentDto.Post contentPostDto) {
         Content content = contentMapper.contentPostDtoToContent(contentPostDto);
         Content createContent = contentService.createContent(content);
 

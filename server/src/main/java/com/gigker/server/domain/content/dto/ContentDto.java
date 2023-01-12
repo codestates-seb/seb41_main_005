@@ -20,7 +20,8 @@ public class ContentDto {
     @Setter
     @AllArgsConstructor
     public static class Post{
-        private  String title;
+        private Long memberId;
+        private String title;
         private ContentType contentType;
         private Integer recruitingCount;
         private String workContent;
