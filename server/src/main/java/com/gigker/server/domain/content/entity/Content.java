@@ -93,7 +93,7 @@ public class Content extends BaseEntity {
 
 	// 프리미엄 여부
 	@Column//(nullable = false)
-	private boolean isPremium;
+	private Boolean isPremium;
 
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ContentApply> applies = new ArrayList<>();

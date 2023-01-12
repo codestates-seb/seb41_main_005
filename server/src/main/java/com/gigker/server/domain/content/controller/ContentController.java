@@ -11,6 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +32,17 @@ public class ContentController {
 //                new SingleResponseDto<>(contentMapper.contentToContentResponseDto(content)), HttpStatus.CREATED
 //        );
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{content_id}")
+    public ResponseEntity patchContent(@Valid @RequestBody ContentDto.Patch contentPatch,
+                                        @PathVariable("content_id") @Positive long contentId) {
+        contentPatch.setContentId(contentId);
+
+        Content content = contentMapper.contentPatchDtoToContent(contentPatch);
+        Content updateContent = contentService.updateContent(content); // DB 업데이트
+//        ContentDto.Response response = contentMapper.contentDtoToContent(updateContent);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

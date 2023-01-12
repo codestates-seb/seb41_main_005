@@ -34,27 +34,27 @@ public class ContentDto {
         private String location;
         private int price;
         private LocalDateTime deadLine;
-        private boolean isPremium;
+        private Boolean isPremium;
     }
 
     @Getter
     @Setter
     @AllArgsConstructor
     public static class Patch{
-        private long contentId;
+        private  long contentId;
         private  String title;
         private Integer recruitingCount;
         private String workContent;
         private String qualification;
         private String preference;
         private String other;
-        private Category category;
-        private List<ContentTag> tags;
-        private List<WorkTime> workTimes;
+//        private Category category;
+//        private List<ContentTag> tags;
+//        private List<WorkTime> workTimes;
         private String location;
         private int price;
         private LocalDateTime deadLine;
-        private boolean isPremium;
+        private Boolean isPremium;
         private LocalDateTime relistedAt;
     }
 
@@ -80,7 +80,7 @@ public class ContentDto {
         private LocalDateTime relistedAt;
         private LocalDateTime deadLine;
         private Content.Status status;
-        private boolean isPremium;
+        private Boolean isPremium;
 //        private List<ContentApply> applies;
     }
 }

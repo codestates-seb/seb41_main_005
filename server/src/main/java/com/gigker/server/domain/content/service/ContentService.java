@@ -12,13 +12,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional
 @RequiredArgsConstructor
 @Service
 public class ContentService {
     private final ContentRepository contentRepository;
     private final MemberService memberService;
-    private final CustomBeanUtils beanUtils;
+    private final CustomBeanUtils<Content> beanUtils;
 
     public Content createContent(Content content) {
         Member member = memberService.findMemberById(content.getMember().getMemberId());
@@ -27,15 +29,15 @@ public class ContentService {
         return contentRepository.save(content);
     }
 
-    public Content updateContent(Content content) {
-//        Content findContent = findVerifiedContent(content.getContentId());
+    public Content updateContent(Content content) //throws BusinessLogicException
+    {
+        Content findContent = findContentByContentId(content.getContentId());
 ////findContent(대상)에 대한 수정요청자 권한 검증, 글 작성자가 아닌경우 400 예외코드
 //        if(findContent.getMember().getMemberId() != getCurrentMember().getMemberId())
 //            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
 ////NOT Null 속성값을 수정하지 않으면 기존 게시물의 속성을 그대로 사용
-//        Content updateContent = beanUtils.copyNonNullProperties(content, findContent);
-//        updateContent.setTags(content.getTags());
-        return null;
+        Content updateContent = beanUtils.copyNonNullProperties(content, findContent);
+        return contentRepository.save(updateContent);
     }
 
     public Content findContentByContentId(long contentId) {

@@ -40,7 +40,7 @@ public class Review {
 	private String secondComment;
 
 	@Column(nullable = false)
-	private boolean isAnonymous;
+	private Boolean isAnonymous;
 
 	@Column(nullable = false)
 	private ContentType contentType;

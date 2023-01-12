@@ -13,10 +13,8 @@ public interface ContentMapper {
     @Mapping(source = "memberId", target = "member.memberId")
     Content contentPostDtoToContent(ContentDto.Post requestBody);
 
-    default Content contentPatchDtoToContent(ContentDto.Patch requestBody) {
 
-        return null;
-    }
+    Content contentPatchDtoToContent(ContentDto.Patch requestBody);
 
 //    default ContentDto.Response contentToContentResponseDto(Content content){
 //        List<ContentTag> contentTags = content.getTags();
