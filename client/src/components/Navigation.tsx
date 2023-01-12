@@ -57,7 +57,7 @@ const Navigation = () => {
   return (
     <NavBar>
       <LogoContainer href="/">
-        <Logo />
+        <Logo width={65} height={65} />
       </LogoContainer>
       <LinkContainer>
         <LinkButton>홈</LinkButton>
