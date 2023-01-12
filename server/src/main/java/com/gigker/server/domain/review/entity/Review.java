@@ -17,12 +17,17 @@ import com.gigker.server.domain.common.LikeType;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.member.entity.Member;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
