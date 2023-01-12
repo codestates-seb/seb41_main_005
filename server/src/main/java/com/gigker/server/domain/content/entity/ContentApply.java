@@ -56,7 +56,11 @@ public class ContentApply extends BaseEntity {
 		}
 	}
 
-	public void changeStatus(ApplyStatus applyStatus) {
-		this.applyStatus = applyStatus;
+	public void accept() {
+		this.applyStatus = ApplyStatus.MATCH;
+	}
+
+	public void complete() {
+		this.applyStatus = ApplyStatus.COMPLETE;
 	}
 }
