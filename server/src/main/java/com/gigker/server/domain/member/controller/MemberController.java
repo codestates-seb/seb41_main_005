@@ -1,6 +1,7 @@
 package com.gigker.server.domain.member.controller;
 
 import com.gigker.server.domain.member.dto.MemberPostDto;
+import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.mapper.MemberMaper;
 import com.gigker.server.domain.member.mapper.ProfileMaper;
 import com.gigker.server.domain.member.service.MemberService;
@@ -42,6 +43,12 @@ public class MemberController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
+	//회원 조회
+//	@GetMapping("/{member-id}")
+//	public ResponseEntity getMember(@PathVariable("member-id") long memberId)
+//	{
+//		//Member findeMember =
+//	}
 
 
 }
