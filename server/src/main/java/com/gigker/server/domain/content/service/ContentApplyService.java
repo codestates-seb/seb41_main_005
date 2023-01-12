@@ -1,6 +1,7 @@
 package com.gigker.server.domain.content.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -29,9 +30,10 @@ public class ContentApplyService {
 	@Transactional
 	public ContentApply createApply(ContentApply apply) {
 		// Member, Content, ContentApply 유효성 검사
-		Member member = memberService.findMemberById(apply.getApplicant().getMemberId());
+		Member applicant = memberService.findMemberById(apply.getApplicant().getMemberId());
 		Content content = contentService.findContentByContentId(apply.getContent().getContentId());
-		verifyExistMemberApply(member, content);
+		verifyApplicantEqualToWriter(applicant, content);
+		verifyExistMemberApply(applicant, content);
 
 		return applyRepository.save(apply);
 	}
@@ -80,11 +82,18 @@ public class ContentApplyService {
 	}
 
 	// 해당 글에 이미 신청내역이 있는지 확인
-	private void verifyExistMemberApply(Member member, Content content) {
-		Optional<ContentApply> optionalApply = applyRepository.findByApplicantAndContent(member, content);
+	private void verifyExistMemberApply(Member applicant, Content content) {
+		Optional<ContentApply> optionalApply = applyRepository.findByApplicantAndContent(applicant, content);
 
 		if (optionalApply.isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.EXISTS_APPLY);
+		}
+	}
+
+	// 신청자가 글 작성자인지 확인
+	private void verifyApplicantEqualToWriter(Member applicant, Content content) {
+		if (Objects.equals(applicant.getMemberId(), content.getMember().getMemberId())) {
+			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST_APPLY);
 		}
 	}
 
@@ -93,6 +102,7 @@ public class ContentApplyService {
 		List<ContentApply> contents = applyRepository.findAllByContent(content);
 
 		contents.stream()
+			.filter(a -> a.getApplyStatus() == ContentApply.ApplyStatus.NONE)
 			.mapToLong(ContentApply::getContentApplyId)
 			.forEach(this::deleteApply);
 	}
