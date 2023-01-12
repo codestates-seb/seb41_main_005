@@ -1,6 +1,7 @@
 package com.gigker.server.domain.content.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.gigker.server.domain.content.dto.ContentApplyDto;
@@ -11,13 +12,12 @@ import com.gigker.server.domain.content.entity.ContentApply;
 	unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ContentApplyMapper {
 
-	// TODO : Member, Content의 Mapper가 만들어지면 매핑
-	// @Mapping(target = "applicant", source = "member")
-	// @Mapping(target = "content", source = "content")
-	ContentApply postToApply(ContentApplyDto.Post post);
+	@Mapping(source = "post.applicantId", target = "applicant.memberId")
+	@Mapping(source = "contentId", target = "content.contentId")
+	ContentApply postToApply(ContentApplyDto.Post post, Long contentId);
 
-	// @Mapping(target = "nickName", source = "member.nickName")
-	// @Mapping(target = "pictureUrl", source = "member.pictureUrl")
-	// @Mapping(target = "about", source = "member.about")
+	@Mapping(source = "applicant.nickName", target = "nickName")
+	@Mapping(source = "applicant.pictureUrl", target = "pictureUrl")
+	@Mapping(source = "applicant.about", target = "about")
 	ContentApplyDto.Response applyToResponse(ContentApply apply);
 }
