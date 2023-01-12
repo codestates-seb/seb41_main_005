@@ -45,9 +45,9 @@ public class MemberService {
 
 
     //회원 조회
-    private Member findMemberById(Long memberid)
+    public Member findMemberById(Long memberId)
     {
-        return memberRepository.findById(memberid)
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_MEMBER));
     }
 

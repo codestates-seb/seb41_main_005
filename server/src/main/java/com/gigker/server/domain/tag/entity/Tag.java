@@ -12,12 +12,11 @@ import javax.persistence.OneToMany;
 
 import com.gigker.server.domain.content.entity.ContentTag;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Entity
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag {
 	@Id
