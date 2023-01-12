@@ -4,18 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
+import lombok.Data;
+import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -25,11 +17,10 @@ import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.member.entity.Member;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Entity
+@Data
 @NoArgsConstructor
 public class Content extends BaseEntity {
 	@Id
@@ -96,6 +87,10 @@ public class Content extends BaseEntity {
 	@Column
 	private LocalDateTime deadLine;
 
+	@Enumerated(value = EnumType.STRING)
+	@Column(length = 20, nullable = false)
+	private Status status;
+
 	// 프리미엄 여부
 	@Column(nullable = false)
 	private boolean isPremium;
@@ -105,4 +100,18 @@ public class Content extends BaseEntity {
 
 	@OneToMany(mappedBy = "content")
 	private List<Bookmark> bookmarks = new ArrayList<>();
+
+	public enum Status {
+		RECRUITING("모집중"),
+		MATCHED("모집완료"),
+		COMPLETED("종료된 게시물"),
+		EXPIRED("모집기간 종료");
+
+		@Getter
+		private String status;
+
+		Status(String status) {
+			this.status = status;
+		}
+	}
 }
