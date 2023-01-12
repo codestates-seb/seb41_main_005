@@ -55,6 +55,7 @@ public class Member extends BaseEntity {
 
 	//사진Url
 	@Column(nullable = false)
+	@Setter
 	private String pictureUrl;
 
 	//자기소개
