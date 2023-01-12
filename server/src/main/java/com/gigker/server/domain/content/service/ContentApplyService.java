@@ -63,7 +63,7 @@ public class ContentApplyService {
 		Optional<ContentApply> optionalApply = applyRepository.findByApplicantAndContent(member, content);
 
 		if (optionalApply.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.APPLY_EXISTS);
+			throw new BusinessLogicException(ExceptionCode.EXISTS_APPLY);
 		}
 	}
 }

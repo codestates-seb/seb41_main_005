@@ -32,6 +32,12 @@ public class MemberService {
     }
 
 
+    //회원 조회
+    private Member findMemberById(Long memberid)
+    {
+        return memberRepository.findById(memberid)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_MEMBER));
+    }
 
 
     //이메일 중복 검사
@@ -48,6 +54,7 @@ public class MemberService {
         if(member.isPresent())
             throw new BusinessLogicException(ExceptionCode.EXISTS_MEMBER);
     }
+
 
 
 
