@@ -37,4 +37,9 @@ public class ContentService {
 //        updateContent.setTags(content.getTags());
         return null;
     }
+
+    public Content findContentByContentId(long contentId) {
+        return contentRepository.findById(contentId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_CONTENT));
+    }
 }
