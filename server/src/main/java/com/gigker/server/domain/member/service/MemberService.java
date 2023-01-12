@@ -6,9 +6,13 @@ import com.gigker.server.domain.member.repository.MemberRepository;
 import com.gigker.server.domain.member.repository.ProfileRepository;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
+import com.gigker.server.global.s3.service.S3Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Transactional
@@ -16,6 +20,8 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final ProfileRepository profileRepository;
+    @Autowired
+    private S3Service s3Service;
 
     public MemberService(MemberRepository memberRepository, ProfileRepository profileRepository) {
         this.memberRepository = memberRepository;
@@ -23,11 +29,17 @@ public class MemberService {
     }
 
     //회원가입
-    public Member saveMember(Member member,Profile profile){
+    public Member saveMember(Member member, Profile profile, MultipartFile image) throws IOException {
         verifyMemberByEmail(member.getEmail());
         verifyMemberByNickName(member.getNickName());
         profileRepository.save(profile);    //member회원가입시 프로필 정보 db 생성
-        member.addProfile(profile);
+
+        if(!image.isEmpty()){   //이미지 파일이 들어있으면 S3에 파일저장하고 Member객체에 URl변환하여 넣어줌.
+            String imgUrl = s3Service.imgUpload(image,"images");
+            member.setPictureUrl(imgUrl);
+        }
+
+        member.addProfile(profile);         //member에 해당profile add
         return memberRepository.save(member);
     }
 
@@ -54,10 +66,4 @@ public class MemberService {
         if(member.isPresent())
             throw new BusinessLogicException(ExceptionCode.EXISTS_MEMBER);
     }
-
-
-
-
-
-
 }

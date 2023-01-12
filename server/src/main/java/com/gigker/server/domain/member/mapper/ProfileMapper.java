@@ -4,7 +4,7 @@ import com.gigker.server.domain.member.entity.Profile;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface ProfileMaper {
+public interface ProfileMapper {
     default Profile profileCreate(){
         Profile profile = Profile.builder()
                 .buyLikeCount(0)
