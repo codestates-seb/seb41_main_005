@@ -23,9 +23,8 @@ public class ContentService {
     public Content createContent(Content content) {
 //        Member member = memberService.findMember(getCurrentMember().getMemberId());
 //        content.setMember(member);
-        Content saveContent = contentRepository.save(content);
 
-        return saveContent;
+        return contentRepository.save(content);
     }
 
     public Content updateContent(Content content) {

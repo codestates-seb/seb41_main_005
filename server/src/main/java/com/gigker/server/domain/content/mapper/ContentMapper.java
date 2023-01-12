@@ -28,7 +28,7 @@ public interface ContentMapper {
 //                    return tag;
 //                }).collect(Collectors.toList());
         content.setContentId(content.getContentId());
-        content.setMember(member);
+        content.setMember(content.getMember());
         content.setContentType(requestBody.getContentType());
         content.setTitle(requestBody.getTitle());
         content.setRecruitingCount(requestBody.getRecruitingCount());
@@ -36,12 +36,12 @@ public interface ContentMapper {
         content.setQualification(requestBody.getQualification());
         content.setPreference(requestBody.getPreference());
         content.setOther(requestBody.getOther());
-        content.setCategory(requestBody.getCategory());
+//        content.setCategory(requestBody.getCategory());
 //        content.setTags(tags);
-        content.setWorkTimes(requestBody.getWorkTimes());
+//        content.setWorkTimes(requestBody.getWorkTimes());
         content.setLocation(requestBody.getLocation());
         content.setPrice(requestBody.getPrice());
-        content.setStatus(Content.Status.RECRUITING);
+        content.setPremium(requestBody.isPremium());
 
         return content;
     }
@@ -51,38 +51,38 @@ public interface ContentMapper {
         return null;
     }
 
-    default ContentDto.Response contentToContentResponseDto(Content content){
-        List<ContentTag> contentTags = content.getTags();
-        List<ContentTagResponseDto> tagResponseDtos = new LinkedList<>();
-        for(int i=0; i<contentTags.size(); i++){
-            ContentTag ct = contentTags.get(i);
-            tagResponseDtos.add(
-                    new ContentTagResponseDto(ct.getContentTagId(), ct.getTag().getName()
-                    ));
-        }
-        ContentDto.Response contentResponseDto =
-                new ContentDto.Response(
-                        content.getContentId(),
-                        content.getMember().getMemberId(),
-                        content.getTitle(),
-                        content.getContentType(),
-                        content.getRecruitingCount(),
-                        content.getWorkContent(),
-                        content.getQualification(),
-                        content.getPreference(),
-                        content.getOther(),
-                        content.getLocation(),
-                        content.getCategory(),
-                        content.getWorkTimes(),
-                        content.getTags(),
-                        content.getCreatedAt(),
-                        content.getLastModifiedAt(),
-                        content.getRelistedAt(),
-                        content.getDeadLine(),
-                        content.getStatus(),
-                        content.isPremium(),
-                        content.getApplies());
-
-        return contentResponseDto;
-    }
+//    default ContentDto.Response contentToContentResponseDto(Content content){
+//        List<ContentTag> contentTags = content.getTags();
+//        List<ContentTagResponseDto> tagResponseDtos = new LinkedList<>();
+//        for(int i=0; i<contentTags.size(); i++){
+//            ContentTag ct = contentTags.get(i);
+//            tagResponseDtos.add(
+//                    new ContentTagResponseDto(ct.getContentTagId(), ct.getTag().getName()
+//                    ));
+//        }
+//        ContentDto.Response contentResponseDto =
+//                new ContentDto.Response(
+//                        content.getContentId(),
+//                        content.getMember().getMemberId(),
+//                        content.getTitle(),
+//                        content.getContentType(),
+//                        content.getRecruitingCount(),
+//                        content.getWorkContent(),
+//                        content.getQualification(),
+//                        content.getPreference(),
+//                        content.getOther(),
+//                        content.getLocation(),
+//                        content.getCategory(),
+//                        content.getWorkTimes(),
+//                        content.getTags(),
+//                        content.getCreatedAt(),
+//                        content.getLastModifiedAt(),
+//                        content.getRelistedAt(),
+//                        content.getDeadLine(),
+//                        content.getStatus(),
+//                        content.isPremium(),
+//                        content.getApplies());
+//
+//        return contentResponseDto;
+//    }
 }

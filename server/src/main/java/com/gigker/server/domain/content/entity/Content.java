@@ -27,15 +27,15 @@ public class Content extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long contentId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", updatable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "member_id")
+//	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member member;
 
-	@Column(nullable = false)
+	@Column//(nullable = false)
 	private ContentType contentType;
 
-	@Column(nullable = false)
+	@Column//(nullable = false)
 	private String title;
 
 	// 모집 인원
@@ -43,7 +43,7 @@ public class Content extends BaseEntity {
 	private Integer recruitingCount;
 
 	// 업무 내용
-	@Column(columnDefinition = "MEDIUMTEXT", nullable = false)
+	@Column//(columnDefinition = "MEDIUMTEXT", nullable = false)
 	private String workContent;
 
 	// 자격 요건
@@ -58,25 +58,25 @@ public class Content extends BaseEntity {
 	@Column(columnDefinition = "MEDIUMTEXT")
 	private String other;
 
-	// 카테고리
-	@OneToOne
-	@JoinColumn(name = "category_id", nullable = false)
-	private Category category;
-
-	// 태그
-	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ContentTag> tags = new ArrayList<>();
-
-	// 업무 시간
-	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<WorkTime> workTimes = new ArrayList<>();
+//	// 카테고리
+//	@OneToOne
+//	@JoinColumn(name = "category_id", nullable = false)
+//	private Category category;
+//
+//	// 태그
+//	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private List<ContentTag> tags = new ArrayList<>();
+//
+//	// 업무 시간
+//	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private List<WorkTime> workTimes = new ArrayList<>();
 
 	// TODO : 지역 정보 추후에 API 연동
-	@Column(nullable = false)
+	@Column//(nullable = false)
 	private String location;
 
 	// 보수
-	@Column(nullable = false)
+	@Column//(nullable = false)
 	private int price;
 
 	// 끌어 올림
@@ -88,11 +88,11 @@ public class Content extends BaseEntity {
 	private LocalDateTime deadLine;
 
 	@Enumerated(value = EnumType.STRING)
-	@Column(length = 20, nullable = false)
+	@Column//(length = 20, nullable = false)
 	private Status status;
 
 	// 프리미엄 여부
-	@Column(nullable = false)
+	@Column//(nullable = false)
 	private boolean isPremium;
 
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)

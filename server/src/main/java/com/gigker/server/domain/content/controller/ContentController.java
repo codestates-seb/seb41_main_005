@@ -8,10 +8,7 @@ import com.gigker.server.global.dto.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,8 +24,9 @@ public class ContentController {
         Content content = contentMapper.contentPostDtoToContent(contentPostDto);
         Content createContent = contentService.createContent(content);
 
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(contentMapper.contentToContentResponseDto(content)), HttpStatus.CREATED
-        );
+//        return new ResponseEntity<>(
+//                new SingleResponseDto<>(contentMapper.contentToContentResponseDto(content)), HttpStatus.CREATED
+//        );
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

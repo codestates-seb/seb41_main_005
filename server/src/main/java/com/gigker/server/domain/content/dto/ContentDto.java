@@ -6,6 +6,7 @@ import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.entity.ContentTag;
+import com.gigker.server.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +27,9 @@ public class ContentDto {
         private String qualification;
         private String preference;
         private String other;
-        private Category category;
-        private List<ContentTag> tags;
-        private List<WorkTime> workTimes;
+//        private Category category;
+//        private List<ContentTag> tags;
+//        private List<WorkTime> workTimes;
         private String location;
         private int price;
         private LocalDateTime deadLine;
@@ -79,6 +80,6 @@ public class ContentDto {
         private LocalDateTime deadLine;
         private Content.Status status;
         private boolean isPremium;
-        private List<ContentApply> applies;
+//        private List<ContentApply> applies;
     }
 }
