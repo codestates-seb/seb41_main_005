@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = MemberMaper.class)
 public interface ContentMapper {
 
     @Mapping(source = "memberId", target = "member.memberId")
