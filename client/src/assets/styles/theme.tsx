@@ -6,6 +6,7 @@ const theme: DefaultTheme = {
     sub1: "#6F38C5",
     sub2: "#6667AB",
     sub3: "#251749",
+    back: "#a9a9a9",
   },
   font: {
     h1: "24px",
