@@ -1,8 +1,8 @@
 import React from "react";
 import { CardProps } from "./CardProps";
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { RootState } from "../../util/store"
+import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { RootState } from "../../util/store";
 
 //import { Link } from "react-router-dom";
 
@@ -64,28 +64,41 @@ export const cards: CardProps[] = [
   },
 ];
 
-const HireArticle: React.FC = () => {
-  const selectedCategory = useSelector((state: RootState) => state.selectedCategory)
-  const selectedLocation = useSelector((state: RootState) => state.selectedLocation)
-  const selectedTag = useSelector((state: RootState) => state.selectedTag)
-  const filteredCards = 
-  selectedCategory === "카테고리" && selectedLocation === "지역" && selectedTag === "" ? cards : 
-  cards.filter(
-    card => 
-      (selectedCategory === "카테고리" || card.categories === selectedCategory) && 
-      (selectedLocation === "지역" || card.location === selectedLocation) && 
-      (selectedTag === "" || card.tag === selectedTag)
+interface DataProps {
+  cardData: {};
+}
+
+const HireArticle: React.FC<DataProps> = () => {
+  const selectedCategory = useSelector(
+    (state: RootState) => state.selectedCategory
   );
+  const selectedLocation = useSelector(
+    (state: RootState) => state.selectedLocation
+  );
+  const selectedTag = useSelector((state: RootState) => state.selectedTag);
+  const filteredCards =
+    selectedCategory === "카테고리" &&
+    selectedLocation === "지역" &&
+    selectedTag === ""
+      ? cards
+      : cards.filter(
+          (card) =>
+            (selectedCategory === "카테고리" ||
+              card.categories === selectedCategory) &&
+            (selectedLocation === "지역" ||
+              card.location === selectedLocation) &&
+            (selectedTag === "" || card.tag === selectedTag)
+        );
   return (
     <HireArticleContainer>
       {filteredCards.map((card, index) => (
-      <Card key={index}>
-        <CardTitle>{card.title}</CardTitle>
-        <CardWriter>작성자 {card.nickname}</CardWriter>
-        <CardPay>보수 {card.price}</CardPay>
-        <CardStart>{card.startWorkTime}</CardStart>
-        <CardEnd>{card.endWorkTime}</CardEnd>
-      </Card>
+        <Card key={index}>
+          <CardTitle>{card.title}</CardTitle>
+          <CardWriter>작성자 {card.nickname}</CardWriter>
+          <CardPay>보수 {card.price}</CardPay>
+          <CardStart>{card.startWorkTime}</CardStart>
+          <CardEnd>{card.endWorkTime}</CardEnd>
+        </Card>
       ))}
     </HireArticleContainer>
   );
@@ -128,6 +141,7 @@ const CardTitle = styled.div`
     margin-top: 10px;
     width: 200px;
     border-bottom: 1px solid #ccc;
+  }
 `;
 
 const CardWriter = styled.div`

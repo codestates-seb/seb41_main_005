@@ -1,18 +1,21 @@
-import { ApplicationState, ApplicationActions } from './types';
+import { ApplicationState, ApplicationActions } from "./types";
 
 const initialState: ApplicationState = {
-  selectedCategory: '카테고리',
-  selectedLocation: '지역',
-  selectedTag: '',
+  selectedCategory: "카테고리",
+  selectedLocation: "지역",
+  selectedTag: "",
 };
 
-export const reducer = (state = initialState, action: ApplicationActions): ApplicationState => {
+export const reducer = (
+  state = initialState,
+  action: ApplicationActions
+): ApplicationState => {
   switch (action.type) {
-    case 'SELECT_CATEGORY':
+    case "SELECT_CATEGORY":
       return { ...state, selectedCategory: action.payload };
-    case 'SELECT_LOCATION':
+    case "SELECT_LOCATION":
       return { ...state, selectedLocation: action.payload };
-    case 'SELECT_TAG':
+    case "SELECT_TAG":
       return { ...state, selectedTag: action.payload };
     default:
       return state;
