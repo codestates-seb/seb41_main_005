@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ContentTagResponseDto {
+    private long ContentId;
     private long tagId;
     private String name;
 }

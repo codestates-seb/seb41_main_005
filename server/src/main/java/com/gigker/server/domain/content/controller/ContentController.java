@@ -1,10 +1,10 @@
 package com.gigker.server.domain.content.controller;
 
-import com.gigker.server.domain.content.dto.ContentDto;
+import com.gigker.server.domain.content.dto.ContentPatchDto;
+import com.gigker.server.domain.content.dto.ContentPostDto;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.mapper.ContentMapper;
 import com.gigker.server.domain.content.service.ContentService;
-import com.gigker.server.global.dto.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +21,7 @@ public class ContentController {
     private final ContentMapper contentMapper;
 
     @PostMapping
-    public ResponseEntity contentPostDtoToContent(@Valid @RequestBody ContentDto.Post contentPostDto) {
+    public ResponseEntity contentPostDtoToContent(@Valid @RequestBody ContentPostDto contentPostDto) {
         Content content = contentMapper.contentPostDtoToContent(contentPostDto);
         Content createContent = contentService.createContent(content);
 
@@ -35,13 +32,13 @@ public class ContentController {
     }
 
     @PatchMapping("/{content_id}")
-    public ResponseEntity patchContent(@Valid @RequestBody ContentDto.Patch contentPatch,
+    public ResponseEntity patchContentDtoToContent(@Valid @RequestBody ContentPatchDto contentPatchDto,
                                         @PathVariable("content_id") @Positive long contentId) {
-        contentPatch.setContentId(contentId);
+        contentPatchDto.setContentId(contentId);
 
-        Content content = contentMapper.contentPatchDtoToContent(contentPatch);
+        Content content = contentMapper.contentPatchDtoToContent(contentPatchDto);
         Content updateContent = contentService.updateContent(content); // DB 업데이트
-//        ContentDto.Response response = contentMapper.contentDtoToContent(updateContent);
+//        Content contentReponseDto = contentMapper.contentDtoToContent(updateContent);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

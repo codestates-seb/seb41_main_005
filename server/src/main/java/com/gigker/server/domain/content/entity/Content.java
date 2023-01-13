@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.gigker.server.domain.member.entity.Profile;
 import lombok.Data;
 import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
@@ -29,7 +30,7 @@ public class Content extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long contentId;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 //	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member member;
@@ -45,7 +46,7 @@ public class Content extends BaseEntity {
 	private Integer recruitingCount;
 
 	// 업무 내용
-	@Column//(columnDefinition = "MEDIUMTEXT", nullable = false)
+	@Column(columnDefinition = "MEDIUMTEXT", nullable = false)
 	private String workContent;
 
 	// 자격 요건
@@ -64,11 +65,11 @@ public class Content extends BaseEntity {
 //	@OneToOne
 //	@JoinColumn(name = "category_id", nullable = false)
 //	private Category category;
-//
-//	// 태그
-//	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private List<ContentTag> tags = new ArrayList<>();
-//
+
+	// 태그
+	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ContentTag> tags = new ArrayList<>();
+
 //	// 업무 시간
 //	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 //	private List<WorkTime> workTimes = new ArrayList<>();

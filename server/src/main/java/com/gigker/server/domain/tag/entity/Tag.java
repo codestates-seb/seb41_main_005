@@ -17,7 +17,7 @@ import lombok.*;
 @Getter
 @Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 public class Tag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
