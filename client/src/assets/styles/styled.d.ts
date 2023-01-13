@@ -7,6 +7,7 @@ declare module "styled-components" {
       sub1: string;
       sub2: string;
       sub3: string;
+      back: string;
     };
     font: {
       h1: string;
