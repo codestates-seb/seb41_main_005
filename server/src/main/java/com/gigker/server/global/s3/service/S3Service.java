@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class S3Service {
 
     //S3 이미지 업로드 이미지URL 반환
     private String imgUpload(File imgUploadFile, String dirName){
-        String fileName = dirName + "/" + imgUploadFile.getName();
+        String fileName = dirName + "/" + uuidRandomCreate(); // 파일명 uuid로 수정
         String uploadImageUrl = putS3(imgUploadFile,fileName);
 
         removeFile(imgUploadFile);  // 로컬에 생성된 File 삭제
@@ -73,5 +74,19 @@ public class S3Service {
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    //UUID.v4 랜덤생성
+    private String uuidRandomCreate(){
+        String resultUuid = "";
+
+        try{
+            UUID uuidTemp = UUID.randomUUID();
+            resultUuid = uuidTemp.toString().replaceAll("-","");
+        }catch(Exception e){
+            log.info("uuidRandomCreate [error][e] ---> " + e);
+            log.info("uuidRandomCreate [error][e.getMessage()] ---> " + e.getMessage());
+        }
+        return resultUuid;
     }
 }
