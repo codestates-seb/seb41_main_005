@@ -34,14 +34,14 @@ public class ContentDto {
         private String location;
         private int price;
         private LocalDateTime deadLine;
-        private Boolean isPremium;
+        private boolean isPremium;
     }
 
     @Getter
     @Setter
     @AllArgsConstructor
     public static class Patch{
-        private  long contentId;
+        private long contentId;
         private  String title;
         private Integer recruitingCount;
         private String workContent;
@@ -54,7 +54,7 @@ public class ContentDto {
         private String location;
         private int price;
         private LocalDateTime deadLine;
-        private Boolean isPremium;
+        private boolean isPremium;
         private LocalDateTime relistedAt;
     }
 
@@ -80,7 +80,7 @@ public class ContentDto {
         private LocalDateTime relistedAt;
         private LocalDateTime deadLine;
         private Content.Status status;
-        private Boolean isPremium;
+        private boolean isPremium;
 //        private List<ContentApply> applies;
     }
 }

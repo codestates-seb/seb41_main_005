@@ -17,8 +17,10 @@ import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.member.entity.Member;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Data
 @NoArgsConstructor
@@ -92,8 +94,8 @@ public class Content extends BaseEntity {
 	private Status status;
 
 	// 프리미엄 여부
-	@Column//(nullable = false)
-	private Boolean isPremium;
+	@Column(nullable = false)
+	private boolean isPremium;
 
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ContentApply> applies = new ArrayList<>();
