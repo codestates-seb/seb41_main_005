@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,6 +33,7 @@ public class ContentApplyService {
 	@Transactional
 	public ContentApply createApply(ContentApply apply) {
 		// Member, Content, ContentApply 유효성 검사
+		// TODO: 글 상태가 "모집 중"인 경우에만 신청 가능하다.
 		Member applicant = memberService.findMemberById(apply.getApplicant().getMemberId());
 		Content content = contentService.findContentByContentId(apply.getContent().getContentId());
 		verifyApplicantEqualToWriter(applicant, content);
@@ -45,6 +49,8 @@ public class ContentApplyService {
 
 		// 중복하여 변경 시도 시 throw Exception
 		if (apply.getApplyStatus() == ContentApply.ApplyStatus.NONE) {
+			// TODO: accept 할 경우 글의 상태도 "모집 완료"로 변경해야한다.
+			// TODO: accept 할 경우 contentId가 다른 경우에도 승인이 되는 오류가 생긴다.
 			apply.accept();
 		} else
 			throw new BusinessLogicException(ExceptionCode.EXISTS_APPLY);
@@ -59,9 +65,11 @@ public class ContentApplyService {
 		return findVerifiedApply(applyId);
 	}
 
-	public List<ContentApply> findAll() {
+	public Page<ContentApply> findAllApplies(Long contentId, int page, int size) {
+		Content content = contentService.findContentByContentId(contentId);
 
-		return null;
+		return applyRepository.findAllByContent(content,
+			PageRequest.of(page, size, Sort.by("contentApplyId").descending()));
 	}
 
 	public void deleteApply(Long applyId) {
