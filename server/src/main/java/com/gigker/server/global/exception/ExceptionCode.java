@@ -7,7 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ExceptionCode {
 
+	// 400 Bad Request (잘못된 요구)
 	NO_PERMISSION(400, "No permission"), //권한이 없는 사용자의 요청
+	BAD_REQUEST_APPLY(400, "Writer cannot apply"),
+
 	// 404
 	NOT_FOUND_MEMBER(404, "Member not found"),
 	NOT_FOUND_CONTENT(404, "Content not found"),

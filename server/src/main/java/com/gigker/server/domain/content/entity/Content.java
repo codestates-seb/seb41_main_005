@@ -27,7 +27,7 @@ public class Content extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long contentId;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 //	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member member;
