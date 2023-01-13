@@ -1,15 +1,13 @@
 import HireArticle, { cards } from "../components/hire/HireArticle";
-import { CardProps } from "../components/hire/CardProps"
 import DropDownMenu from "../components/DropDownMenu";
+import { CardProps } from '../components/hire/CardProps';
 
 function Hire() {
-  const cardComponents = cards.map((card: CardProps) => (
-    <HireArticle key={card.memberId} {...card} />
-  ));
+
   return (
     <div className="Hire">
       <DropDownMenu />
-      {cardComponents}
+      <HireArticle cardData={cards as CardProps[]} />
     </div>
   );
 }

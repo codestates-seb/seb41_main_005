@@ -1,72 +1,87 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components"
 import useDetectClose from "../util/useDetectClose"
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from "../util/store"
+import { selectCategory, selectLocation, selectTag } from "../util/types"
 
 const tags = ['재택근무🏠', '야간🌙', '초보자가능🐣', '최저시급💰', '당일지급💵', '능력활용🧐', '역세권🚇', '식사제공🍴', '경력1년이상💡'];
 
 const TagButton = ({tag}: {tag:string}) => (
   <button>{tag}</button>
 )
-const category = ['외식/음료', '매장관리/판매', '서비스', '사무직', '고객상담/리서치/영업', '생산/건설/노무', 'IT/기술', '디자인', '미디어', '유통/물류', '병원/간호/연구', '교육/강사', '기타'] 
-const territory = ['종로구', '중구', '용산구', '성동구', '광진구', '동대문구', '중랑구', '성북구', '강북구', '도봉구', '노원구', '은평구', '서대문구', '마포구', '양천구','강서구','구로구', '금천구', '영등포구', '동작구','관악구', '서초구','강남구', '송파구', '강동구']
+
+const category = ['카테고리','외식/음료', '매장관리/판매', '서비스', '사무직', '고객상담/영업', '생산/건설/노무', 'IT/기술', '디자인', '미디어', '유통/물류', '병원/간호/연구', '교육/강사', '기타'] 
+const location = ['지역','종로구', '중구', '용산구', '성동구', '광진구', '동대문구', '중랑구', '성북구', '강북구', '도봉구', '노원구', '은평구', '서대문구', '마포구', '양천구','강서구','구로구', '금천구', '영등포구', '동작구','관악구', '서초구','강남구', '송파구', '강동구']
 
 const DropdownMenu = () => {
-  const [selectedCategory, setSelectedCategory] = useState("유통/물류");
-  const [selectedterritory, setSelectedTerritory] = useState("강남구")
-  const [myPageIsOpen, myPageRef, myPageHandler] = useDetectClose(false);
-  const [boardIsOpen, boardRef, boardHandler] = useDetectClose(false);
+  const dispatch = useDispatch();
+  const selectedCategory = useSelector((state: RootState) => state.selectedCategory);
+  const selectedLocation = useSelector((state: RootState) => state.selectedLocation);
+  const selectedTag = useSelector((state: RootState) => state.selectedTag)
+  
+  const handleCategoryClick = (category: string) => {
+    dispatch(selectCategory(category));
+    categoryHandler();
+  }
 
-  const logoutClickHandler = () => {
+  const handleLocationClick = (location: string) => {
+    dispatch(selectLocation(location));
+    locationHandler();
+  }
+
+  const handleTagClick = (tag: string) => {
+    dispatch(selectTag(tag));
+  }
+
+
+  const [categoryIsOpen, categoryRef, categoryHandler] = useDetectClose(false);
+  const [locationIsOpen, locationRef, locationHandler] = useDetectClose(false);
+
+
+  const newHireClickHandler = () => {
     console.log("새 글 작성");
   };
 
-  const handleCategoryClick = (category:string) => {
-    setSelectedCategory(category);
-    myPageHandler();
-  }
-  const handleTerritoryClick = (territory:string) => {
-    setSelectedTerritory(territory);
-    myPageHandler();
-  }
 
   return (
     <>
       <UpperWrapper>
         <DropdownContainer>
-          <DropdownButton onClick={myPageHandler} ref={myPageRef}>
+          <DropdownWrapper onClick={() => handleCategoryClick("category")} ref={categoryRef}>
             <span>{selectedCategory}</span>
-          </DropdownButton>
-          <Menu isDropped={myPageIsOpen}>
-            <Ul>
+          </DropdownWrapper>
+          <DropdownTitle isDropped={categoryIsOpen}>
+            <DropdownList>
               {category.map((category:string) => (
-              <Li key={category}>
+              <DropdownItem key={category}>
                 <LinkWrapper href="#1-1" onClick={() => handleCategoryClick(category)}>{category}</LinkWrapper>
-              </Li>
+              </DropdownItem>
             ))}
-            </Ul>
-          </Menu>
+            </DropdownList>
+          </DropdownTitle>
         </DropdownContainer>
 
         <DropdownContainer>
-          <DropdownButton onClick={boardHandler} ref={boardRef}>
-            <span>{selectedterritory}</span>
-          </DropdownButton>
-          <Menu isDropped={boardIsOpen}>
-            <Ul>
-            {territory.map((territory:string) => (
-              <Li key={territory}>
-                <LinkWrapper href="#2-1" onClick={() => handleTerritoryClick(territory)}>{territory}</LinkWrapper>
-              </Li>
+          <DropdownWrapper onClick={locationHandler} ref={locationRef}>
+            <span>{selectedLocation}</span>
+          </DropdownWrapper>
+          <DropdownTitle isDropped={locationIsOpen}>
+            <DropdownList>
+            {location.map((location:string) => (
+              <DropdownItem key={location}>
+                <LinkWrapper href="#2-1" onClick={() => handleLocationClick(location)}>{location}</LinkWrapper>
+              </DropdownItem>
             ))}
-            </Ul>
-          </Menu>
+            </DropdownList>
+          </DropdownTitle>
         </DropdownContainer>
 
-        <AddHire onClick={logoutClickHandler}><button>게시글 작성</button></AddHire>
+        <AddHire onClick={newHireClickHandler}><button>게시글 작성</button></AddHire>
       </UpperWrapper>
       <LowerWrapper>
         <CategoryButton>
-          <div>{tags.map(tag => <TagButton tag={tag} />)}</div>
+          <div>{tags.map(tag => <TagButton tag={tag} onClick={() => handleTagClick(selectedTag)} />)}</div>
         </CategoryButton>
         <FilterButton>
           <div>
@@ -85,7 +100,7 @@ const UpperWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  padding: 20px 20px 15px 20px;
+  padding: 70px 20px 15px 20px;
   border-bottom: 1px solid #dadbdc;
   . {
     margin: 0px 0px 15px 0px;
@@ -93,6 +108,7 @@ const UpperWrapper = styled.div`
 `;
 
 const DropdownContainer = styled.div`
+  margin: 16px 50px 0 50px;
   position: relative;
   text-align: center;    
   flex: 0 1 auto;
@@ -102,19 +118,18 @@ const DropdownContainer = styled.div`
   height: 38px;
   padding: 8px;
   background-color: white;
-  margin: 16px 8px 0;
 `;
 
-const DropdownButton = styled.div`
+const DropdownWrapper = styled.div`
   cursor: pointer;
 `;
 
-const Menu = styled.div`
+const DropdownTitle = styled.div`
   background: gray;
   position: absolute;
   top: 52px;
   left: 50%;
-  width: 100px;
+  width: 130px;
   text-align: center;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
   border-radius: 3px;
@@ -147,8 +162,7 @@ const Menu = styled.div`
     `};
 `;
 
-
-const Ul = styled.ul`
+const DropdownList = styled.ul`
   & > li {
     margin-bottom: 10px;
   }
@@ -166,7 +180,7 @@ const Ul = styled.ul`
   align-items: center;
 `;
 
-const Li = styled.li``;
+const DropdownItem = styled.li``;
 
 const LinkWrapper = styled.a`
   font-size: 16px;
@@ -177,31 +191,35 @@ const LinkWrapper = styled.a`
 const AddHire = styled.div`
   height: 38px;
   margin: 16px 15px 0 auto;
-  padding: 9px 11px 8px;
-  // border: 1px solid;
+  padding: 9px 50px 8px;
   cursor: pointer;
   font-size: 16px;
 `;
 
 //태그 파트
 const LowerWrapper = styled.div`
-width: 100%;
-padding: 20px 20px 15px 20px;
-border-bottom: 1px solid #dadbdc;
-. {
-  margin: 0px 0px 15px 0px;
-}
+  width: 100%;
+  height: 100px;
+  padding: 20px 20px 15px 20px;
+  border-bottom: 1px solid #dadbdc;
+  . {
+    margin: 0px 0px 15px 0px;
+  }
 `;
 
-const CategoryButton = styled.div`
+const CategoryButton = styled.button`
+  margin: 16px 50px 8px;
+  border: none;
+  background-color: white;
 `;
+
 const FilterButton = styled.div`
-height: 38px;
-margin: 16px 15px 0 auto;
-padding: 9px 11px 8px;
-border: 1px solid 
-cursor: pointer;
-font-size: 16px;
+  height: 38px;
+  margin: 0 20px 0 8px;
+  float: right;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
 `;
 
 export default DropdownMenu;

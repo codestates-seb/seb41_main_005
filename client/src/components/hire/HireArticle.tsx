@@ -1,7 +1,9 @@
 import React from "react";
 import { CardProps } from "./CardProps";
 import styled from 'styled-components';
-// import HireArticleContainer from "./HireArticleContainer";
+import { useSelector } from 'react-redux';
+import { RootState } from "../../util/store"
+
 //import { Link } from "react-router-dom";
 
 export const cards: CardProps[] = [
@@ -12,6 +14,9 @@ export const cards: CardProps[] = [
     startWorkTime: `2023.1.25 11:00`,
     endWorkTime: `2023.1.25 18:00`,
     memberId: `1`,
+    location: `강남구`,
+    categories: `유통/물류`,
+    tag: `식사제공🍴`,
   },
   {
     title: `애견시설 알바 구합니다.`,
@@ -20,6 +25,9 @@ export const cards: CardProps[] = [
     startWorkTime: `2023.2.2 9:00`,
     endWorkTime: `2023.2.2 15:00`,
     memberId: `2`,
+    location: `용산구`,
+    categories: `매장관리/판매`,
+    tag: `초보자가능🐣`,
   },
   {
     title: "아이 돌봄 알바 구합니다.",
@@ -28,6 +36,9 @@ export const cards: CardProps[] = [
     startWorkTime: "2023.2.10 14:00",
     endWorkTime: "2023.2.10 19:00",
     memberId: `3`,
+    location: `종로구`,
+    categories: `기타`,
+    tag: `능력활용🧐`,
   },
   {
     title: `강아지 돌봄 알바 구합니다.`,
@@ -36,27 +47,44 @@ export const cards: CardProps[] = [
     startWorkTime: `2023.2.15 14:00`,
     endWorkTime: `2023.2.15 19:00`,
     memberId: `4`,
+    location: `중랑구`,
+    categories: `기타`,
+    tag: `최저시급💰`,
   },
   {
-    title: `강아지 돌봄 알바 구합니다.`,
+    title: `카페 알바 구합니다.`,
     nickname: `집사오조`,
     price: `7만원`,
     startWorkTime: `2023.2.15 14:00`,
     endWorkTime: `2023.2.15 19:00`,
     memberId: `5`,
+    location: `서대문구`,
+    categories: `외식/음료`,
+    tag: `역세권🚇`,
   },
 ];
 
-const HireArticle: React.FC<CardProps> = ({ cardData }) => {
+const HireArticle: React.FC = () => {
+  const selectedCategory = useSelector((state: RootState) => state.selectedCategory)
+  const selectedLocation = useSelector((state: RootState) => state.selectedLocation)
+  const selectedTag = useSelector((state: RootState) => state.selectedTag)
+  const filteredCards = 
+  selectedCategory === "카테고리" && selectedLocation === "지역" && selectedTag === "" ? cards : 
+  cards.filter(
+    card => 
+      (selectedCategory === "카테고리" || card.categories === selectedCategory) && 
+      (selectedLocation === "지역" || card.location === selectedLocation) && 
+      (selectedTag === "" || card.tag === selectedTag)
+  );
   return (
     <HireArticleContainer>
-      {cardData.map((data, index) => (
+      {filteredCards.map((card, index) => (
       <Card key={index}>
-        <CardTitle>{data.title}</CardTitle>
-        <CardWriter>작성자 {data.nickname}</CardWriter>
-        <CardPay>보수 {data.price}</CardPay>
-        <CardStart>{data.startWorkTime}</CardStart>
-        <CardEnd>{data.endWorkTime}</CardEnd>
+        <CardTitle>{card.title}</CardTitle>
+        <CardWriter>작성자 {card.nickname}</CardWriter>
+        <CardPay>보수 {card.price}</CardPay>
+        <CardStart>{card.startWorkTime}</CardStart>
+        <CardEnd>{card.endWorkTime}</CardEnd>
       </Card>
       ))}
     </HireArticleContainer>
@@ -65,21 +93,26 @@ const HireArticle: React.FC<CardProps> = ({ cardData }) => {
 // <Link to ={`/contents/${content-id}`}>{title}</Link>
 
 const HireArticleContainer = styled.div`
-margin-top: 30px;
-width: 80%;
-display: flex;
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-left: 60px;
+  margin-right: 60px;
 `;
 
 const Card = styled.div`
-width: 250px;
-height: 120px;
-border: 1px solid #ccc;
-margin: 5px;
-display: flex;
-flex-direction: row;
-justify-content: flex-start;
-flex-wrap: wrap;
-text-overflow: ellipsis;
+  width: 250px;
+  height: 120px;
+  border: 1px solid #ccc;
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  text-overflow: ellipsis;
 `;
 
 const CardTitle = styled.div`

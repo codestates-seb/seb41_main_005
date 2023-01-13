@@ -5,4 +5,7 @@ export interface CardProps {
   startWorkTime: string;
   endWorkTime: string;
   memberId: string;
+  location: string;
+  categories: string;
+  tag: string;
 };
