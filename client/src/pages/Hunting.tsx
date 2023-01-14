@@ -1,11 +1,11 @@
 import HuntingArticle, { cards } from "../components/hunting/HuntingArticle";
-import DropDownT from "../components/DropDownT";
+import HuntingDropDown from "../components/hunting/HuntingDropDown";
 import { CardProps } from "../components/hunting/CardProps";
 
 function Hunting() {
   return (
     <div className="Hunting">
-      <DropDownT />
+      <HuntingDropDown />
       <HuntingArticle cardData={cards as CardProps[]} />
     </div>
   );

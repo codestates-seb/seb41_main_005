@@ -1,11 +1,11 @@
 import HireArticle, { cards } from "../components/hire/HireArticle";
-import DropDownMenu from "../components/DropDownMenu";
+import HireDropDown from "../components/hire/HireDropDown";
 import { CardProps } from "../components/hire/CardProps";
 
 function Hire() {
   return (
     <div className="Hire">
-      <DropDownMenu />
+      <HireDropDown />
       <HireArticle cardData={cards as CardProps[]} />
     </div>
   );

@@ -1,9 +1,25 @@
 import React from "react";
 import styled from "styled-components";
-import useDetectClose from "../util/useDetectClose";
+import useDetectClose from "../../util/useDetectClose";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../util/store";
-import { selectCategory, selectLocation, selectTag } from "../util/types";
+import { RootState } from "../../util/store";
+import { selectCategory, selectLocation, selectTag } from "../../util/types";
+
+const tags = [
+  "재택근무🏠",
+  "야간🌙",
+  "초보자가능🐣",
+  "최저시급💰",
+  "당일지급💵",
+  "능력활용🧐",
+  "역세권🚇",
+  "식사제공🍴",
+  "경력1년이상💡",
+];
+
+const TagButton = ({ tag }: { tag: string; onClick: () => void }) => (
+  <button>{tag}</button>
+);
 
 const category = [
   "카테고리",
@@ -50,7 +66,7 @@ const location = [
   "강동구",
 ];
 
-const DropdownT = () => {
+const DropdownMenu = () => {
   const dispatch = useDispatch();
   const selectedCategory = useSelector(
     (state: RootState) => state.selectedCategory
@@ -58,6 +74,7 @@ const DropdownT = () => {
   const selectedLocation = useSelector(
     (state: RootState) => state.selectedLocation
   );
+  const selectedTag = useSelector((state: RootState) => state.selectedTag);
 
   const handleCategoryClick = (category: string) => {
     dispatch(selectCategory(category));
@@ -67,6 +84,10 @@ const DropdownT = () => {
   const handleLocationClick = (location: string) => {
     dispatch(selectLocation(location));
     locationHandler();
+  };
+
+  const handleTagClick = (tag: string) => {
+    dispatch(selectTag(tag));
   };
 
   const [categoryIsOpen, categoryRef, categoryHandler] = useDetectClose(false);
@@ -81,9 +102,7 @@ const DropdownT = () => {
       <UpperWrapper>
         <DropdownContainer>
           <DropdownWrapper
-            onClick={() => handleCategoryClick("category")}
-            ref={categoryRef}
-          >
+            onClick={categoryHandler} ref={categoryRef}>
             <span>{selectedCategory}</span>
           </DropdownWrapper>
           <DropdownTitle isDropped={categoryIsOpen}>
@@ -91,7 +110,6 @@ const DropdownT = () => {
               {category.map((category: string) => (
                 <DropdownItem key={category}>
                   <LinkWrapper
-                    href="#1-1"
                     onClick={() => handleCategoryClick(category)}
                   >
                     {category}
@@ -111,7 +129,6 @@ const DropdownT = () => {
               {location.map((location: string) => (
                 <DropdownItem key={location}>
                   <LinkWrapper
-                    href="#2-1"
                     onClick={() => handleLocationClick(location)}
                   >
                     {location}
@@ -127,6 +144,17 @@ const DropdownT = () => {
         </AddHire>
       </UpperWrapper>
       <LowerWrapper>
+        <CategoryButton>
+          <div>
+            {tags.map((tag) => (
+              <TagButton
+                key={1}
+                tag={tag}
+                onClick={() => handleTagClick(selectedTag)}
+              />
+            ))}
+          </div>
+        </CategoryButton>
         <FilterButton>
           <div>
             <button>조회순</button>
@@ -249,6 +277,12 @@ const LowerWrapper = styled.div`
   border-bottom: 1px solid #dadbdc;
 `;
 
+const CategoryButton = styled.button`
+  margin: 16px 50px 8px;
+  border: none;
+  background-color: white;
+`;
+
 const FilterButton = styled.div`
   height: 38px;
   margin: 0 20px 0 8px;
@@ -258,4 +292,4 @@ const FilterButton = styled.div`
   font-size: 16px;
 `;
 
-export default DropdownT;
+export default DropdownMenu;
