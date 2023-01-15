@@ -16,12 +16,21 @@ public class ContentApplyStubData {
 			.build();
 	}
 
+	public static ContentApply getMatchedApply() {
+
+		return ContentApply.builder()
+			.applicant(MemberStubData.getMember())
+			.content(ContentStubData.getMatchedContent())
+			.applyStatus(ContentApply.ApplyStatus.MATCH)
+			.build();
+	}
+
 	public static List<ContentApply> getApplies() {
 		List<ContentApply> applies = new ArrayList<>();
 
 		for (int i = 1; i <= 4; i++) {
 			ContentApply apply = ContentApply.builder()
-				.contentApplyId((long) i)
+				.contentApplyId((long)i)
 				.applicant(MemberStubData.getMembers().get(i))
 				.content(ContentStubData.getContent())
 				.applyStatus(ContentApply.ApplyStatus.NONE)
