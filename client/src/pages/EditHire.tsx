@@ -1,34 +1,64 @@
-import React from "react";
+import React, { useState, ChangeEvent } from "react";
 import InputBox from "../components/Input";
+import Button from "../components/Buttons"
 import styled from 'styled-components';
+import { WorkSchedule, LocationContainer, CategoryContainer } from '../components/EditSelect';
+// import axios from 'axios'
 
 const EditHire = () => {
+
+  const [title, setTitle] = useState("")
+  const [workDetail, setWorkDetail] = useState("")
+
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
+  const handleWorkDetailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setWorkDetail(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    // axios.post('/your-endpoint', {
+    //   title: title,
+    //   category: category,
+    //   workTime: workTime
+    // })
+    // .then(response => {
+    //   console.log(response)
+    // })
+    // .catch(error => {
+    //   console.log(error)
+    // });
+  }
+
   return (
     <EditHireContainer>
-      <WithTitle>제목
-        <InputBox width="600px" />
-      </WithTitle>
-      <WithTitle>카테고리
-        <InputBox width="600px" /></WithTitle>
+      <TitleContainer>제목
+        <InputBox width="400px" onChange={handleTitleChange} />
+        카테고리
+        <CategoryContainer /></TitleContainer>
       <WithTitle>업무시간
-        <InputBox width="600px" /></WithTitle>
+        <WorkSchedule /></WithTitle>
       <ThreeInput>
         <WithTitle>모집인원
           <InputBox width="165px" /></WithTitle>
         <WithTitle>보수
           <InputBox width="165px" /></WithTitle>
         <WithTitle>장소
-          <InputBox width="165px" /></WithTitle>
+          <LocationContainer /></WithTitle>
       </ThreeInput>
       <WithTitle>업무내용
-        <InputBox width="600px" /></WithTitle>
+        <InputBox width="600px" onChange={handleWorkDetailChange} /></WithTitle>
       <WithTitle>자격요건
         <InputBox width="600px" /></WithTitle>
       <WithTitle>우대사항 (선택)
         <InputBox width="600px" /></WithTitle>
       <WithTitle>기타 (선택)
         <InputBox width="600px" /></WithTitle>
+      <Button onClick={handleSubmit}>제출하기</Button>
     </EditHireContainer>
+
   );
 };
 
@@ -39,6 +69,10 @@ flex-direction: column;
 $ {InputBox} { 
   align-items: center;
 }
+`
+const TitleContainer = styled.div`
+display: flex;
+flex-direction: row;
 `
 const WithTitle = styled.div`
 display: flex;
