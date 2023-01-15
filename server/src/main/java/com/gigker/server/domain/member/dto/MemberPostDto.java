@@ -2,7 +2,6 @@ package com.gigker.server.domain.member.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -26,9 +25,6 @@ public class MemberPostDto {
     @Length(min = 2, max = 16)
     private String nickName;
 
-    //사진Url
-    @NotBlank
-    private String pictureUrl;
 
     //자기소개
     @NotBlank

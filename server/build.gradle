@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final' // mapper
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'com.google.code.gson:gson'	// gson
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // AWS S3(이미지저장소)
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	// sql 쿼리 파라미터에 실제 값을 넣기 위한 라이브러리

@@ -1,3 +1,16 @@
+#aws S3
+cloud:
+  aws:
+    credentials:
+      accessKey:
+      secretKey:
+    s3:
+      bucket:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
 spring:
   application:
     name: gigker
@@ -36,6 +49,10 @@ logging:
       springframework:
         orm:
           jpa: DEBUG
+
+
+
+
 
 #spring:
 #  jpa:
