@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.gigker.server.domain.member.entity.Profile;
 import lombok.Data;
 import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
@@ -17,8 +18,10 @@ import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.member.entity.Member;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Data
 @NoArgsConstructor
@@ -43,7 +46,7 @@ public class Content extends BaseEntity {
 	private Integer recruitingCount;
 
 	// 업무 내용
-	@Column//(columnDefinition = "MEDIUMTEXT", nullable = false)
+	@Column(columnDefinition = "MEDIUMTEXT", nullable = false)
 	private String workContent;
 
 	// 자격 요건
@@ -62,11 +65,11 @@ public class Content extends BaseEntity {
 //	@OneToOne
 //	@JoinColumn(name = "category_id", nullable = false)
 //	private Category category;
-//
-//	// 태그
-//	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private List<ContentTag> tags = new ArrayList<>();
-//
+
+	// 태그
+	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ContentTag> contentTags = new ArrayList<>();
+
 //	// 업무 시간
 //	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 //	private List<WorkTime> workTimes = new ArrayList<>();
@@ -92,7 +95,7 @@ public class Content extends BaseEntity {
 	private Status status;
 
 	// 프리미엄 여부
-	@Column//(nullable = false)
+	@Column(nullable = false)
 	private boolean isPremium;
 
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
