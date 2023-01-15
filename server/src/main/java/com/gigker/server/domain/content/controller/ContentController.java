@@ -2,9 +2,11 @@ package com.gigker.server.domain.content.controller;
 
 import com.gigker.server.domain.content.dto.ContentPatchDto;
 import com.gigker.server.domain.content.dto.ContentPostDto;
+import com.gigker.server.domain.content.dto.ContentResponseDto;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.mapper.ContentMapper;
 import com.gigker.server.domain.content.service.ContentService;
+import com.gigker.server.global.dto.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +43,13 @@ public class ContentController {
 //        Content contentReponseDto = contentMapper.contentDtoToContent(updateContent);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{content_id}")
+    public ResponseEntity getContent(@PathVariable("content_id") long contentId){
+        Content content = contentService.findVerifiedContent(contentId);
+
+        return new ResponseEntity<>(contentMapper.contentResponseDto(content)
+                ,HttpStatus.OK);
     }
 }

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -43,5 +44,22 @@ public class ContentService {
     public Content findContentByContentId(long contentId) {
         return contentRepository.findById(contentId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_CONTENT));
+    }
+
+    public Content findVerifiedContent(long contentId){
+        Optional<Content> optionalContent = contentRepository.findById(contentId);
+
+        Content findContent =
+                optionalContent.orElseThrow(()->
+                        new BusinessLogicException(ExceptionCode.NOT_FOUND_CONTENT));
+        return findContent;
+    }
+
+    public List<Content> findContents(){
+        return contentRepository.findAll();
+    }
+
+    public Content findContent(long contentId){
+        return findVerifiedContent(contentId);
     }
 }
