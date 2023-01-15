@@ -62,4 +62,11 @@ public class ContentService {
     public Content findContent(long contentId){
         return findVerifiedContent(contentId);
     }
+
+    public void deleteContent(long contentId) {
+        Content findContent = findVerifiedContent(contentId);
+//        if(findContent.getMember().getMemberId() != getCurrentMember().getMemberId())
+//            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
+        contentRepository.delete(findContent);
+    }
 }

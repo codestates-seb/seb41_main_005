@@ -6,6 +6,7 @@ import com.gigker.server.domain.content.dto.ContentResponseDto;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.mapper.ContentMapper;
 import com.gigker.server.domain.content.service.ContentService;
+import com.gigker.server.global.dto.MultiResponseDto;
 import com.gigker.server.global.dto.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,7 +51,22 @@ public class ContentController {
     public ResponseEntity getContent(@PathVariable("content_id") long contentId){
         Content content = contentService.findVerifiedContent(contentId);
 
-        return new ResponseEntity<>(contentMapper.contentResponseDto(content)
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(contentMapper.contentResponseDto(content))
                 ,HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity getContents() {
+        List<Content> contents = contentService.findContents();
+        return new ResponseEntity<>(
+                (contentMapper.contentsResponseDto(contents)),
+                HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{content_id}")
+    public ResponseEntity deleteContent(@PathVariable("content_id") long contentId) {
+        contentService.deleteContent(contentId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
