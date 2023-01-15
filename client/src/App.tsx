@@ -4,6 +4,7 @@ import GlobalStyle from "./assets/styles/global-styles";
 import { theme } from "./assets/styles/theme";
 import Hire from "./pages/Hire";
 import Hunting from "./pages/Hunting";
+import EditHire from './pages/EditHire';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/hire" element={<Hire />} />
           <Route path="/hunting" element={<Hunting />} />
+          <Route path="/edithire" element={<EditHire />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>
