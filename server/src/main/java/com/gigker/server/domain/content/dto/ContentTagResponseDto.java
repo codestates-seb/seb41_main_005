@@ -8,6 +8,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ContentTagResponseDto {
     private long ContentId;
-    private long tagId;
+    private Long tagId;
     private String name;
 }

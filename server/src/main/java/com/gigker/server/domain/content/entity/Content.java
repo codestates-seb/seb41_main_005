@@ -68,7 +68,7 @@ public class Content extends BaseEntity {
 
 	// 태그
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ContentTag> tags = new ArrayList<>();
+	private List<ContentTag> contentTags = new ArrayList<>();
 
 //	// 업무 시간
 //	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)

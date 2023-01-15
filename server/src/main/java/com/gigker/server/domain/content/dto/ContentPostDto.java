@@ -22,7 +22,7 @@ public class ContentPostDto {
     private String preference;
     private String other;
 //    private Category category;
-    private List<ContentTag> tags;
+    private List<ContentTag> contentTags;
 //    private List<WorkTime> workTimes;
     private String location;
     private int price;

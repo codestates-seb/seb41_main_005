@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class ContentTagService {
     ContentTagRepository contentTagRepository;
-    public List<ContentTag> createContentTags(List<ContentTag> tags){
-        return tags.stream().map(contentTag -> contentTagRepository.save(contentTag)).collect(Collectors.toList());
+    public List<ContentTag> createContentTags(List<ContentTag> contentTags){
+        return contentTags.stream().map(contentTag -> contentTagRepository.save(contentTag)).collect(Collectors.toList());
     }
 }
