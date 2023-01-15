@@ -7,12 +7,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.gigker.server.domain.content.mapper.ContentApplyMapper;
-import com.gigker.server.domain.member.mapper.MemberMaper;
+import com.gigker.server.domain.member.mapper.MemberMapper;
 import com.gigker.server.domain.review.dto.ReviewDto;
 import com.gigker.server.domain.review.entity.Review;
 
 @Mapper(componentModel = "spring",
-	uses = {MemberMaper.class, ContentApplyMapper.class},
+	uses = {MemberMapper.class, ContentApplyMapper.class},
 	unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ReviewMapper {
 	// Dto.writerId <=> Review.contentApply.contentApplyId 매핑

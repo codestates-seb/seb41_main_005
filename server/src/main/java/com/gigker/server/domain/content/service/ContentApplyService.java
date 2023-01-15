@@ -1,15 +1,19 @@
 package com.gigker.server.domain.content.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.repository.ContentApplyRepository;
 import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.domain.member.service.MemberService;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 
@@ -20,20 +24,39 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ContentApplyService {
 	private final ContentApplyRepository applyRepository;
+	private final MemberService memberService;
+	private final ContentService contentService;
 
-	public ContentApply createApply() {
+	@Transactional
+	public ContentApply createApply(ContentApply apply) {
+		// Member, Content, ContentApply 유효성 검사
+		Member applicant = memberService.findMemberById(apply.getApplicant().getMemberId());
+		Content content = contentService.findContentByContentId(apply.getContent().getContentId());
+		verifyApplicantEqualToWriter(applicant, content);
+		verifyExistMemberApply(applicant, content);
 
-		return null;
+		return applyRepository.save(apply);
 	}
 
-	public ContentApply acceptApply() {
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+	public ContentApply acceptApply(Long applyId) {
+		// TODO: 추후 토큰의 memberId와 content.member.memberId 비교하는 로직 추가 (작성자만 승인 가능)
+		ContentApply apply = findVerifiedApply(applyId);
 
-		return null;
+		// 중복하여 변경 시도 시 throw Exception
+		if (apply.getApplyStatus() == ContentApply.ApplyStatus.NONE) {
+			apply.accept();
+		} else
+			throw new BusinessLogicException(ExceptionCode.EXISTS_APPLY);
+
+		otherApplicantsAutoDelete(apply.getContent());
+
+		return apply;
 	}
 
-	public ContentApply findApply() {
+	public ContentApply findApply(Long applyId) {
 
-		return null;
+		return findVerifiedApply(applyId);
 	}
 
 	public List<ContentApply> findAll() {
@@ -59,11 +82,28 @@ public class ContentApplyService {
 	}
 
 	// 해당 글에 이미 신청내역이 있는지 확인
-	private void verifyExistMemberApply(Member member, Content content) {
-		Optional<ContentApply> optionalApply = applyRepository.findByApplicantAndContent(member, content);
+	private void verifyExistMemberApply(Member applicant, Content content) {
+		Optional<ContentApply> optionalApply = applyRepository.findByApplicantAndContent(applicant, content);
 
 		if (optionalApply.isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.EXISTS_APPLY);
 		}
+	}
+
+	// 신청자가 글 작성자인지 확인
+	private void verifyApplicantEqualToWriter(Member applicant, Content content) {
+		if (Objects.equals(applicant.getMemberId(), content.getMember().getMemberId())) {
+			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST_APPLY);
+		}
+	}
+
+	// Accept 요청 발생 시, 나머지 지원자들 자동 취소 기능
+	private void otherApplicantsAutoDelete(Content content) {
+		List<ContentApply> contents = applyRepository.findAllByContent(content);
+
+		contents.stream()
+			.filter(a -> a.getApplyStatus() == ContentApply.ApplyStatus.NONE)
+			.mapToLong(ContentApply::getContentApplyId)
+			.forEach(this::deleteApply);
 	}
 }

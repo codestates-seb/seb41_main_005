@@ -10,6 +10,7 @@ const NavBar = styled.div`
   justify-content: space-between;
   box-shadow: 0 2px 10px -5px;
   position: fixed;
+  background-color: #ffffff;
 `;
 
 const LogoContainer = styled.a`
@@ -50,7 +51,9 @@ const LinkButton = styled.button`
 const LogInContainer = styled.div`
   /* margin-right: 40px; */
   display: flex;
+  justify-content: space-around;
   align-items: center;
+  padding: 0 1rem;
 `;
 
 const Navigation = () => {
@@ -65,8 +68,12 @@ const Navigation = () => {
         <LinkButton>구직</LinkButton>
       </LinkContainer>
       <LogInContainer>
-        <Button color="#6667AB">로그인</Button>
-        <Button color="#6F38C5">회원가입</Button>
+        <Button color={"#6667AB"} width={"5rem"}>
+          로그인
+        </Button>
+        <Button color={"#6F38C5"} width={"5rem"}>
+          회원가입
+        </Button>
       </LogInContainer>
     </NavBar>
   );
