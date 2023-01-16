@@ -51,6 +51,11 @@ public class MemberController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
+
+
+
+
+
 	//마이페이지 프로필 정보 조회
 //	@GetMapping("/{member-id}")
 //	public ResponseEntity getMember(@PathVariable("member-id") long memberId)
