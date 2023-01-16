@@ -71,17 +71,4 @@ logging:
 ##    key-store: classpath:localhost.p12      #HTTPS SETTING
 ##    key-password: changeit
 #
-#mail:
-#  address:
-#    admin: admin@gmail.com
-#  smtp:
-#    host: smtp.gmail.com
-#    port: 587
-#    auth: true
-#    starttls:
-#      enable: true
-#
-#jwt:
-#  key: ${JWT_SECRET_KEY}
-#  access-token-expiration-minutes: 40
-#  refresh-token-expiration-minutes: 420
+
