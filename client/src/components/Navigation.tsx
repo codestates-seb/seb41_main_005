@@ -2,6 +2,7 @@ import React from "react"; // eslint-disable-line no-unused-vars
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import Button from "./Buttons";
+import { Link } from "react-router-dom";
 
 const NavBar = styled.div`
   width: 100vw;
@@ -63,9 +64,15 @@ const Navigation = () => {
         <Logo width={65} height={65} />
       </LogoContainer>
       <LinkContainer>
-        <LinkButton>홈</LinkButton>
-        <LinkButton>구인</LinkButton>
-        <LinkButton>구직</LinkButton>
+        <LinkButton>
+          <Link to="/">홈</Link>
+        </LinkButton>
+        <LinkButton>
+          <Link to="/hire">구인</Link>
+        </LinkButton>
+        <LinkButton>
+          <Link to="/hunting">구직</Link>
+        </LinkButton>
       </LinkContainer>
       <LogInContainer>
         <Button color={"#6667AB"} width={"5rem"}>

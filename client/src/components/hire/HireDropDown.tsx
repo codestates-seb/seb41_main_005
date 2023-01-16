@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import useDetectClose from "../util/useDetectClose";
+import useDetectClose from "../../util/useDetectClose";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../util/store";
-import { selectCategory, selectLocation, selectTag } from "../util/types";
+import { RootState } from "../../util/store";
+import { selectCategory, selectLocation, selectTag } from "../../util/types";
 
 const tags = [
   "재택근무🏠",
@@ -102,9 +102,7 @@ const DropdownMenu = () => {
       <UpperWrapper>
         <DropdownContainer>
           <DropdownWrapper
-            onClick={() => handleCategoryClick("category")}
-            ref={categoryRef}
-          >
+            onClick={categoryHandler} ref={categoryRef}>
             <span>{selectedCategory}</span>
           </DropdownWrapper>
           <DropdownTitle isDropped={categoryIsOpen}>
@@ -112,7 +110,6 @@ const DropdownMenu = () => {
               {category.map((category: string) => (
                 <DropdownItem key={category}>
                   <LinkWrapper
-                    href="#1-1"
                     onClick={() => handleCategoryClick(category)}
                   >
                     {category}
@@ -132,7 +129,6 @@ const DropdownMenu = () => {
               {location.map((location: string) => (
                 <DropdownItem key={location}>
                   <LinkWrapper
-                    href="#2-1"
                     onClick={() => handleLocationClick(location)}
                   >
                     {location}

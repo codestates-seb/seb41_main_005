@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,11 +32,17 @@ public class ContentApplyService {
 
 	@Transactional
 	public ContentApply createApply(ContentApply apply) {
-		// Member, Content, ContentApply 유효성 검사
+		// Member, Content 유효성 검사
 		Member applicant = memberService.findMemberById(apply.getApplicant().getMemberId());
 		Content content = contentService.findContentByContentId(apply.getContent().getContentId());
-		verifyApplicantEqualToWriter(applicant, content);
-		verifyExistMemberApply(applicant, content);
+
+		// 모집 중인 게시글인지 확인
+		if (isContentRecruiting(content)) {
+			verifyApplicantEqualToWriter(applicant, content);  // 신청자가 작성자인지 확인
+			verifyExistMemberApply(applicant, content);	 // 이미 신청한 기록이 있는지 확인
+		} else {
+			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST_RECRUITING);
+		}
 
 		return applyRepository.save(apply);
 	}
@@ -43,11 +52,15 @@ public class ContentApplyService {
 		// TODO: 추후 토큰의 memberId와 content.member.memberId 비교하는 로직 추가 (작성자만 승인 가능)
 		ContentApply apply = findVerifiedApply(applyId);
 
-		// 중복하여 변경 시도 시 throw Exception
-		if (apply.getApplyStatus() == ContentApply.ApplyStatus.NONE) {
+		// ApplyStatus 가 None 인지 확인
+		if (isApplyStatusNone(apply)) {
+			// TODO: accept 할 경우 contentId가 다른 경우에도 승인이 되는 오류가 생긴다.
 			apply.accept();
-		} else
+			// accept 할 경우 글의 상태도 "모집 완료"로 변경
+			apply.getContent().setStatus(Content.Status.MATCHED);
+		} else {
 			throw new BusinessLogicException(ExceptionCode.EXISTS_APPLY);
+		}
 
 		otherApplicantsAutoDelete(apply.getContent());
 
@@ -59,9 +72,11 @@ public class ContentApplyService {
 		return findVerifiedApply(applyId);
 	}
 
-	public List<ContentApply> findAll() {
+	public Page<ContentApply> findAllApplies(Long contentId, int page, int size) {
+		Content content = contentService.findContentByContentId(contentId);
 
-		return null;
+		return applyRepository.findAllByContent(content,
+			PageRequest.of(page, size, Sort.by("contentApplyId").descending()));
 	}
 
 	public void deleteApply(Long applyId) {
@@ -69,6 +84,8 @@ public class ContentApplyService {
 
 		applyRepository.delete(apply);
 	}
+
+	// == Find ==
 
 	// 해당 ApplyId가 존재하는지 확인
 	@Transactional(readOnly = true)
@@ -81,6 +98,21 @@ public class ContentApplyService {
 		return findApply;
 	}
 
+	// == Create ==
+
+	// 해당 글이 모집 중인 글인지 확인
+	private boolean isContentRecruiting(Content content) {
+
+		return Objects.equals(content.getStatus(), Content.Status.RECRUITING);
+	}
+
+	// 신청자가 글 작성자인지 확인
+	private void verifyApplicantEqualToWriter(Member applicant, Content content) {
+		if (Objects.equals(applicant.getMemberId(), content.getMember().getMemberId())) {
+			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST_APPLY);
+		}
+	}
+
 	// 해당 글에 이미 신청내역이 있는지 확인
 	private void verifyExistMemberApply(Member applicant, Content content) {
 		Optional<ContentApply> optionalApply = applyRepository.findByApplicantAndContent(applicant, content);
@@ -90,11 +122,12 @@ public class ContentApplyService {
 		}
 	}
 
-	// 신청자가 글 작성자인지 확인
-	private void verifyApplicantEqualToWriter(Member applicant, Content content) {
-		if (Objects.equals(applicant.getMemberId(), content.getMember().getMemberId())) {
-			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST_APPLY);
-		}
+	// == Accept ==
+
+	// 아직 지원 요청이 승인된 상태가 아닌지 확인
+	private boolean isApplyStatusNone(ContentApply apply) {
+
+		return Objects.equals(apply.getApplyStatus(), ContentApply.ApplyStatus.NONE);
 	}
 
 	// Accept 요청 발생 시, 나머지 지원자들 자동 취소 기능
