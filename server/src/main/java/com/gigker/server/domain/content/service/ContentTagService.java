@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class ContentTagService {
     ContentTagRepository contentTagRepository;
-//    public List<ContentTag> createContentTags(List<Tag> tags){
+//    public List<ContentTag> createContentTagList(List<Tag> tags){
+//        return tags.stream().map(tag -> contentTagRepository.save(tag)).collect(Collectors.toList());
 //    }
 }

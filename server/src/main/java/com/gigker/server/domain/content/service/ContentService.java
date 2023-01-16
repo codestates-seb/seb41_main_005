@@ -27,10 +27,17 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final MemberService memberService;
     private final CustomBeanUtils<Content> beanUtils;
+    private final TagService tagService;
+    private final ContentTagRepository contentTagRepository;
 
     public Content createContent(Content content) {
         Member member = memberService.findMemberById(content.getMember().getMemberId());
+        List<Long> tagIdList = new ArrayList<>();
+        for (int i = 0; i < content.getContentTagList().size(); i++) {
+            tagIdList.add(content.getContentTagList().get(i).getTag().getTagId());
+        }
         content.setMember(member);
+        contentTagRepository.save(new ContentTag());
 
         return contentRepository.save(content);
     }

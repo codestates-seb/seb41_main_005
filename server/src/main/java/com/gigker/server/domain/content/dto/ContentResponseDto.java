@@ -29,7 +29,7 @@ public class ContentResponseDto {
     private String location;
     private Category category;
     private List<WorkTime> workTimes;
-    private List<ContentTag> contentTags;
+    private List<ContentTag> contentTagList;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
     private LocalDateTime relistedAt;
