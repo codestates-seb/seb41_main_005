@@ -2,10 +2,10 @@
 cloud:
   aws:
     credentials:
-      accessKey: AKIARUG5YHOISBFGTO4H
-      secretKey: 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
+      accessKey:
+      secretKey:
     s3:
-      bucket: img-storage-gigker
+      bucket:
     region:
       static: ap-northeast-2
     stack:
