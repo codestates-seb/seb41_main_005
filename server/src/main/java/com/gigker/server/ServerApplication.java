@@ -13,29 +13,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class ServerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ServerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ServerApplication.class, args);
+    }
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-					.allowedOrigins("*");
-				corsFilter();
-			}
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*");
+                corsFilter();
+            }
 
-			public void corsFilter() {
-				CorsConfiguration corsConfiguration = new CorsConfiguration();
-				UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-				corsConfiguration.addAllowedOriginPattern("*");
-				corsConfiguration.addAllowedMethod("*");
-				corsConfiguration.addAllowedHeader("*");
-				corsConfiguration.addExposedHeader("authorization");
-				source.registerCorsConfiguration("/**", corsConfiguration);
-			}
-		};
-	}
+            public void corsFilter() {
+                CorsConfiguration corsConfiguration = new CorsConfiguration();
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                corsConfiguration.addAllowedOriginPattern("*");
+                corsConfiguration.addAllowedMethod("*");
+                corsConfiguration.addAllowedHeader("*");
+                corsConfiguration.addExposedHeader("authorization");
+                source.registerCorsConfiguration("/**", corsConfiguration);
+            }
+        };
+    }
 }
