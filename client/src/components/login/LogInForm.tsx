@@ -18,7 +18,7 @@ const LoginBox = styled.form`
   padding: 2rem;
 `;
 
-const Section = styled.div`
+const InputSection = styled.div`
   margin: 1rem 0;
   height: 5rem;
   display: flex;
@@ -38,7 +38,7 @@ const SocialLogin = styled.div`
 const LogInForm = () => {
   return (
     <LoginBox>
-      <Section>
+      <InputSection>
         <label htmlFor={"email"}>이메일</label>
         <InputBox
           id={"email"}
@@ -47,8 +47,8 @@ const LogInForm = () => {
           width={"300px"}
           placeholder={"이메일을 입력해주세요"}
         />
-      </Section>
-      <Section>
+      </InputSection>
+      <InputSection>
         <label htmlFor={"password"}>비밀번호</label>
         <InputBox
           id={"password"}
@@ -57,12 +57,12 @@ const LogInForm = () => {
           width={"300px"}
           placeholder={"비밀번호를 입력해주세요"}
         />
-      </Section>
-      <Section>
+      </InputSection>
+      <InputSection>
         <Button color={"#6F38C5"} width={"300px"} type={"submit"}>
           로그인
         </Button>
-      </Section>
+      </InputSection>
       <SocialLogin>
         <a href={"/"}>
           <FcGoogle size={50} />
@@ -74,9 +74,9 @@ const LogInForm = () => {
           <RiKakaoTalkFill size={50} color={"#F7E600"} />
         </a>
       </SocialLogin>
-      <Section>
+      <InputSection>
         <a href={"/"}>회원가입</a>
-      </Section>
+      </InputSection>
     </LoginBox>
   );
 };
