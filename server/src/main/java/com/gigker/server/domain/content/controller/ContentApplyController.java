@@ -38,9 +38,9 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@RequestBody @Valid ContentApplyDto.Post post) {
 
-		ContentApply apply = applyService.createApply();
-
-		ContentApplyDto.Response response = applyMapper.applyToResponse(apply);
+		ContentApply apply = applyMapper.postToApply(post, contentId);
+		ContentApply createdApply = applyService.createApply(apply);
+		ContentApplyDto.Response response = applyMapper.applyToResponse(createdApply);
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -51,7 +51,7 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
-		ContentApply apply = applyService.acceptApply();
+		ContentApply apply = applyService.acceptApply(applyId);
 
 		return ResponseEntity.ok().build();
 	}
@@ -72,7 +72,7 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
-		ContentApply apply = applyService.findApply();
+		ContentApply apply = applyService.findApply(applyId);
 
 		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}

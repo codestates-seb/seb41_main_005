@@ -1,13 +1,15 @@
 import styled from "styled-components";
 import React from "react";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  width?: number | string | undefined;
+}
 
-const StyledButton = styled.button`
-  margin-right: 1rem;
-  width: 5rem;
+const StyledButton = styled.button<ButtonProps>`
+  width: ${(props) => props.width};
+  margin: 0 0.5rem;
   height: 2.5rem;
-  font-size: 16px;
+  font-size: ${(props) => props.theme.font.medium};
   border: none;
   border-radius: 4px;
   color: #ffffff;

@@ -28,4 +28,8 @@ public class ContentTag {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "content_id")
 	private Content content;
+
+	public void addContent(Content content) {
+		this.content = content;
+	}
 }

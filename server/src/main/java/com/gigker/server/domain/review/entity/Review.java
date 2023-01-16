@@ -53,7 +53,7 @@ public class Review {
 	private String secondComment;
 
 	@Column(nullable = false)
-	private boolean isAnonymous;
+	private Boolean isAnonymous;
 
 	@Enumerated(value = EnumType.STRING)
 	@Column(nullable = false)
