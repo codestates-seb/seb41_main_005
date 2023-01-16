@@ -1,13 +1,13 @@
 import Select from "react-select";
-import styled from 'styled-components';
-import DatePicker from 'react-datepicker';
+import styled from "styled-components";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
-import ko from 'date-fns/locale/ko';
+import ko from "date-fns/locale/ko";
 
 //카테고리 컨테이너
 const CategoryContainer = () => {
-  const [category, setCategory] = useState("")
+  const [category, setCategory] = useState("");
 
   const categoryOptions = [
     { value: "외식/음료", label: "외식/음료" },
@@ -23,19 +23,18 @@ const CategoryContainer = () => {
     { value: "병원/간호/연구", label: "병원/간호/연구" },
     { value: "교육/강사", label: "교육/강사" },
     { value: "기타", label: "기타" },
-  ]
+  ];
 
   const handleCategoryChange = (selectedOption: any) => {
     setCategory(selectedOption.value);
-  }
+  };
 
   return (
     <CategoryWrapper>
       <Select options={categoryOptions} onChange={handleCategoryChange} />
     </CategoryWrapper>
-  )
-
-}
+  );
+};
 
 // 업무시간 컨테이너
 const WorkSchedule = () => {
@@ -44,18 +43,19 @@ const WorkSchedule = () => {
   const [endTime, setEndTime] = useState("");
 
   const handleStartTimeChange = (selectedOption: any) => {
-    setStartTime(selectedOption.value)
-  }
+    setStartTime(selectedOption.value);
+  };
   const handleEndTimeChange = (selectedOption: any) => {
-    setEndTime(selectedOption.value)
-  }
+    setEndTime(selectedOption.value);
+  };
 
   // 시간 드롭다운
   const timeOptions = [];
   for (let hour = 0; hour < 24; hour++) {
     for (let minute = 0; minute < 60; minute += 30) {
-      let value = `${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}`;
-      let label = `${hour}:${("0" + minute).slice(-2)} ${hour < 12 ? "AM" : "PM"}`;
+      const value = `${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}`;
+      const label = `${hour}:${("0" + minute).slice(-2)} 
+      ${hour < 12 ? "AM" : "PM"}`;
       timeOptions.push({ value, label });
     }
   }
@@ -64,23 +64,24 @@ const WorkSchedule = () => {
     <TimeWrapper>
       날짜
       <div>
-        <DatePicker selected={startDate}
+        <DatePicker
+          selected={startDate}
           onChange={(date: unknown) => setStartDate(date as Date)}
           dateFormat="yyyy-MM-dd"
           locale={ko}
         />
       </div>
       시작시간
-      < Select options={timeOptions} onChange={handleStartTimeChange} />
+      <Select options={timeOptions} onChange={handleStartTimeChange} />
       종료시간
-      < Select options={timeOptions} onChange={handleEndTimeChange} />
-    </TimeWrapper >
-  )
-}
+      <Select options={timeOptions} onChange={handleEndTimeChange} />
+    </TimeWrapper>
+  );
+};
 
 //장소컨테이너
 const LocationContainer = () => {
-  const [location, setLocation] = useState("")
+  const [location, setLocation] = useState("");
 
   const locationOptions = [
     { value: "종로구", label: "종로구" },
@@ -108,35 +109,34 @@ const LocationContainer = () => {
     { value: "강남구", label: "강남구" },
     { value: "송파구", label: "송파구" },
     { value: "강동구", label: "강동구" },
-  ]
+  ];
 
   const handleLocationChange = (selectedOption: any) => {
     setLocation(selectedOption.value);
-  }
+  };
 
   return (
     <LocationWrapper>
       <Select options={locationOptions} onChange={handleLocationChange} />
     </LocationWrapper>
-  )
-}
+  );
+};
 
 const CategoryWrapper = styled.div`
-margin: 10px;
-padding: 10px;
-`
+  margin: 10px;
+  padding: 10px;
+`;
 
 const TimeWrapper = styled.div`
-display: flex;
-flex-direction: row;
-margin: 10px;
-padding: 10px;
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  padding: 10px;
 `;
 
 const LocationWrapper = styled.div`
-margin: 10px;
-padding: 10px;
+  margin: 10px;
+  padding: 10px;
 `;
 
 export { WorkSchedule, LocationContainer, CategoryContainer };
-

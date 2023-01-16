@@ -1,14 +1,17 @@
 import React, { useState, ChangeEvent } from "react";
 import InputBox from "../components/Input";
-import Button from "../components/Buttons"
-import styled from 'styled-components';
-import { WorkSchedule, LocationContainer, CategoryContainer } from '../components/EditSelect';
+import Button from "../components/Buttons";
+import styled from "styled-components";
+import {
+  WorkSchedule,
+  LocationContainer,
+  CategoryContainer,
+} from "../components/EditSelect";
 // import axios from 'axios'
 
 const EditHire = () => {
-
-  const [title, setTitle] = useState("")
-  const [workDetail, setWorkDetail] = useState("")
+  const [title, setTitle] = useState("");
+  const [workDetail, setWorkDetail] = useState("");
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -30,57 +33,74 @@ const EditHire = () => {
     // .catch(error => {
     //   console.log(error)
     // });
-  }
+  };
 
   return (
     <EditHireContainer>
-      <TitleContainer>제목
+      <TitleContainer>
+        제목
         <InputBox width="400px" onChange={handleTitleChange} />
         카테고리
-        <CategoryContainer /></TitleContainer>
-      <WithTitle>업무시간
-        <WorkSchedule /></WithTitle>
+        <CategoryContainer />
+      </TitleContainer>
+      <WithTitle>
+        업무시간
+        <WorkSchedule />
+      </WithTitle>
       <ThreeInput>
-        <WithTitle>모집인원
-          <InputBox width="165px" /></WithTitle>
-        <WithTitle>보수
-          <InputBox width="165px" /></WithTitle>
-        <WithTitle>장소
-          <LocationContainer /></WithTitle>
+        <WithTitle>
+          모집인원
+          <InputBox width="165px" />
+        </WithTitle>
+        <WithTitle>
+          보수
+          <InputBox width="165px" />
+        </WithTitle>
+        <WithTitle>
+          장소
+          <LocationContainer />
+        </WithTitle>
       </ThreeInput>
-      <WithTitle>업무내용
-        <InputBox width="600px" onChange={handleWorkDetailChange} /></WithTitle>
-      <WithTitle>자격요건
-        <InputBox width="600px" /></WithTitle>
-      <WithTitle>우대사항 (선택)
-        <InputBox width="600px" /></WithTitle>
-      <WithTitle>기타 (선택)
-        <InputBox width="600px" /></WithTitle>
+      <WithTitle>
+        업무내용
+        <InputBox width="600px" onChange={handleWorkDetailChange} />
+      </WithTitle>
+      <WithTitle>
+        자격요건
+        <InputBox width="600px" />
+      </WithTitle>
+      <WithTitle>
+        우대사항 (선택)
+        <InputBox width="600px" />
+      </WithTitle>
+      <WithTitle>
+        기타 (선택)
+        <InputBox width="600px" />
+      </WithTitle>
       <Button onClick={handleSubmit}>제출하기</Button>
     </EditHireContainer>
-
   );
 };
 
 const EditHireContainer = styled.div`
-padding: 100px 50px 50px 50px;
-display: flex;
-flex-direction: column;
-$ {InputBox} { 
-  align-items: center;
-}
-`
+  padding: 100px 50px 50px 50px;
+  display: flex;
+  flex-direction: column;
+  $ {InputBox} { 
+    align-items: center;
+  }
+`;
 const TitleContainer = styled.div`
-display: flex;
-flex-direction: row;
-`
+  display: flex;
+  flex-direction: row;
+`;
 const WithTitle = styled.div`
-display: flex;
-flex-direction: column;
-padding: 10px;
-`
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+`;
 const ThreeInput = styled.div`
-display: flex;
-flex-direction: row;
-`
+  display: flex;
+  flex-direction: row;
+`;
 export default EditHire;

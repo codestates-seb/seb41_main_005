@@ -94,9 +94,9 @@ const DropdownMenu = () => {
   const [categoryIsOpen, categoryRef, categoryHandler] = useDetectClose(false);
   const [locationIsOpen, locationRef, locationHandler] = useDetectClose(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const newHireClickHandler = () => {
-    navigate("/edithire")
+    navigate("/edithire");
     console.log("새 글 작성");
   };
 
@@ -104,17 +104,14 @@ const DropdownMenu = () => {
     <>
       <UpperWrapper>
         <DropdownContainer>
-          <DropdownWrapper
-            onClick={categoryHandler} ref={categoryRef}>
+          <DropdownWrapper onClick={categoryHandler} ref={categoryRef}>
             <span>{selectedCategory}</span>
           </DropdownWrapper>
           <DropdownTitle isDropped={categoryIsOpen}>
             <DropdownList>
               {category.map((category: string) => (
                 <DropdownItem key={category}>
-                  <LinkWrapper
-                    onClick={() => handleCategoryClick(category)}
-                  >
+                  <LinkWrapper onClick={() => handleCategoryClick(category)}>
                     {category}
                   </LinkWrapper>
                 </DropdownItem>
@@ -131,9 +128,7 @@ const DropdownMenu = () => {
             <DropdownList>
               {location.map((location: string) => (
                 <DropdownItem key={location}>
-                  <LinkWrapper
-                    onClick={() => handleLocationClick(location)}
-                  >
+                  <LinkWrapper onClick={() => handleLocationClick(location)}>
                     {location}
                   </LinkWrapper>
                 </DropdownItem>
