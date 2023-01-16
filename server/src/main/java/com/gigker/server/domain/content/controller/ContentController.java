@@ -1,5 +1,6 @@
 package com.gigker.server.domain.content.controller;
 
+import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.dto.ContentPatchDto;
 import com.gigker.server.domain.content.dto.ContentPostDto;
 import com.gigker.server.domain.content.dto.ContentResponseDto;
@@ -57,8 +58,8 @@ public class ContentController {
     }
 
     @GetMapping
-    public ResponseEntity getContents() {
-        List<Content> contents = contentService.findContents();
+    public ResponseEntity getContents(@RequestParam("contentType") ContentType contentType) {
+        List<Content> contents = contentService.findContentsByContentType(contentType);
         return new ResponseEntity<>(
                 (contentMapper.contentsResponseDto(contents)),
                 HttpStatus.OK);

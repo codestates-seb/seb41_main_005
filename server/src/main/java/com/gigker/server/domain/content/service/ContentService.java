@@ -1,5 +1,6 @@
 package com.gigker.server.domain.content.service;
 
+import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.repository.ContentRepository;
 import com.gigker.server.domain.common.CustomBeanUtils;
@@ -57,6 +58,10 @@ public class ContentService {
 
     public List<Content> findContents(){
         return contentRepository.findAll();
+    }
+
+    public List<Content> findContentsByContentType(ContentType contentType){
+        return contentRepository.findContentsByContentType(contentType);
     }
 
     public Content findContent(long contentId){
