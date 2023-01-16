@@ -2,16 +2,21 @@ package com.gigker.server.domain.content.service;
 
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.entity.Content;
+import com.gigker.server.domain.content.entity.ContentTag;
 import com.gigker.server.domain.content.repository.ContentRepository;
 import com.gigker.server.domain.common.CustomBeanUtils;
+import com.gigker.server.domain.content.repository.ContentTagRepository;
 import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.service.MemberService;
+import com.gigker.server.domain.tag.entity.Tag;
+import com.gigker.server.domain.tag.service.TagService;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
