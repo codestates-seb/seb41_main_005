@@ -2,6 +2,8 @@ package com.gigker.server.domain.content.dto;
 
 import javax.validation.constraints.NotNull;
 
+import com.gigker.server.domain.content.entity.ContentApply;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,5 +31,6 @@ public class ContentApplyDto {
 		private int like;
 		private int dislike;
 		private int reviewCount;
+		private ContentApply.ApplyStatus applyStatus;
 	}
 }
