@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> { }
 
 const StyledInput = styled.input<InputProps>`
   height: 2.5rem;

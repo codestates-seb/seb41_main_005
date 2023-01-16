@@ -1,12 +1,12 @@
 import Select from "react-select";
 import styled from "styled-components";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { useState } from "react";
-import ko from "date-fns/locale/ko";
+import React, { useState } from "react";
 
+interface Props {
+  value: string;
+}
 //카테고리 컨테이너
-const CategoryContainer = () => {
+const CategoryContainer: React.FC<Props> = () => {
   const [category, setCategory] = useState("");
 
   const categoryOptions = [
@@ -31,56 +31,17 @@ const CategoryContainer = () => {
 
   return (
     <CategoryWrapper>
-      <Select options={categoryOptions} onChange={handleCategoryChange} />
+      <StyledSelect
+        placeholder={"카테고리"}
+        options={categoryOptions}
+        onChange={handleCategoryChange}
+      />
     </CategoryWrapper>
   );
 };
 
-// 업무시간 컨테이너
-const WorkSchedule = () => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-
-  const handleStartTimeChange = (selectedOption: any) => {
-    setStartTime(selectedOption.value);
-  };
-  const handleEndTimeChange = (selectedOption: any) => {
-    setEndTime(selectedOption.value);
-  };
-
-  // 시간 드롭다운
-  const timeOptions = [];
-  for (let hour = 0; hour < 24; hour++) {
-    for (let minute = 0; minute < 60; minute += 30) {
-      const value = `${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}`;
-      const label = `${hour}:${("0" + minute).slice(-2)} 
-      ${hour < 12 ? "AM" : "PM"}`;
-      timeOptions.push({ value, label });
-    }
-  }
-
-  return (
-    <TimeWrapper>
-      날짜
-      <div>
-        <DatePicker
-          selected={startDate}
-          onChange={(date: unknown) => setStartDate(date as Date)}
-          dateFormat="yyyy-MM-dd"
-          locale={ko}
-        />
-      </div>
-      시작시간
-      <Select options={timeOptions} onChange={handleStartTimeChange} />
-      종료시간
-      <Select options={timeOptions} onChange={handleEndTimeChange} />
-    </TimeWrapper>
-  );
-};
-
 //장소컨테이너
-const LocationContainer = () => {
+const LocationContainer: React.FC<Props> = () => {
   const [location, setLocation] = useState("");
 
   const locationOptions = [
@@ -117,19 +78,20 @@ const LocationContainer = () => {
 
   return (
     <LocationWrapper>
-      <Select options={locationOptions} onChange={handleLocationChange} />
+      <StyledSelect
+        placeholder={"지역"}
+        options={locationOptions}
+        onChange={handleLocationChange}
+      />
     </LocationWrapper>
   );
 };
 
-const CategoryWrapper = styled.div`
-  margin: 10px;
-  padding: 10px;
+const StyledSelect = styled(Select)`
+  width: 150px;
 `;
 
-const TimeWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
+const CategoryWrapper = styled.div`
   margin: 10px;
   padding: 10px;
 `;
@@ -139,4 +101,4 @@ const LocationWrapper = styled.div`
   padding: 10px;
 `;
 
-export { WorkSchedule, LocationContainer, CategoryContainer };
+export { LocationContainer, CategoryContainer };
