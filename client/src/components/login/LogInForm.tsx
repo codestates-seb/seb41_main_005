@@ -3,11 +3,14 @@ import styled from "styled-components";
 import InputBox from "../Input";
 import Button from "../Buttons";
 import { FcGoogle } from "react-icons/fc";
+import { BsFacebook } from "react-icons/bs";
+import { RiKakaoTalkFill } from "react-icons/ri";
 
 const LoginBox = styled.form`
   width: 25rem;
   height: 35rem;
-  border: 1px solid black;
+  border: 1px solid ${(props) => props.theme.color.back};
+  box-shadow: 2px 2px 10px -5px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -22,6 +25,14 @@ const Section = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const SocialLogin = styled.div`
+  width: 300px;
+  margin-top: 80px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 `;
 
 const LogInForm = () => {
@@ -48,12 +59,23 @@ const LogInForm = () => {
         />
       </Section>
       <Section>
-        <Button color={"#6F38C5"} width={"300px"}>
+        <Button color={"#6F38C5"} width={"300px"} type={"submit"}>
           로그인
         </Button>
       </Section>
+      <SocialLogin>
+        <a href={"/"}>
+          <FcGoogle size={50} />
+        </a>
+        <a href={"/"}>
+          <BsFacebook size={50} color={"#4267B2"} />
+        </a>
+        <a href={"/"}>
+          <RiKakaoTalkFill size={50} color={"#F7E600"} />
+        </a>
+      </SocialLogin>
       <Section>
-        <FcGoogle />
+        <a href={"/"}>회원가입</a>
       </Section>
     </LoginBox>
   );
