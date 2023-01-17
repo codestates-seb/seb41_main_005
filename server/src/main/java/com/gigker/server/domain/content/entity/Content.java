@@ -78,8 +78,8 @@ public class Content extends BaseEntity {
 
 
 //	// 업무 시간
-//	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private List<WorkTime> workTimes = new ArrayList<>();
+	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<WorkTime> workTimes = new ArrayList<>();
 
 	// TODO : 지역 정보 추후에 API 연동
 	@Column(nullable = false)

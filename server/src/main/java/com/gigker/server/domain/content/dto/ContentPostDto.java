@@ -1,6 +1,7 @@
 package com.gigker.server.domain.content.dto;
 
 import com.gigker.server.domain.common.ContentType;
+import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentTag;
 import com.gigker.server.domain.tag.entity.Tag;
@@ -26,7 +27,7 @@ public class ContentPostDto {
     private String other;
 //    private Category category;
     private List<ContentTag> contentTagList;
-//    private List<WorkTime> workTimes;
+    private List<WorkTime> workTimes;
     private String location;
     private int price;
     private LocalDateTime deadLine;

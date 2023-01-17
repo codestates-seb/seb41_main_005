@@ -19,6 +19,7 @@ import java.util.List;
 public class ContentResponseDto {
     private long contentId;
     private long memberId;
+    private String nickName;
     private String title;
     private ContentType contentType;
     private Integer recruitingCount;
