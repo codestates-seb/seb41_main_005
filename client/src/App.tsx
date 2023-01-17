@@ -8,6 +8,7 @@ import Hunting from "./pages/Hunting";
 import EditHire from "./pages/EditHire";
 import EditHunting from "./pages/EditHunting";
 import HireDetail from "./pages/HireDetail";
+import HuntingDetail from "./pages/HuntingDetail";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import axios from "axios";
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/edithire" element={<EditHire />} />
           <Route path="/edithunting" element={<EditHunting />} />
           <Route path="/hiredetail" element={<HireDetail />} />
+          <Route path="/huntingdetail" element={<HuntingDetail />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>
