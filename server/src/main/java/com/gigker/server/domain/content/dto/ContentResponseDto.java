@@ -38,7 +38,7 @@ public class ContentResponseDto {
         private LocalDateTime deadLine;
         private Content.Status status;
         private boolean isPremium;
-        private List<ContentApply> applies;
+        private List<ContentApplyResponseDto.Applicant> applies;
     }
 
     @Getter
