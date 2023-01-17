@@ -2,6 +2,7 @@ import React from "react"; // eslint-disable-line no-unused-vars
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import Button from "./Buttons";
+import { Link } from "react-router-dom";
 
 const NavBar = styled.div`
   width: 100vw;
@@ -48,6 +49,11 @@ const LinkButton = styled.button`
   }
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
+
 const LogInContainer = styled.div`
   /* margin-right: 40px; */
   display: flex;
@@ -63,9 +69,15 @@ const Navigation = () => {
         <Logo width={65} height={65} />
       </LogoContainer>
       <LinkContainer>
-        <LinkButton>홈</LinkButton>
-        <LinkButton>구인</LinkButton>
-        <LinkButton>구직</LinkButton>
+        <LinkButton>
+          <StyledLink to="/">홈</StyledLink>
+        </LinkButton>
+        <LinkButton>
+          <StyledLink to="/hire">구인</StyledLink>
+        </LinkButton>
+        <LinkButton>
+          <StyledLink to="/hunting">구직</StyledLink>
+        </LinkButton>
       </LinkContainer>
       <LogInContainer>
         <Button color={"#6667AB"} width={"5rem"}>

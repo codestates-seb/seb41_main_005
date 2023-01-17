@@ -1,5 +1,7 @@
 package com.gigker.server.domain.content.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -20,4 +22,9 @@ public interface ContentApplyMapper {
 	@Mapping(source = "applicant.pictureUrl", target = "pictureUrl")
 	@Mapping(source = "applicant.about", target = "about")
 	ContentApplyDto.Response applyToResponse(ContentApply apply);
+
+	@Mapping(source = "applicant.nickName", target = "nickName")
+	@Mapping(source = "applicant.pictureUrl", target = "pictureUrl")
+	@Mapping(source = "applicant.about", target = "about")
+	List<ContentApplyDto.Response> appliesToResponses(List<ContentApply> applies);
 }

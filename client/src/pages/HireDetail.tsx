@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/Buttons";
 import CalloutBox from "../components/hiredetail/CalloutBox";
@@ -83,12 +84,13 @@ function HireDetail() {
   };
   const nickname = data.nickname;
 
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [isDisable, setIsDisable] = useState(true);
+  const navigate = useNavigate();
 
   const HandleEditButton = () => {
     isLogin
-      ? console.log("edit page로 이동") //useNavigate
+      ? navigate("/edithire") //useNavigate
       : console.log("login 필수");
   };
 

@@ -3,12 +3,13 @@ import { CardProps } from "./CardProps";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../util/store";
-import { useNavigate } from "react-router-dom";
+
+//import { Link } from "react-router-dom";
 
 export const cards: CardProps[] = [
   {
-    title: `배달 알바 구합니다.`,
-    nickname: `느낌오조`,
+    title: `배달 합니다`,
+    nickname: `느낌`,
     price: `6만원`,
     startWorkTime: `2023.1.25 11:00`,
     endWorkTime: `2023.1.25 18:00`,
@@ -18,8 +19,8 @@ export const cards: CardProps[] = [
     tag: `식사제공🍴`,
   },
   {
-    title: `애견시설 알바 구합니다.`,
-    nickname: `애견맘`,
+    title: `애견시설 알바합니다.`,
+    nickname: `댕댕맘`,
     price: `8만원`,
     startWorkTime: `2023.2.2 9:00`,
     endWorkTime: `2023.2.2 15:00`,
@@ -29,8 +30,8 @@ export const cards: CardProps[] = [
     tag: `초보자가능🐣`,
   },
   {
-    title: "아이 돌봄 알바 구합니다.",
-    nickname: "아빠오조",
+    title: "아이 돌봄 알바합니다.",
+    nickname: "아빠죠",
     price: "7만원",
     startWorkTime: "2023.2.10 14:00",
     endWorkTime: "2023.2.10 19:00",
@@ -40,8 +41,8 @@ export const cards: CardProps[] = [
     tag: `능력활용🧐`,
   },
   {
-    title: `강아지 돌봄 알바 구합니다.`,
-    nickname: `집사오조`,
+    title: `강아지 돌봄 알바합니다.`,
+    nickname: `집사조`,
     price: `7만원`,
     startWorkTime: `2023.2.15 14:00`,
     endWorkTime: `2023.2.15 19:00`,
@@ -51,8 +52,8 @@ export const cards: CardProps[] = [
     tag: `최저시급💰`,
   },
   {
-    title: `카페 알바 구합니다.`,
-    nickname: `집사오조`,
+    title: `카페 알바합니다.`,
+    nickname: `발2스타`,
     price: `7만원`,
     startWorkTime: `2023.2.15 14:00`,
     endWorkTime: `2023.2.15 19:00`,
@@ -68,11 +69,6 @@ interface DataProps {
 }
 
 const HireArticle: React.FC<DataProps> = () => {
-  const navigate = useNavigate();
-  const HandleClick = () => {
-    navigate("/hiredetail");
-  };
-
   const selectedCategory = useSelector(
     (state: RootState) => state.selectedCategory
   );
@@ -96,7 +92,7 @@ const HireArticle: React.FC<DataProps> = () => {
   return (
     <HireArticleContainer>
       {filteredCards.map((card, index) => (
-        <Card key={index} onClick={HandleClick}>
+        <Card key={index}>
           <CardTitle>{card.title}</CardTitle>
           <CardWriter>작성자 {card.nickname}</CardWriter>
           <CardPay>보수 {card.price}</CardPay>
@@ -107,6 +103,7 @@ const HireArticle: React.FC<DataProps> = () => {
     </HireArticleContainer>
   );
 };
+// <Link to ={`/contents/${content-id}`}>{title}</Link>
 
 const HireArticleContainer = styled.div`
   margin-top: 30px;
@@ -129,7 +126,6 @@ const Card = styled.div`
   justify-content: flex-start;
   flex-wrap: wrap;
   text-overflow: ellipsis;
-  cursor: pointer;
 `;
 
 const CardTitle = styled.div`

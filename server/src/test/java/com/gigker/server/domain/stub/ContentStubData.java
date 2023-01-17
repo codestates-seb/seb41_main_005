@@ -19,4 +19,19 @@ public class ContentStubData {
 
 		return content;
 	}
+
+	public static Content getMatchedContent() {
+		Content content = new Content();
+		content.setContentId(2L);
+		content.setMember(MemberStubData.getMember());
+		content.setContentType(ContentType.BUY);
+		content.setTitle("제목");
+		content.setWorkContent("일할 사람");
+		// content.setCategory();
+		content.setLocation("444123");
+		content.setPrice(100000);
+		content.setStatus(Content.Status.MATCHED);
+
+		return content;
+	}
 }

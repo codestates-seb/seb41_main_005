@@ -2,19 +2,31 @@ import Navigation from "./components/Navigation";
 import { ThemeProvider } from "styled-components";
 import GlobalStyle from "./assets/styles/global-styles";
 import { theme } from "./assets/styles/theme";
+import Main from "./pages/Main";
 import Hire from "./pages/Hire";
-
-// import axios from "axios";
+import Hunting from "./pages/Hunting";
+import EditHire from "./pages/EditHire";
+import EditHunting from "./pages/EditHunting";
 import HireDetail from "./pages/HireDetail";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import axios from "axios";
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <Navigation />
-      {/* <Hire /> */}
-      <HireDetail />
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/hire" element={<Hire />} />
+          <Route path="/hunting" element={<Hunting />} />
+          <Route path="/edithire" element={<EditHire />} />
+          <Route path="/edithunting" element={<EditHunting />} />
+          <Route path="/hiredetail" element={<HireDetail />} />
+        </Routes>
+      </ThemeProvider>
+    </BrowserRouter>
   );
   // axios({
   //   method: "post",

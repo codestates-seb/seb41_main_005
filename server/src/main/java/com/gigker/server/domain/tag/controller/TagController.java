@@ -1,10 +1,7 @@
 package com.gigker.server.domain.tag.controller;
 
-import com.gigker.server.domain.tag.dto.TagPostDto;
 import com.gigker.server.domain.tag.entity.Tag;
-import com.gigker.server.domain.tag.mapper.TagMapper;
 import com.gigker.server.domain.tag.repository.TagRepository;
-import com.gigker.server.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

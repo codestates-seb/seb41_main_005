@@ -1,5 +1,6 @@
 package com.gigker.server.domain.member.controller;
 
+import com.gigker.server.domain.member.dto.MemberPatchDto;
 import com.gigker.server.domain.member.dto.MemberPostDto;
 import com.gigker.server.domain.member.entity.Member;
 
@@ -14,18 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.io.IOException;
 
 @Validated
 @RestController
 @RequestMapping("/members")
 public class MemberController {
-	/* 통신 테스트
-	@GetMapping()
-	public String hello(){
-		return "느낌오조~ 프론트와 백엔드의 첫 통신이 성공하였습니다~!";
-	}
-	*/
 
 	private final MemberService memberService;
 	private final MemberMapper memberMapper;
@@ -50,6 +46,20 @@ public class MemberController {
 				profileMapper.profileCreate(),image);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
+
+	//회원수정
+	@PatchMapping(value = "{member-id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity updateMember(@PathVariable("member-id") @Positive long memberId,
+									   @Valid @RequestPart(value = "key") MemberPatchDto memberPatchDto,
+									   @RequestParam(value = "image")MultipartFile image) throws IOException
+	{
+		memberPatchDto.setMemberId(memberId);
+		memberService.updateMember(memberMapper.memberPatchToMember(memberPatchDto),image);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+
+
 
 	//마이페이지 프로필 정보 조회
 //	@GetMapping("/{member-id}")

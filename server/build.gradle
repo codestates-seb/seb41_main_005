@@ -28,7 +28,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'com.google.code.gson:gson'	// gson
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // AWS S3(이미지저장소)
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security' //Security
 
 	// sql 쿼리 파라미터에 실제 값을 넣기 위한 라이브러리
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1' // 쿼리문을 예쁘게 표시해주는? 설정을 하기 위한 dependency
@@ -37,10 +37,10 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3'
 
 	// 인증 관련
-//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-//	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-//	runtimeOnly	'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly	'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	compileOnly 'org.projectlombok:lombok'			//lombok
 	annotationProcessor 'org.projectlombok:lombok'	//lombok
@@ -51,7 +51,7 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'		//mysql database
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 
 
 }
