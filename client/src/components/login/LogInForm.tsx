@@ -63,15 +63,15 @@ const LogInForm = () => {
 
   const logInHandler = async () => {
     axios
-      .post("/signUp", {
-        email: logInEmail,
+      .post("http://gigker.iptime.org:8080/auth/login", {
+        username: logInEmail,
         password: logInPassword,
       })
       .then((res) => {
-        console.log(res.config.data);
+        console.log(res);
       })
       .catch((err) => {
-        console.log(err.config.data);
+        console.log(err);
       });
   };
 

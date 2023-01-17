@@ -136,22 +136,30 @@ const SignUpForm = () => {
 
   const signUpHandler = async () => {
     const formData = new FormData();
-    formData.append("email", JSON.stringify(signUpEmail));
-    formData.append("nickName", JSON.stringify(signUpNickname));
-    formData.append("password", JSON.stringify(signUpPassword));
-    formData.append("about", JSON.stringify(signUpIntroduction));
+    const Data = {
+      email: signUpEmail,
+      nickName: signUpNickname,
+      password: signUpPassword,
+      about: signUpIntroduction,
+    };
+    formData.append(
+      "key",
+      new Blob([JSON.stringify(Data)], {
+        type: "application/json",
+      })
+    );
     formData.append("image", signUpImg);
     axios
-      .post("/signUp", formData, {
+      .post("http://gigker.iptime.org:8080/members", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
-        console.log(res.config.data);
+        console.log(res);
       })
       .catch((err) => {
-        console.log(formData.get("image"));
+        console.log(err);
       });
   };
 
