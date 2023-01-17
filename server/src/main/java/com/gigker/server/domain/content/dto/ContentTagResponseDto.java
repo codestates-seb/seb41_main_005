@@ -9,5 +9,5 @@ import lombok.Data;
 public class ContentTagResponseDto {
     private long ContentId;
     private Long tagId;
-    private String name;
+    private String tagName;
 }

@@ -20,7 +20,7 @@ public interface ContentMapper {
 
     Content contentPatchDtoToContent(ContentPatchDto requestBody);
 
-    Content contentResponseDto(Content content);
+    ContentResponseDto contentResponseDto(Content content);
 
     List<ContentResponseDto> contentsResponseDto(List<Content> contents);
 }

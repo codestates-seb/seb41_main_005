@@ -19,6 +19,7 @@ import java.util.List;
 public class ContentResponseDto {
     private long contentId;
     private long memberId;
+    private String nickName;
     private String title;
     private ContentType contentType;
     private Integer recruitingCount;
@@ -29,7 +30,7 @@ public class ContentResponseDto {
     private String location;
     private Category category;
     private List<WorkTime> workTimes;
-    private List<ContentTag> contentTags;
+    private List<ContentTag> contentTagList;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
     private LocalDateTime relistedAt;

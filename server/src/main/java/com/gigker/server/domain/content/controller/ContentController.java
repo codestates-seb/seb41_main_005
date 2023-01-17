@@ -6,7 +6,6 @@ import com.gigker.server.domain.content.dto.ContentPostDto;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.mapper.ContentMapper;
 import com.gigker.server.domain.content.service.ContentService;
-import com.gigker.server.global.dto.MultiResponseDto;
 import com.gigker.server.global.dto.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -53,7 +52,8 @@ public class ContentController {
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(contentMapper.contentResponseDto(content))
-                ,HttpStatus.OK);
+                ,HttpStatus.OK
+        );
     }
 
     @GetMapping

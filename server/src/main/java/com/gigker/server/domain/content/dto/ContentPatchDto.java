@@ -1,5 +1,6 @@
 package com.gigker.server.domain.content.dto;
 
+import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.ContentTag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,8 +21,8 @@ public class ContentPatchDto {
     private String preference;
     private String other;
 //    private Category category;
-    private List<ContentTag> contentTags;
-//    private List<WorkTime> workTimes;
+    private List<ContentTag> contentTagList;
+    private List<WorkTime> workTimes;
     private String location;
     private int price;
     private LocalDateTime deadLine;
