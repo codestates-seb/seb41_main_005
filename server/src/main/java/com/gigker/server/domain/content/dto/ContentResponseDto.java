@@ -20,6 +20,7 @@ public class ContentResponseDto {
     public static class ContentResponse {
         private long contentId;
         private long memberId;
+        private String nickName;
         private String title;
         private ContentType contentType;
         private Integer recruitingCount;
@@ -46,7 +47,7 @@ public class ContentResponseDto {
     public static class SimpleContentResponse {
         private Long contentId;
         private int price;
-        private WorkTime workTime;
+        private List<WorkTime> workTimes;
         private Long memberId;
         private String nickName;
     }
