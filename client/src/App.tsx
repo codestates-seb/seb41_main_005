@@ -12,8 +12,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <Navigation />
-      <Hire />
-      {/* <HireDetail /> */}
+      {/* <Hire /> */}
+      <HireDetail />
     </ThemeProvider>
   );
   // axios({
