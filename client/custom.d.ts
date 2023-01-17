@@ -6,3 +6,5 @@ declare module "*.svg" {
   export default src;
 }
 profile;
+
+declare module "*.jpg";

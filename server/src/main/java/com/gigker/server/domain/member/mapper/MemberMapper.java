@@ -1,6 +1,7 @@
 package com.gigker.server.domain.member.mapper;
 
 
+import com.gigker.server.domain.member.dto.MemberPatchDto;
 import com.gigker.server.domain.member.dto.MemberPostDto;
 import com.gigker.server.domain.member.entity.Member;
 import org.mapstruct.Mapper;
@@ -17,4 +18,6 @@ public interface MemberMapper {
                 .build();
         return member;
     }
+
+    Member memberPatchToMember(MemberPatchDto memberPatchDto);
 }

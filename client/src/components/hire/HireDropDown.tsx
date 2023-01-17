@@ -4,6 +4,7 @@ import useDetectClose from "../../util/useDetectClose";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../util/store";
 import { selectCategory, selectLocation, selectTag } from "../../util/types";
+import { useNavigate } from "react-router";
 
 const tags = [
   "재택근무🏠",
@@ -93,7 +94,9 @@ const DropdownMenu = () => {
   const [categoryIsOpen, categoryRef, categoryHandler] = useDetectClose(false);
   const [locationIsOpen, locationRef, locationHandler] = useDetectClose(false);
 
+  const navigate = useNavigate();
   const newHireClickHandler = () => {
+    navigate("/edithire");
     console.log("새 글 작성");
   };
 
@@ -101,17 +104,14 @@ const DropdownMenu = () => {
     <>
       <UpperWrapper>
         <DropdownContainer>
-          <DropdownWrapper
-            onClick={categoryHandler} ref={categoryRef}>
+          <DropdownWrapper onClick={categoryHandler} ref={categoryRef}>
             <span>{selectedCategory}</span>
           </DropdownWrapper>
           <DropdownTitle isDropped={categoryIsOpen}>
             <DropdownList>
               {category.map((category: string) => (
                 <DropdownItem key={category}>
-                  <LinkWrapper
-                    onClick={() => handleCategoryClick(category)}
-                  >
+                  <LinkWrapper onClick={() => handleCategoryClick(category)}>
                     {category}
                   </LinkWrapper>
                 </DropdownItem>
@@ -128,9 +128,7 @@ const DropdownMenu = () => {
             <DropdownList>
               {location.map((location: string) => (
                 <DropdownItem key={location}>
-                  <LinkWrapper
-                    onClick={() => handleLocationClick(location)}
-                  >
+                  <LinkWrapper onClick={() => handleLocationClick(location)}>
                     {location}
                   </LinkWrapper>
                 </DropdownItem>
@@ -138,9 +136,8 @@ const DropdownMenu = () => {
             </DropdownList>
           </DropdownTitle>
         </DropdownContainer>
-
         <AddHire onClick={newHireClickHandler}>
-          <button>게시글 작성</button>
+          <button> 게시글 작성</button>
         </AddHire>
       </UpperWrapper>
       <LowerWrapper>
