@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../util/store";
 import { setLogInEmail, setLogInPassword } from "../../util/types";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const LoginBox = styled.form`
   width: 25rem;
@@ -50,34 +51,36 @@ const SocialLogin = styled.div`
 
 const LogInForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const logInEmail = useSelector((state: RootState) => state.logInEmail);
   const logInPassword = useSelector((state: RootState) => state.logInPassword);
 
-  const loginEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLoginEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setLogInEmail(e.currentTarget.value));
   };
 
-  const loginPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLoginPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setLogInPassword(e.currentTarget.value));
   };
 
-  const logInHandler = async () => {
+  const handleLogIn = async () => {
     axios
       .post("http://gigker.iptime.org:8080/auth/login", {
         username: logInEmail,
         password: logInPassword,
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.headers.authorization);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    logInHandler();
+    handleLogIn();
+    navigate("/");
   };
 
   return (
@@ -90,7 +93,7 @@ const LogInForm = () => {
           name={"email"}
           width={"300px"}
           placeholder={"이메일을 입력해주세요"}
-          onChange={loginEmailHandler}
+          onChange={handleLoginEmail}
         />
       </InputSection>
       <InputSection>
@@ -101,7 +104,7 @@ const LogInForm = () => {
           name={"password"}
           width={"300px"}
           placeholder={"비밀번호를 입력해주세요"}
-          onChange={loginPasswordHandler}
+          onChange={handleLoginPassword}
         />
       </InputSection>
       <ButtonSection>
