@@ -42,7 +42,7 @@ public class Content extends BaseEntity {
 	private String title;
 
 	// 모집 인원
-	@Column(nullable = false)
+	@Column
 	private Integer recruitingCount;
 
 	// 업무 내용

@@ -1,13 +1,22 @@
 package com.gigker.server.domain.content.dto;
 
 import com.gigker.server.domain.tag.entity.Tag;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
 public class ContentTagResponseDto {
-    private long ContentId;
-    private Long tagId;
-    private String tagName;
+
+    @Data
+    @NoArgsConstructor
+    public static class Post {
+        private Long tagId;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class Tags {
+        private long ContentId;
+        private Long tagId;
+        private String tagName;
+    }
 }

@@ -7,12 +7,15 @@ import com.gigker.server.domain.content.repository.ContentRepository;
 import com.gigker.server.domain.common.CustomBeanUtils;
 import com.gigker.server.domain.content.repository.ContentTagRepository;
 import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.domain.member.repository.MemberRepository;
 import com.gigker.server.domain.member.service.MemberService;
 import com.gigker.server.domain.tag.entity.Tag;
 import com.gigker.server.domain.tag.service.TagService;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,15 +32,16 @@ public class ContentService {
     private final CustomBeanUtils<Content> beanUtils;
     private final TagService tagService;
     private final ContentTagRepository contentTagRepository;
+    private final MemberRepository memberRepository;
 
     public Content createContent(Content content) {
-        Member member = memberService.findMemberById(content.getMember().getMemberId());
-        List<Long> tagIdList = new ArrayList<>();
-        for (int i = 0; i < content.getContentTagList().size(); i++) {
-            tagIdList.add(content.getContentTagList().get(i).getTag().getTagId());
-        }
+        Member member = memberService.findMemberById(memberService.getCurrentMember().getMemberId());
+//        List<Long> tagIdList = new ArrayList<>();
+//        for (int i = 0; i < content.getContentTagList().size(); i++) {
+//            tagIdList.add(content.getContentTagList().get(i).getTag().getTagId());
+//        }
         content.setMember(member);
-        contentTagRepository.save(new ContentTag());
+//        contentTagRepository.save(new ContentTag());
 
         return contentRepository.save(content);
     }

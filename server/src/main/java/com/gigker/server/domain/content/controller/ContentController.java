@@ -37,7 +37,7 @@ public class ContentController {
     @PatchMapping("/{content_id}")
     public ResponseEntity patchContentDtoToContent(@Valid @RequestBody ContentPatchDto contentPatchDto,
                                         @PathVariable("content_id") @Positive long contentId) {
-        contentPatchDto.setContentId(contentId);
+//        contentPatchDto.setContentId(contentId);
 
         Content content = contentMapper.contentPatchDtoToContent(contentPatchDto);
         Content updateContent = contentService.updateContent(content); // DB 업데이트
