@@ -10,6 +10,8 @@ export interface RootState {
   signUpPassword: string;
   signUpIntroduction: string;
   signUpImg: File | string | Blob;
+  logInEmail: string;
+  logInPassword: string;
 }
 
 export const store = createStore(reducer);
