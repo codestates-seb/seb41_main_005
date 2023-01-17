@@ -49,6 +49,11 @@ const LinkButton = styled.button`
   }
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
+
 const LogInContainer = styled.div`
   /* margin-right: 40px; */
   display: flex;
@@ -65,13 +70,13 @@ const Navigation = () => {
       </LogoContainer>
       <LinkContainer>
         <LinkButton>
-          <Link to="/">홈</Link>
+          <StyledLink to="/">홈</StyledLink>
         </LinkButton>
         <LinkButton>
-          <Link to="/hire">구인</Link>
+          <StyledLink to="/hire">구인</StyledLink>
         </LinkButton>
         <LinkButton>
-          <Link to="/hunting">구직</Link>
+          <StyledLink to="/hunting">구직</StyledLink>
         </LinkButton>
       </LinkContainer>
       <LogInContainer>
