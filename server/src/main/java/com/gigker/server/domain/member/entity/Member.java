@@ -14,6 +14,7 @@ import com.gigker.server.domain.review.entity.Review;
 import lombok.*;
 
 @Getter @Builder
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,6 +48,7 @@ public class Member extends BaseEntity {
 
 	//비밀번호
 	@Column(nullable = false, length = 100)
+	@Setter
 	private String password;
 
 	//닉네임
@@ -66,6 +68,11 @@ public class Member extends BaseEntity {
 	@Enumerated(value = EnumType.STRING)
 	@Column(length = 20, nullable = false)
 	private MemberStatus memberStatus;
+
+	@Builder.Default
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Setter
+	private List<String> roles = new ArrayList<>();
 
 	//회원 상태
 	public enum MemberStatus {

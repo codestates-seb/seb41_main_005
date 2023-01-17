@@ -10,12 +10,14 @@ import javax.persistence.ManyToOne;
 
 import com.gigker.server.domain.tag.entity.Tag;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor
+@Data
 public class ContentTag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +30,8 @@ public class ContentTag {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "content_id")
 	private Content content;
+
+	public void addContent(Content content) {
+		this.content = content;
+	}
 }

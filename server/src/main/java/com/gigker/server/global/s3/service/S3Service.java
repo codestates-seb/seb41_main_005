@@ -3,6 +3,7 @@ package com.gigker.server.global.s3.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.gigker.server.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,18 +27,20 @@ public class S3Service {
 
     private final AmazonS3Client amazonS3Client;
 
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    private String s3DirName = "images";
 
-    public String imgUpload(MultipartFile multipartFile, String dirName) throws IOException
+
+    public String imgUpload(MultipartFile multipartFile) throws IOException
     {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-        return imgUpload(uploadFile,dirName);
+        return imgUpload(uploadFile,s3DirName);
     }
-
-    //S3 이미지 업로드 이미지URL 반환
+    //S3 이미지 업로드
     private String imgUpload(File imgUploadFile, String dirName){
         String fileName = dirName + "/" + uuidRandomCreate(); // 파일명 uuid로 수정
         String uploadImageUrl = putS3(imgUploadFile,fileName);
@@ -49,6 +52,21 @@ public class S3Service {
     }
 
     //S3 이미지 수정
+    public String imgUpdate(MultipartFile multipartFile,String imgName) throws IOException
+    {
+        String deleteFileName = s3DirName + "/" + imgName;
+        if("".equals(s3DirName) == false && s3DirName != null){
+            boolean isExistImg = amazonS3Client.doesObjectExist(bucket,deleteFileName);
+
+            if(isExistImg == true){
+                amazonS3Client.deleteObject(bucket, deleteFileName);
+            }
+        }
+
+       return imgUpload(multipartFile);
+    }
+
+
     private String putS3(File imgUploadFile,String fileName){
         amazonS3Client.putObject(
                 new PutObjectRequest(bucket,fileName,imgUploadFile)

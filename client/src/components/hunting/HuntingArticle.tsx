@@ -3,8 +3,7 @@ import { CardProps } from "./CardProps";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../util/store";
-
-//import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const cards: CardProps[] = [
   {
@@ -68,7 +67,12 @@ interface DataProps {
   cardData: {};
 }
 
-const HireArticle: React.FC<DataProps> = () => {
+const HuntingArticle: React.FC<DataProps> = () => {
+  const navigate = useNavigate();
+  const HandleClick = () => {
+    navigate("/huntingdetail");
+  };
+
   const selectedCategory = useSelector(
     (state: RootState) => state.selectedCategory
   );
@@ -92,7 +96,7 @@ const HireArticle: React.FC<DataProps> = () => {
   return (
     <HireArticleContainer>
       {filteredCards.map((card, index) => (
-        <Card key={index}>
+        <Card key={index} onClick={HandleClick}>
           <CardTitle>{card.title}</CardTitle>
           <CardWriter>작성자 {card.nickname}</CardWriter>
           <CardPay>보수 {card.price}</CardPay>
@@ -103,7 +107,6 @@ const HireArticle: React.FC<DataProps> = () => {
     </HireArticleContainer>
   );
 };
-// <Link to ={`/contents/${content-id}`}>{title}</Link>
 
 const HireArticleContainer = styled.div`
   margin-top: 30px;
@@ -126,6 +129,7 @@ const Card = styled.div`
   justify-content: flex-start;
   flex-wrap: wrap;
   text-overflow: ellipsis;
+  cursor: pointer;
 `;
 
 const CardTitle = styled.div`
@@ -172,4 +176,4 @@ const CardEnd = styled.div`
   padding-bottom: 5px;
 `;
 
-export default HireArticle;
+export default HuntingArticle;
