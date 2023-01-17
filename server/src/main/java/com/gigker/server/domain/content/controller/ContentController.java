@@ -60,7 +60,7 @@ public class ContentController {
     public ResponseEntity getContents(@RequestParam("contentType") ContentType contentType) {
         List<Content> contents = contentService.findContentsByContentType(contentType);
         return new ResponseEntity<>(
-                (contentMapper.contentsResponseDto(contents)),
+                (new SingleResponseDto<>(contentMapper.contentsToSimpleContents(contents))),
                 HttpStatus.OK);
     }
 

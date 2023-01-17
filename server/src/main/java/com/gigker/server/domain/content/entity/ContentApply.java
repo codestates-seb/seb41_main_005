@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.gigker.server.domain.common.BaseEntity;
+import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.member.entity.Member;
 
 import lombok.AccessLevel;
@@ -62,5 +63,36 @@ public class ContentApply extends BaseEntity {
 
 	public void complete() {
 		this.applyStatus = ApplyStatus.COMPLETE;
+	}
+
+	// 지원자 정보 조회 시 좋아요 및 싫어요 정보를 가져온다.
+	public int getLikeCount() {
+		ContentType type = this.content.getContentType();
+
+		switch (type) {
+			case BUY:
+				return this.applicant.getProfile().getSellLikeCount();
+
+			case SELL:
+				return this.applicant.getProfile().getBuyLikeCount();
+
+			default:
+				return 0;
+		}
+	}
+
+	public int getDislikeCount() {
+		ContentType type = this.content.getContentType();
+
+		switch (type) {
+			case BUY:
+				return this.applicant.getProfile().getSellDislikeCount();
+
+			case SELL:
+				return this.applicant.getProfile().getBuyDislikeCount();
+
+			default:
+				return 0;
+		}
 	}
 }
