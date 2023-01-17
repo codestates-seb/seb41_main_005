@@ -4,6 +4,7 @@ import useDetectClose from "../../util/useDetectClose";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../util/store";
 import { selectCategory, selectLocation } from "../../util/types";
+import { useNavigate } from "react-router";
 
 const category = [
   "카테고리",
@@ -72,7 +73,9 @@ const DropdownT = () => {
   const [categoryIsOpen, categoryRef, categoryHandler] = useDetectClose(false);
   const [locationIsOpen, locationRef, locationHandler] = useDetectClose(false);
 
+  const navigate = useNavigate();
   const newHuntingClickHandler = () => {
+    navigate("/edithunting");
     console.log("새 글 작성");
   };
 
@@ -80,17 +83,14 @@ const DropdownT = () => {
     <>
       <UpperWrapper>
         <DropdownContainer>
-          <DropdownWrapper
-            onClick={categoryHandler} ref={categoryRef}>
+          <DropdownWrapper onClick={categoryHandler} ref={categoryRef}>
             <span>{selectedCategory}</span>
           </DropdownWrapper>
           <DropdownTitle isDropped={categoryIsOpen}>
             <DropdownList>
               {category.map((category: string) => (
                 <DropdownItem key={category}>
-                  <LinkWrapper
-                    onClick={() => handleCategoryClick(category)}
-                  >
+                  <LinkWrapper onClick={() => handleCategoryClick(category)}>
                     {category}
                   </LinkWrapper>
                 </DropdownItem>
@@ -107,9 +107,7 @@ const DropdownT = () => {
             <DropdownList>
               {location.map((location: string) => (
                 <DropdownItem key={location}>
-                  <LinkWrapper
-                    onClick={() => handleLocationClick(location)}
-                  >
+                  <LinkWrapper onClick={() => handleLocationClick(location)}>
                     {location}
                   </LinkWrapper>
                 </DropdownItem>

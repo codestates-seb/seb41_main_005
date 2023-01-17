@@ -11,6 +11,8 @@ public enum ExceptionCode {
 	NO_PERMISSION(400, "No permission"), //권한이 없는 사용자의 요청
 	BAD_REQUEST_APPLY(400, "Writer cannot apply"),
 	BAD_REQUEST_RECRUITING(400, "This content is not being recruited"),
+	EDIT_NOT_ALLOWED(400, "Edit not allowed"),
+	DELETE_NOT_ALLOWED(400,"No Permission"),
 
 	// 404
 	NOT_FOUND_MEMBER(404, "Member not found"),
