@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
 import InputBox from "../components/Input";
 import Button from "../components/Buttons";
 import styled from "styled-components";
@@ -9,57 +9,29 @@ import {
 } from "../components/CategoryLocation";
 import axios from 'axios'
 
-interface ExistingData {
-  title: string;
-  category: string;
-  workTime: Array<{ startDate: Date; startTime: string; endTime: string }>;
-  volume: string;
-  pay: string;
-  location: string;
-  workDetail: string;
-  qualification: string;
-  preferential: string;
-  etc: string;
-}
+const NewHire = () => {
+  const [title, setTitle] = useState("");
+  const [workDetail, setWorkDetail] = useState("");
+  const [volume, setVolume] = useState("");
+  const [pay, setPay] = useState("");
+  const [qualification, setQualification] = useState("");
+  const [preferential, setPreferential] = useState("");
+  const [etc, setEtc] = useState("");
+  const [location, setLocation] = useState("");
+  const [category, setCategory] = useState("");
+  const [workTime, setWorkTime] = useState([]);
 
-interface Props {
-  existingData?: ExistingData
-}
+  const handleLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLocation(event.target.value);
+  };
 
-const EditHire = (props: Props) => {
-  const { existingData } = props;
-  const [title, setTitle] = useState(existingData ? existingData.title : '');
-  const [workDetail, setWorkDetail] = useState(existingData ? existingData.workDetail : '');
-  const [volume, setVolume] = useState(existingData ? existingData.volume : '');
-  const [pay, setPay] = useState(existingData ? existingData.pay : '');
-  const [qualification, setQualification] = useState(existingData ? existingData.qualification : '');
-  const [preferential, setPreferential] = useState(existingData ? existingData.preferential : '');
-  const [etc, setEtc] = useState(existingData ? existingData.etc : '');
-  const [location, setLocation] = useState(existingData ? existingData.location : '');
-  const [category, setCategory] = useState(existingData ? existingData.category : '');
-  const [workTime, setWorkTime] = useState(existingData ? existingData.workTime : '');
-  const [existingInfo, setExistingInfo] = useState<ExistingData>({
-    title: "",
-    category: "",
-    workTime: [],
-    volume: "",
-    pay: "",
-    location: "",
-    workDetail: "",
-    qualification: "",
-    preferential: "",
-    etc: "",
-  });
+  const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setCategory(event.target.value);
+  };
 
-  useEffect(() => {
-    axios.get('/contents/:id')
-      .then(response => {
-        setExistingInfo(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
+  const handleWorkTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setWorkTime(event.target.value);
+  };
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -90,7 +62,7 @@ const EditHire = (props: Props) => {
   };
 
   const handleSubmit = () => {
-    axios.post('/contents', {
+    axios.post("http://gigker.iptime.org:8080/contents", {
       title: title,
       recruting_count: volume,
       work_content: workDetail,
@@ -108,6 +80,7 @@ const EditHire = (props: Props) => {
       .catch(error => {
         console.log(error)
       });
+    console.log("새글제출");
   };
 
   return (
@@ -117,14 +90,13 @@ const EditHire = (props: Props) => {
         <InputBox
           width="400px"
           onChange={handleTitleChange}
-          value={existingInfo.title}
         />
         카테고리
-        <CategoryContainer value={existingInfo.category} />
+        <CategoryContainer value={category} onChange={handleCategoryChange} />
       </TitleContainer>
       <WithTitle>
         업무시간
-        <WorkSchedule value={existingInfo.workTime} />
+        <WorkSchedule value={workTime} onChange={handleWorkTimeChange} />
       </WithTitle>
       <ThreeInput>
         <WithTitle>
@@ -132,7 +104,6 @@ const EditHire = (props: Props) => {
           <InputBox
             width="165px"
             onChange={handleVolumeChange}
-            value={existingInfo.volume}
           />
         </WithTitle>
         <WithTitle>
@@ -140,12 +111,11 @@ const EditHire = (props: Props) => {
           <InputBox
             width="165px"
             onChange={handlePayChange}
-            value={existingInfo.pay}
           />
         </WithTitle>
         <WithTitle>
           장소
-          <LocationContainer value={existingInfo.location} />
+          <LocationContainer value={location} onChange={handleLocationChange} />
         </WithTitle>
       </ThreeInput>
       <WithTitle>
@@ -153,7 +123,6 @@ const EditHire = (props: Props) => {
         <InputBox
           width="600px"
           onChange={handleWorkDetailChange}
-          value={existingInfo.workDetail}
         />
       </WithTitle>
       <WithTitle>
@@ -161,7 +130,6 @@ const EditHire = (props: Props) => {
         <InputBox
           width="600px"
           onChange={handleQualificationChange}
-          value={existingInfo.qualification}
         />
       </WithTitle>
       <WithTitle>
@@ -169,7 +137,6 @@ const EditHire = (props: Props) => {
         <InputBox
           width="600px"
           onChange={handlePreferentialChange}
-          value={existingInfo.preferential}
         />
       </WithTitle>
       <WithTitle>
@@ -177,7 +144,6 @@ const EditHire = (props: Props) => {
         <InputBox
           width="600px"
           onChange={handleEtcChange}
-          value={existingInfo.etc}
         />
       </WithTitle>
       <Button onClick={handleSubmit}>제출하기</Button>
@@ -206,4 +172,4 @@ const ThreeInput = styled.div`
   display: flex;
   flex-direction: row;
 `;
-export default EditHire;
+export default NewHire;

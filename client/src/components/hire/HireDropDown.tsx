@@ -96,7 +96,7 @@ const DropdownMenu = () => {
 
   const navigate = useNavigate();
   const newHireClickHandler = () => {
-    navigate("/edithire");
+    navigate("/newhire");
     console.log("새 글 작성");
   };
 
@@ -145,7 +145,7 @@ const DropdownMenu = () => {
           <div>
             {tags.map((tag) => (
               <TagButton
-                key={1}
+                key={""}
                 tag={tag}
                 onClick={() => handleTagClick(selectedTag)}
               />
