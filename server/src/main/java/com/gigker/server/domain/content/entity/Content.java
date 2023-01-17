@@ -92,7 +92,7 @@ public class Content extends BaseEntity {
 
 	@Enumerated(value = EnumType.STRING)
 	@Column//(length = 20, nullable = false)
-	private Status status;
+	private Status status = Status.RECRUITING;
 
 	// 프리미엄 여부
 	@Column(nullable = false)
