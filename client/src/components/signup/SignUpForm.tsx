@@ -2,8 +2,20 @@ import React from "react";
 import styled from "styled-components";
 import InputBox from "../Input";
 import Button from "../Buttons";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../util/store";
+import {
+  setEmail,
+  setNickname,
+  setPassword,
+  setIntroduction,
+  setImage,
+} from "../../util/types";
 
-const SignUpBox = styled.form`
+interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
+
+const SignUpBox = styled.form<FormProps>`
   margin-top: 15rem;
   width: 30rem;
   height: auto;
@@ -79,8 +91,77 @@ const StyledTextArea = styled.textarea<TextareaProps>`
 `;
 
 const SignUpForm = () => {
+  const dispatch = useDispatch();
+  const signUpEmail = useSelector((state: RootState) => state.signUpEmail);
+  const signUpNickname = useSelector(
+    (state: RootState) => state.signUpNickname
+  );
+  const signUpPassword = useSelector(
+    (state: RootState) => state.signUpPassword
+  );
+  const signUpIntroduction = useSelector(
+    (state: RootState) => state.signUpIntroduction
+  );
+  const signUpImg = useSelector((state: RootState) => state.signUpImg);
+
+  const emailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setEmail(e.currentTarget.value));
+  };
+
+  const nickNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setNickname(e.currentTarget.value));
+  };
+
+  const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setPassword(e.currentTarget.value));
+  };
+
+  const introductionHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    dispatch(setIntroduction(e.currentTarget.value));
+  };
+
+  const imageUploder = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // e.preventDefault();
+
+    if (e.currentTarget.files) {
+      // const uploadFile = e.currentTarget.files[0];
+      // console.log(uploadFile);
+      // const formData = new FormData();
+      // formData.append("files", uploadFile);
+
+      // console.log(formData.get("files"));
+      dispatch(setImage(e.currentTarget.files[0]));
+    }
+  };
+
+  const signUpHandler = async () => {
+    const formData = new FormData();
+    formData.append("email", JSON.stringify(signUpEmail));
+    formData.append("nickName", JSON.stringify(signUpNickname));
+    formData.append("password", JSON.stringify(signUpPassword));
+    formData.append("about", JSON.stringify(signUpIntroduction));
+    formData.append("image", signUpImg);
+    axios
+      .post("/signUp", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res.config.data);
+      })
+      .catch((err) => {
+        console.log(formData.get("image"));
+      });
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    signUpHandler();
+  };
+
   return (
-    <SignUpBox>
+    <SignUpBox onSubmit={handleSubmit}>
       <InputSection>
         <label htmlFor={"email"}>이메일</label>
         <InputBox
@@ -89,6 +170,7 @@ const SignUpForm = () => {
           name={"email"}
           width={"350px"}
           placeholder={"이메일을 입력해주세요"}
+          onChange={emailHandler}
         />
       </InputSection>
       <InputSection>
@@ -99,6 +181,7 @@ const SignUpForm = () => {
           name={"nickname"}
           width={"350px"}
           placeholder={"닉네임을 입력해주세요"}
+          onChange={nickNameHandler}
         />
       </InputSection>
       <InputSection>
@@ -109,6 +192,7 @@ const SignUpForm = () => {
           name={"password"}
           width={"350px"}
           placeholder={"비밀번호를 입력해주세요"}
+          onChange={passwordHandler}
         />
       </InputSection>
       <IntroduceSection>
@@ -118,6 +202,7 @@ const SignUpForm = () => {
           name={"introduction"}
           width={"350px"}
           placeholder={"자기소개"}
+          onChange={introductionHandler}
         />
       </IntroduceSection>
       <UploadSection>
@@ -128,6 +213,7 @@ const SignUpForm = () => {
           name={"file"}
           width={"350px"}
           placeholder={"이미지 파일"}
+          onChange={imageUploder}
         />
       </UploadSection>
       <InputSection>
