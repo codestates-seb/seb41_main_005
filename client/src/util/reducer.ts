@@ -11,6 +11,8 @@ const initialState: ApplicationState = {
   signUpImg: null,
   logInEmail: "",
   logInPassword: "",
+  emailMessage: "",
+  isEmail: false,
 };
 
 export const reducer = (
@@ -38,6 +40,10 @@ export const reducer = (
       return { ...state, logInEmail: action.payload };
     case "LOGIN_PASSWORD":
       return { ...state, logInPassword: action.payload };
+    case "EMAIL_MESSAGE":
+      return { ...state, emailMessage: action.payload };
+    case "IS_EMAIL":
+      return { ...state, isEmail: action.payload };
     default:
       return state;
   }
