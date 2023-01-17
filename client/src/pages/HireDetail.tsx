@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Button from "../components/Buttons";
 import CalloutBox from "../components/detail/CalloutBox";
 import UserInfo from "../components/detail/UserInfo";
 import Warning from "../components/detail/Warning";
@@ -27,6 +26,17 @@ const Container = styled.div`
           font-weight: bold;
           p {
             padding-top: 8px;
+          }
+          button {
+            margin: 0 0.5rem;
+            height: 2.5rem;
+            font-size: 16px;
+            font-weight: regular;
+            color: #6f38c5;
+            background-color: white;
+            width: 120px;
+            border: solid 1.2px #6f38c5;
+            border-radius: 4px;
           }
         }
         .tags {
@@ -90,9 +100,7 @@ function HireDetail() {
   const navigate = useNavigate();
 
   const HandleEditButton = () => {
-    isLogin
-      ? navigate("/edithire") //useNavigate
-      : console.log("login 필수");
+    isLogin ? navigate("/edithire") : console.log("login 필수");
   };
 
   const HandleApplyButton = () => {
@@ -108,13 +116,7 @@ function HireDetail() {
           <section className="header">
             <div className="title">
               <p>{data.title}</p>
-              <Button
-                color={"#6F38C5"}
-                width={"150px"}
-                onClick={HandleEditButton}
-              >
-                작성하기
-              </Button>
+              <button onClick={HandleEditButton}>게시글 작성</button>
             </div>
             <div className="tags">
               <ul>
