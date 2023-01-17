@@ -9,6 +9,8 @@ export type ApplicationState = {
   signUpImg: File | string | Blob | null;
   logInEmail: string;
   logInPassword: string;
+  emailMessage: string;
+  isEmail: boolean;
 };
 
 export type ApplicationActions =
@@ -21,7 +23,9 @@ export type ApplicationActions =
   | { type: "SIGNUP_INTRODUCTION"; payload: string }
   | { type: "SIGNUP_IMAGE"; payload: File | string | Blob | null }
   | { type: "LOGIN_EMAIL"; payload: string }
-  | { type: "LOGIN_PASSWORD"; payload: string };
+  | { type: "LOGIN_PASSWORD"; payload: string }
+  | { type: "EMAIL_MESSAGE"; payload: string }
+  | { type: "IS_EMAIL"; payload: boolean };
 
 export const selectCategory = (category: string) => ({
   type: "SELECT_CATEGORY",
@@ -71,4 +75,14 @@ export const setLogInEmail = (email: string) => ({
 export const setLogInPassword = (password: string) => ({
   type: "LOGIN_PASSWORD",
   payload: password,
+});
+
+export const setEmailMessage = (message: string) => ({
+  type: "EMAIL_MESSAGE",
+  payload: message,
+});
+
+export const setIsEmail = (isEmail: boolean) => ({
+  type: "IS_EMAIL",
+  payload: isEmail,
 });

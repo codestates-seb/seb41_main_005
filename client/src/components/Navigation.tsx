@@ -80,12 +80,16 @@ const Navigation = () => {
         </LinkButton>
       </LinkContainer>
       <LogInContainer>
-        <Button color={"#6667AB"} width={"5rem"}>
-          로그인
-        </Button>
-        <Button color={"#6F38C5"} width={"5rem"}>
-          회원가입
-        </Button>
+        <StyledLink to="/login">
+          <Button color={"#6667AB"} width={"5rem"}>
+            로그인
+          </Button>
+        </StyledLink>
+        <StyledLink to="/signup">
+          <Button color={"#6F38C5"} width={"5rem"}>
+            회원가입
+          </Button>
+        </StyledLink>
       </LogInContainer>
     </NavBar>
   );

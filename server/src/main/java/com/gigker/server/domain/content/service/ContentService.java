@@ -2,16 +2,21 @@ package com.gigker.server.domain.content.service;
 
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.entity.Content;
+import com.gigker.server.domain.content.entity.ContentTag;
 import com.gigker.server.domain.content.repository.ContentRepository;
 import com.gigker.server.domain.common.CustomBeanUtils;
+import com.gigker.server.domain.content.repository.ContentTagRepository;
 import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.service.MemberService;
+import com.gigker.server.domain.tag.entity.Tag;
+import com.gigker.server.domain.tag.service.TagService;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +27,17 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final MemberService memberService;
     private final CustomBeanUtils<Content> beanUtils;
+    private final TagService tagService;
+    private final ContentTagRepository contentTagRepository;
 
     public Content createContent(Content content) {
         Member member = memberService.findMemberById(content.getMember().getMemberId());
+        List<Long> tagIdList = new ArrayList<>();
+        for (int i = 0; i < content.getContentTagList().size(); i++) {
+            tagIdList.add(content.getContentTagList().get(i).getTag().getTagId());
+        }
         content.setMember(member);
+        contentTagRepository.save(new ContentTag());
 
         return contentRepository.save(content);
     }

@@ -11,6 +11,8 @@ import {
   setPassword,
   setIntroduction,
   setImage,
+  setEmailMessage,
+  setIsEmail,
 } from "../../util/types";
 
 interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
@@ -90,6 +92,17 @@ const StyledTextArea = styled.textarea<TextareaProps>`
   }
 `;
 
+const StyledSpan = styled.span`
+  font-size: 12px;
+  margin: 4px 0 0 2rem;
+  &.success {
+    color: black;
+  }
+  &.error {
+    color: red;
+  }
+`;
+
 const SignUpForm = () => {
   const dispatch = useDispatch();
   const signUpEmail = useSelector((state: RootState) => state.signUpEmail);
@@ -103,9 +116,23 @@ const SignUpForm = () => {
     (state: RootState) => state.signUpIntroduction
   );
   const signUpImg = useSelector((state: RootState) => state.signUpImg);
+  const emailMessage = useSelector((state: RootState) => state.emailMessage);
+  const isEmail = useSelector((state: RootState) => state.isEmail);
 
   const emailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setEmail(e.currentTarget.value));
+    const emailRegex =
+      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    const emailCurrent = e.currentTarget.value;
+    dispatch(setEmail(emailCurrent));
+    if (!emailRegex.test(emailCurrent)) {
+      dispatch(
+        setEmailMessage("이메일 형식이 틀렸어요! 다시 확인해주세요 ㅜㅜ")
+      );
+      dispatch(setIsEmail(false));
+    } else {
+      dispatch(setEmailMessage("올바른 이메일 형식이에요 :)"));
+      dispatch(setIsEmail(true));
+    }
   };
 
   const nickNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,15 +148,8 @@ const SignUpForm = () => {
   };
 
   const imageUploder = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // e.preventDefault();
-
+    e.preventDefault();
     if (e.currentTarget.files) {
-      // const uploadFile = e.currentTarget.files[0];
-      // console.log(uploadFile);
-      // const formData = new FormData();
-      // formData.append("files", uploadFile);
-
-      // console.log(formData.get("files"));
       dispatch(setImage(e.currentTarget.files[0]));
     }
   };
@@ -180,6 +200,11 @@ const SignUpForm = () => {
           placeholder={"이메일을 입력해주세요"}
           onChange={emailHandler}
         />
+        {signUpEmail.length > 0 && (
+          <StyledSpan className={`${isEmail ? "success" : "error"}`}>
+            {emailMessage}
+          </StyledSpan>
+        )}
       </InputSection>
       <InputSection>
         <label htmlFor={"email"}>닉네임</label>

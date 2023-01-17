@@ -12,6 +12,8 @@ export interface RootState {
   signUpImg: File | string | Blob;
   logInEmail: string;
   logInPassword: string;
+  emailMessage: string;
+  isEmail: boolean;
 }
 
 export const store = createStore(reducer);
