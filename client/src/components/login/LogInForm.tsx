@@ -5,6 +5,10 @@ import Button from "../Buttons";
 import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
 import { RiKakaoTalkFill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../util/store";
+import { setLogInEmail, setLogInPassword } from "../../util/types";
+import axios from "axios";
 
 const LoginBox = styled.form`
   width: 25rem;
@@ -23,8 +27,17 @@ const InputSection = styled.div`
   height: 5rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  label {
+    margin-left: 1rem;
+  }
+`;
+
+const ButtonSection = styled.div`
+  margin: 1rem 0;
+  height: 5rem;
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
 `;
 
 const SocialLogin = styled.div`
@@ -36,8 +49,39 @@ const SocialLogin = styled.div`
 `;
 
 const LogInForm = () => {
+  const dispatch = useDispatch();
+  const logInEmail = useSelector((state: RootState) => state.logInEmail);
+  const logInPassword = useSelector((state: RootState) => state.logInPassword);
+
+  const loginEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setLogInEmail(e.currentTarget.value));
+  };
+
+  const loginPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setLogInPassword(e.currentTarget.value));
+  };
+
+  const logInHandler = async () => {
+    axios
+      .post("/signUp", {
+        email: logInEmail,
+        password: logInPassword,
+      })
+      .then((res) => {
+        console.log(res.config.data);
+      })
+      .catch((err) => {
+        console.log(err.config.data);
+      });
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    logInHandler();
+  };
+
   return (
-    <LoginBox>
+    <LoginBox onSubmit={handleSubmit}>
       <InputSection>
         <label htmlFor={"email"}>이메일</label>
         <InputBox
@@ -46,6 +90,7 @@ const LogInForm = () => {
           name={"email"}
           width={"300px"}
           placeholder={"이메일을 입력해주세요"}
+          onChange={loginEmailHandler}
         />
       </InputSection>
       <InputSection>
@@ -56,13 +101,14 @@ const LogInForm = () => {
           name={"password"}
           width={"300px"}
           placeholder={"비밀번호를 입력해주세요"}
+          onChange={loginPasswordHandler}
         />
       </InputSection>
-      <InputSection>
+      <ButtonSection>
         <Button color={"#6F38C5"} width={"300px"} type={"submit"}>
           로그인
         </Button>
-      </InputSection>
+      </ButtonSection>
       <SocialLogin>
         <a href={"/"}>
           <FcGoogle size={50} />
