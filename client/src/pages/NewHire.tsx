@@ -7,7 +7,7 @@ import {
   LocationContainer,
   CategoryContainer,
 } from "../components/CategoryLocation";
-import axios from 'axios'
+import axios from "axios";
 
 const NewHire = () => {
   const [title, setTitle] = useState("");
@@ -19,7 +19,7 @@ const NewHire = () => {
   const [etc, setEtc] = useState("");
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("");
-  const [workTime, setWorkTime] = useState([]);
+  const [workTime, setWorkTime] = useState<any>([]);
 
   const handleLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
     setLocation(event.target.value);
@@ -62,23 +62,24 @@ const NewHire = () => {
   };
 
   const handleSubmit = () => {
-    axios.post("http://gigker.iptime.org:8080/contents", {
-      title: title,
-      recruting_count: volume,
-      work_content: workDetail,
-      qualification: qualification,
-      preference: preferential,
-      other: etc,
-      worktime: workTime,
-      price: pay,
-      location: location,
-      category: category,
-    })
-      .then(response => {
-        console.log(response)
+    axios
+      .post("http://gigker.iptime.org:8080/contents", {
+        title: title,
+        recruting_count: volume,
+        work_content: workDetail,
+        qualification: qualification,
+        preference: preferential,
+        other: etc,
+        worktime: workTime,
+        price: pay,
+        location: location,
+        category: category,
       })
-      .catch(error => {
-        console.log(error)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
       });
     console.log("새글제출");
   };
@@ -87,10 +88,7 @@ const NewHire = () => {
     <EditHireContainer>
       <TitleContainer>
         제목
-        <InputBox
-          width="400px"
-          onChange={handleTitleChange}
-        />
+        <InputBox width="400px" onChange={handleTitleChange} />
         카테고리
         <CategoryContainer value={category} onChange={handleCategoryChange} />
       </TitleContainer>
@@ -101,17 +99,11 @@ const NewHire = () => {
       <ThreeInput>
         <WithTitle>
           모집인원
-          <InputBox
-            width="165px"
-            onChange={handleVolumeChange}
-          />
+          <InputBox width="165px" onChange={handleVolumeChange} />
         </WithTitle>
         <WithTitle>
           보수
-          <InputBox
-            width="165px"
-            onChange={handlePayChange}
-          />
+          <InputBox width="165px" onChange={handlePayChange} />
         </WithTitle>
         <WithTitle>
           장소
@@ -120,31 +112,19 @@ const NewHire = () => {
       </ThreeInput>
       <WithTitle>
         업무내용
-        <InputBox
-          width="600px"
-          onChange={handleWorkDetailChange}
-        />
+        <InputBox width="600px" onChange={handleWorkDetailChange} />
       </WithTitle>
       <WithTitle>
         자격요건
-        <InputBox
-          width="600px"
-          onChange={handleQualificationChange}
-        />
+        <InputBox width="600px" onChange={handleQualificationChange} />
       </WithTitle>
       <WithTitle>
         우대사항 (선택)
-        <InputBox
-          width="600px"
-          onChange={handlePreferentialChange}
-        />
+        <InputBox width="600px" onChange={handlePreferentialChange} />
       </WithTitle>
       <WithTitle>
         기타 (선택)
-        <InputBox
-          width="600px"
-          onChange={handleEtcChange}
-        />
+        <InputBox width="600px" onChange={handleEtcChange} />
       </WithTitle>
       <Button onClick={handleSubmit}>제출하기</Button>
     </EditHireContainer>
@@ -155,7 +135,7 @@ const EditHireContainer = styled.div`
   padding: 100px 50px 50px 50px;
   display: flex;
   flex-direction: column;
-  $ {InputBox} { 
+  input {
     align-items: center;
   }
 `;

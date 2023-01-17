@@ -7,7 +7,7 @@ import {
   LocationContainer,
   CategoryContainer,
 } from "../components/CategoryLocation";
-import axios from 'axios'
+import axios from "axios";
 
 interface ExistingData {
   title: string;
@@ -23,21 +23,33 @@ interface ExistingData {
 }
 
 interface Props {
-  existingData?: ExistingData
+  existingData?: ExistingData;
 }
 
 const EditHire = (props: Props) => {
   const { existingData } = props;
-  const [title, setTitle] = useState(existingData ? existingData.title : '');
-  const [workDetail, setWorkDetail] = useState(existingData ? existingData.workDetail : '');
-  const [volume, setVolume] = useState(existingData ? existingData.volume : '');
-  const [pay, setPay] = useState(existingData ? existingData.pay : '');
-  const [qualification, setQualification] = useState(existingData ? existingData.qualification : '');
-  const [preferential, setPreferential] = useState(existingData ? existingData.preferential : '');
-  const [etc, setEtc] = useState(existingData ? existingData.etc : '');
-  const [location, setLocation] = useState(existingData ? existingData.location : '');
-  const [category, setCategory] = useState(existingData ? existingData.category : '');
-  const [workTime, setWorkTime] = useState(existingData ? existingData.workTime : '');
+  const [title, setTitle] = useState(existingData ? existingData.title : "");
+  const [workDetail, setWorkDetail] = useState(
+    existingData ? existingData.workDetail : ""
+  );
+  const [volume, setVolume] = useState(existingData ? existingData.volume : "");
+  const [pay, setPay] = useState(existingData ? existingData.pay : "");
+  const [qualification, setQualification] = useState(
+    existingData ? existingData.qualification : ""
+  );
+  const [preferential, setPreferential] = useState(
+    existingData ? existingData.preferential : ""
+  );
+  const [etc, setEtc] = useState(existingData ? existingData.etc : "");
+  const [location, setLocation] = useState(
+    existingData ? existingData.location : ""
+  );
+  const [category, setCategory] = useState(
+    existingData ? existingData.category : ""
+  );
+  const [workTime, setWorkTime] = useState(
+    existingData ? existingData.workTime : ""
+  );
   const [existingInfo, setExistingInfo] = useState<ExistingData>({
     title: "",
     category: "",
@@ -52,11 +64,12 @@ const EditHire = (props: Props) => {
   });
 
   useEffect(() => {
-    axios.get('/contents/:id')
-      .then(response => {
+    axios
+      .get("/contents/:id")
+      .then((response) => {
         setExistingInfo(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }, []);
@@ -90,23 +103,24 @@ const EditHire = (props: Props) => {
   };
 
   const handleSubmit = () => {
-    axios.post('/contents', {
-      title: title,
-      recruting_count: volume,
-      work_content: workDetail,
-      qualification: qualification,
-      preference: preferential,
-      other: etc,
-      worktime: workTime,
-      price: pay,
-      location: location,
-      category: category,
-    })
-      .then(response => {
-        console.log(response)
+    axios
+      .post("/contents", {
+        title: title,
+        recruting_count: volume,
+        work_content: workDetail,
+        qualification: qualification,
+        preference: preferential,
+        other: etc,
+        worktime: workTime,
+        price: pay,
+        location: location,
+        category: category,
       })
-      .catch(error => {
-        console.log(error)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -189,7 +203,7 @@ const EditHireContainer = styled.div`
   padding: 100px 50px 50px 50px;
   display: flex;
   flex-direction: column;
-  $ {InputBox} { 
+  input {
     align-items: center;
   }
 `;

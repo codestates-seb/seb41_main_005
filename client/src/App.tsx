@@ -7,7 +7,7 @@ import Hire from "./pages/Hire";
 import Hunting from "./pages/Hunting";
 import EditHire from "./pages/EditHire";
 import EditHunting from "./pages/EditHunting";
-import NewHire from './pages/NewHire';
+import NewHire from "./pages/NewHire";
 import HireDetail from "./pages/HireDetail";
 import HuntingDetail from "./pages/HuntingDetail";
 import LogInPage from "./pages/LogInPage";
