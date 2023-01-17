@@ -2,8 +2,9 @@ package com.gigker.server.domain.member.controller;
 
 import com.gigker.server.domain.member.dto.MemberPatchDto;
 import com.gigker.server.domain.member.dto.MemberPostDto;
-import com.gigker.server.domain.member.entity.Member;
 
+import com.gigker.server.domain.member.dto.MemberProfileResponseDto;
+import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.mapper.MemberMapper;
 import com.gigker.server.domain.member.mapper.ProfileMapper;
 import com.gigker.server.domain.member.service.MemberService;
@@ -27,7 +28,8 @@ public class MemberController {
 	private final MemberMapper memberMapper;
 	private final ProfileMapper profileMapper;
 
-	public MemberController(MemberService memberService, MemberMapper memberMapper, ProfileMapper profileMapper) {
+	public MemberController(MemberService memberService, MemberMapper memberMapper, ProfileMapper profileMapper)
+	{
 		this.memberService = memberService;
 		this.memberMapper = memberMapper;
 		this.profileMapper = profileMapper;
@@ -58,15 +60,21 @@ public class MemberController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-
+	//회원탈퇴 (회원 상태 변경)
+	@DeleteMapping("{member-id}")
+	public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId)
+	{
+		memberService.deleteMember(memberId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 
 
 	//마이페이지 프로필 정보 조회
-//	@GetMapping("/{member-id}")
-//	public ResponseEntity getMember(@PathVariable("member-id") long memberId)
-//	{
-//		//Member findeMember =
-//	}
-
-
+	@GetMapping("/{member-id}/profile")
+	public ResponseEntity getMember(@PathVariable("member-id") long memberId)
+	{
+		Member member = memberService.findMemberById(memberId);
+		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member,member.getProfile());
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
 }

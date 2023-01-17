@@ -14,6 +14,9 @@ public enum ExceptionCode {
 	EDIT_NOT_ALLOWED(400, "Edit not allowed"),
 	DELETE_NOT_ALLOWED(400,"No Permission"),
 
+	// 401 (권한없음)
+	MEMBER_STATUS_SECESSION(401,"현재 회원은 탈퇴된 상태입니다"),
+
 	// 404
 	NOT_FOUND_MEMBER(404, "Member not found"),
 	NOT_FOUND_CONTENT(404, "Content not found"),

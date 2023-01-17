@@ -33,12 +33,17 @@ public class MemberDetailsService implements UserDetailsService {
     }
 
     private final class MemberDetails extends Member implements UserDetails {
+
         MemberDetails(Member member) {
             setMemberId(member.getMemberId());
+            setProfile(member.getProfile());
             setEmail(member.getEmail());
             setPassword(member.getPassword());
-            setRoles(member.getRoles());
             setNickName(member.getNickName());
+            setPictureUrl(member.getPictureUrl());
+            setAbout(member.getAbout());
+            setMemberStatus(member.getMemberStatus());
+            setRoles(member.getRoles());
         }
 
         @Override
