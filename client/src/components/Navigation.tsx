@@ -12,6 +12,7 @@ const NavBar = styled.div`
   box-shadow: 0 2px 10px -5px;
   position: fixed;
   background-color: #ffffff;
+  z-index: 900;
 `;
 
 const LogoContainer = styled.a`
