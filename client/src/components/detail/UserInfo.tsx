@@ -1,4 +1,4 @@
-import Button from "../../components/Buttons";
+import Button from "../Buttons";
 import cat from "../../assets/cat.jpg";
 import styled from "styled-components";
 

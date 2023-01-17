@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/Buttons";
-import CalloutBox from "../components/hiredetail/CalloutBox";
-import UserInfo from "../components/hiredetail/UserInfo";
-import Warning from "../components/hiredetail/Warning";
+import CalloutBox from "../components/detail/CalloutBox";
+import UserInfo from "../components/detail/UserInfo";
+import Warning from "../components/detail/Warning";
 
 const Container = styled.div`
   display: block;
@@ -67,6 +67,7 @@ const Container = styled.div`
 
 function HireDetail() {
   const data = {
+    type: "buy",
     nickname: "느낌오조",
     worktime: ["1월 22일 11:00 ~ 18:00"],
     location: "강남구",

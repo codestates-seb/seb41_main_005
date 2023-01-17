@@ -1,4 +1,4 @@
-import Button from "../../components/Buttons";
+import Button from "../Buttons";
 import styled from "styled-components";
 
 const Container = styled.aside`
@@ -30,16 +30,22 @@ export default function CalloutBox({
   return (
     <Container>
       <div>
-        <span className="title">업무 시간</span>
+        <span className="title">
+          {data.type === "buy" ? "업무 시간" : "희망 시간"}
+        </span>
         <span>{data.worktime}</span>
       </div>
       <div>
-        <span className="title">장소</span>
+        <span className="title">
+          {data.type === "buy" ? "장소" : "희망 장소"}
+        </span>
         <span>{data.location}</span>
       </div>
       <div>
-        <span className="title">보수</span>
-        <span>{data.price}</span>
+        <span className="title">
+          {data.type === "buy" ? "보수" : "희망 보수"}
+        </span>
+        <span>{data.price}원</span>
       </div>
       <Button
         color={"#6F38C5"}
