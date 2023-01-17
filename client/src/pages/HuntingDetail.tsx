@@ -9,7 +9,7 @@ const Container = styled.div`
   display: block;
   max-width: 1060px;
   .wrapper {
-    margin-top: 80px;
+    padding-top: 80px;
     line-height: 20px;
     position: relative;
     .left {
@@ -109,7 +109,6 @@ function HuntingDetail() {
 
   return (
     <Container>
-      hire detail page
       <div className="wrapper">
         <div className="left">
           <section className="header">
