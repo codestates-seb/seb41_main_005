@@ -52,7 +52,8 @@ public class ContentController {
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(contentMapper.contentResponseDto(content))
-                ,HttpStatus.OK);
+                ,HttpStatus.OK
+        );
     }
 
     @GetMapping

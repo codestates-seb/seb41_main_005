@@ -35,14 +35,14 @@ public class Content extends BaseEntity {
 //	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member member;
 
-	@Column//(nullable = false)
+	@Column(nullable = false)
 	private ContentType contentType;
 
-	@Column//(nullable = false)
+	@Column(nullable = false, length = 30)
 	private String title;
 
 	// 모집 인원
-	@Column
+	@Column(nullable = false)
 	private Integer recruitingCount;
 
 	// 업무 내용
@@ -68,18 +68,25 @@ public class Content extends BaseEntity {
 
 	// 태그
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ContentTag> contentTags = new ArrayList<>();
+	private List<ContentTag> contentTagList = new ArrayList<>();
+	public void addContentTag(ContentTag contentTag) {
+		this.contentTagList.add(contentTag);
+		if (contentTag.getContent() != this) {
+			contentTag.addContent(this);
+		}
+	}
+
 
 //	// 업무 시간
-//	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private List<WorkTime> workTimes = new ArrayList<>();
+	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<WorkTime> workTimes = new ArrayList<>();
 
 	// TODO : 지역 정보 추후에 API 연동
-	@Column//(nullable = false)
+	@Column(nullable = false)
 	private String location;
 
 	// 보수
-	@Column//(nullable = false)
+	@Column(nullable = false)
 	private int price;
 
 	// 끌어 올림
