@@ -8,6 +8,8 @@ import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.mapper.MemberMapper;
 import com.gigker.server.domain.member.mapper.ProfileMapper;
 import com.gigker.server.domain.member.service.MemberService;
+import com.gigker.server.global.dto.MultiResponseDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
+import java.util.List;
 
 @Validated
 @RestController
@@ -60,14 +63,6 @@ public class MemberController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	//회원탈퇴 (회원 상태 변경)
-	@DeleteMapping("{member-id}")
-	public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId)
-	{
-		memberService.deleteMember(memberId);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
-
 
 	//마이페이지 프로필 정보 조회
 	@GetMapping("/{member-id}/profile")
@@ -76,5 +71,25 @@ public class MemberController {
 		Member member = memberService.findMemberById(memberId);
 		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member,member.getProfile());
 		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+
+	//전체회원조회
+	@GetMapping
+	public ResponseEntity getMembers(@Positive @RequestParam int page,
+									 @Positive @RequestParam int size)
+	{
+		Page<Member> pageMembers = memberService.findMembers(page-1,size);
+		List<Member> members = pageMembers.getContent();
+		return new ResponseEntity<>(
+				new MultiResponseDto<>(memberMapper.memberToMemberResponses(members),
+				pageMembers),HttpStatus.OK);
+	}
+
+	//회원탈퇴 (회원 상태 변경)
+	@DeleteMapping("{member-id}")
+	public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId)
+	{
+		memberService.deleteMember(memberId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

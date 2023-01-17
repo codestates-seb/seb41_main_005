@@ -8,9 +8,12 @@ import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.entity.Profile;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
-    default Member memberPostToMember(MemberPostDto memberPostDto){
+    default Member memberPostToMember(MemberPostDto memberPostDto) {
         Member member = Member.builder()
                 .email(memberPostDto.getEmail())
                 .password(memberPostDto.getPassword())
@@ -23,7 +26,7 @@ public interface MemberMapper {
 
     Member memberPatchToMember(MemberPatchDto memberPatchDto);
 
-    default MemberProfileResponseDto memberToMemberResponse(Member member, Profile profile){
+    default MemberProfileResponseDto memberToMemberResponse(Member member, Profile profile) {
         MemberProfileResponseDto memberProfileResponseDto = MemberProfileResponseDto.builder()
                 .email(member.getEmail())
                 .nickName(member.getNickName())
@@ -35,4 +38,6 @@ public interface MemberMapper {
                 .build();
         return memberProfileResponseDto;
     }
+
+    List<MemberProfileResponseDto> memberToMemberResponses(List<Member> members);
 }

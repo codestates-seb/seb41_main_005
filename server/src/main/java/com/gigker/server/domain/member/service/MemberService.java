@@ -124,7 +124,7 @@ public class MemberService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication == null || authentication.getName() == null ||
-        authentication.getName().equals("anoymousUser"))
+        authentication.getName().equals("anonymousUser"))
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
 
         Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
