@@ -25,8 +25,4 @@ public class Tag extends BaseEntity {
 
 	@OneToMany(mappedBy = "tagName", cascade = CascadeType.ALL)
 	private List<ContentTag> contentTags = new ArrayList<>();
-	
-//	public void addContent(List<ContentTag> contentTags) {
-//		this.contentTags = contentTags;
-//	}
 }

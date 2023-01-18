@@ -33,18 +33,6 @@ public class ContentService {
     private final ContentTagRepository contentTagRepository;
     private final MemberRepository memberRepository;
 
-    //    public Content createContent(Content content) {
-//        Member member = memberService.findMemberById(memberService.getCurrentMember().getMemberId());
-//        List<Tag> tags = tagService.findAllBy(content.getNames());
-////        List<Long> tagIdList = new ArrayList<>();
-////        for (int i = 0; i < content.getContentTags().size(); i++) {
-////            tagIdList.add(content.getContentTags().get(i).getTag().getTagId());
-////        }
-//        content.setMember(member);
-////        contentTagRepository.save(new ContentTag());
-//
-//        return contentRepository.save(content);
-//    }
     public Content createContent(Content content) {
         Member member = memberService.findMemberById(memberService.getCurrentMember().getMemberId());
         content.setMember(member);
@@ -55,10 +43,10 @@ public class ContentService {
     public Content updateContent(Content content) //throws BusinessLogicException
     {
         Content findContent = findContentByContentId(content.getContentId());
-////findContent(대상)에 대한 수정요청자 권한 검증, 글 작성자가 아닌경우 400 예외코드
-//        if(findContent.getMember().getMemberId() != getCurrentMember().getMemberId())
-//            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
-////NOT Null 속성값을 수정하지 않으면 기존 게시물의 속성을 그대로 사용
+//findContent(대상)에 대한 수정요청자 권한 검증, 글 작성자가 아닌경우 400 예외코드
+        if(findContent.getMember().getMemberId() != memberService.getCurrentMember().getMemberId())
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
+//NOT Null 속성값을 수정하지 않으면 기존 게시물의 속성을 그대로 사용
         Content updateContent = beanUtils.copyNonNullProperties(content, findContent);
         return contentRepository.save(updateContent);
     }
@@ -91,8 +79,8 @@ public class ContentService {
 
     public void deleteContent(long contentId) {
         Content findContent = findVerifiedContent(contentId);
-//        if(findContent.getMember().getMemberId() != getCurrentMember().getMemberId())
-//            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
+        if(findContent.getMember().getMemberId() != memberService.getCurrentMember().getMemberId())
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
         contentRepository.delete(findContent);
     }
     private Content save(Content content) {

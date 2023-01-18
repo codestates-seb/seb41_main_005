@@ -22,20 +22,6 @@ import java.util.List;
 public class ContentController {
     private final ContentService contentService;
     private final ContentMapper contentMapper;
-
-//    @PostMapping
-//    public ResponseEntity contentPostDtoToContent(@Valid @RequestBody ContentPostDto contentPostDto) {
-//        Content content = contentService.createContent(contentMapper.contentPostDtoToContent(contentPostDto));
-//        Optional.ofNullable(contentPostDto.getContentTags())
-//                .ifPresent(tags -> contentPostDto.getContentTags().forEach(content::addTagFromTagList));
-//        Content createContent = contentService.createContent(content);
-//
-////        return new ResponseEntity<>(
-////                new SingleResponseDto<>(contentMapper.contentToContentResponseDto(content)), HttpStatus.CREATED
-////        );
-//        return new ResponseEntity<>(HttpStatus.CREATED);
-//    }
-
     @PostMapping
     public ResponseEntity postContent(@Valid @RequestBody ContentPostDto contentPostDto) {
         Content content = contentMapper.contentPostDtoToContent(contentPostDto);
@@ -47,11 +33,9 @@ public class ContentController {
     @PatchMapping("/{content_id}")
     public ResponseEntity patchContentDtoToContent(@Valid @RequestBody ContentPatchDto contentPatchDto,
                                                    @PathVariable("content_id") @Positive long contentId) {
-//        contentPatchDto.setContentId(contentId);
 
         Content content = contentMapper.contentPatchDtoToContent(contentPatchDto);
         Content updateContent = contentService.updateContent(content); // DB 업데이트
-//        Content contentReponseDto = contentMapper.contentDtoToContent(updateContent);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

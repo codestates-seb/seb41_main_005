@@ -22,8 +22,6 @@ public class TagController {
     @PostMapping
     public ResponseEntity tagPostDtoToTag(@Valid @RequestBody Tag tag) {
         tagRepository.save(tag);
-        return new ResponseEntity<>(
-                HttpStatus.CREATED
-        );
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
