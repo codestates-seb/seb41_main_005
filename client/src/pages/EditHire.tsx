@@ -7,7 +7,7 @@ import {
   LocationContainer,
   CategoryContainer,
 } from "../components/CategoryLocation";
-// import axios from 'axios'
+import axios from "axios";
 
 interface ExistingData {
   title: string;
@@ -22,15 +22,35 @@ interface ExistingData {
   etc: string;
 }
 
-const EditHire = () => {
-  const [title, setTitle] = useState("");
-  const [workDetail, setWorkDetail] = useState("");
-  const [volume, setVolume] = useState("");
-  const [pay, setPay] = useState("");
-  const [qualification, setQualification] = useState("");
-  const [preferential, setPreferential] = useState("");
-  const [etc, setEtc] = useState("");
-  const [existingData, setExistingData] = useState<ExistingData>({
+interface Props {
+  existingData?: ExistingData;
+}
+
+const EditHire = (props: Props) => {
+  const { existingData } = props;
+  const [title, setTitle] = useState(existingData ? existingData.title : "");
+  const [workDetail, setWorkDetail] = useState(
+    existingData ? existingData.workDetail : ""
+  );
+  const [volume, setVolume] = useState(existingData ? existingData.volume : "");
+  const [pay, setPay] = useState(existingData ? existingData.pay : "");
+  const [qualification, setQualification] = useState(
+    existingData ? existingData.qualification : ""
+  );
+  const [preferential, setPreferential] = useState(
+    existingData ? existingData.preferential : ""
+  );
+  const [etc, setEtc] = useState(existingData ? existingData.etc : "");
+  const [location, setLocation] = useState(
+    existingData ? existingData.location : ""
+  );
+  const [category, setCategory] = useState(
+    existingData ? existingData.category : ""
+  );
+  const [workTime, setWorkTime] = useState(
+    existingData ? existingData.workTime : ""
+  );
+  const [existingInfo, setExistingInfo] = useState<ExistingData>({
     title: "",
     category: "",
     workTime: [],
@@ -42,19 +62,17 @@ const EditHire = () => {
     preferential: "",
     etc: "",
   });
-  // const [articleId, setArticleId] = useState(props.match.params.id);
 
-  // useEffect(() => {
-  //   axios.get(`/endpoint/${articleId}`)
-  //     .then((response) => {
-  //       setExistingData(response.data);
-  //       setTitle(response.data.title);
-  //       setWorkDetail(response.data.workDetail);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get("/contents/:id")
+      .then((response) => {
+        setExistingInfo(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -85,17 +103,25 @@ const EditHire = () => {
   };
 
   const handleSubmit = () => {
-    // axios.post('/endpoint/${articleId}', {
-    //   title: title,
-    //   category: category,
-    //   workTime: workTime
-    // })
-    // .then(response => {
-    //   console.log(response)
-    // })
-    // .catch(error => {
-    //   console.log(error)
-    // });
+    axios
+      .post("/contents", {
+        title: title,
+        recruting_count: volume,
+        work_content: workDetail,
+        qualification: qualification,
+        preference: preferential,
+        other: etc,
+        worktime: workTime,
+        price: pay,
+        location: location,
+        category: category,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -105,14 +131,14 @@ const EditHire = () => {
         <InputBox
           width="400px"
           onChange={handleTitleChange}
-          value={existingData.title}
+          value={existingInfo.title}
         />
         카테고리
-        <CategoryContainer value={existingData.category} />
+        <CategoryContainer value={existingInfo.category} />
       </TitleContainer>
       <WithTitle>
         업무시간
-        <WorkSchedule value={existingData.workTime} />
+        <WorkSchedule value={existingInfo.workTime} />
       </WithTitle>
       <ThreeInput>
         <WithTitle>
@@ -120,7 +146,7 @@ const EditHire = () => {
           <InputBox
             width="165px"
             onChange={handleVolumeChange}
-            value={existingData.volume}
+            value={existingInfo.volume}
           />
         </WithTitle>
         <WithTitle>
@@ -128,12 +154,12 @@ const EditHire = () => {
           <InputBox
             width="165px"
             onChange={handlePayChange}
-            value={existingData.pay}
+            value={existingInfo.pay}
           />
         </WithTitle>
         <WithTitle>
           장소
-          <LocationContainer value={existingData.location} />
+          <LocationContainer value={existingInfo.location} />
         </WithTitle>
       </ThreeInput>
       <WithTitle>
@@ -141,7 +167,7 @@ const EditHire = () => {
         <InputBox
           width="600px"
           onChange={handleWorkDetailChange}
-          value={existingData.workDetail}
+          value={existingInfo.workDetail}
         />
       </WithTitle>
       <WithTitle>
@@ -149,7 +175,7 @@ const EditHire = () => {
         <InputBox
           width="600px"
           onChange={handleQualificationChange}
-          value={existingData.qualification}
+          value={existingInfo.qualification}
         />
       </WithTitle>
       <WithTitle>
@@ -157,7 +183,7 @@ const EditHire = () => {
         <InputBox
           width="600px"
           onChange={handlePreferentialChange}
-          value={existingData.preferential}
+          value={existingInfo.preferential}
         />
       </WithTitle>
       <WithTitle>
@@ -165,7 +191,7 @@ const EditHire = () => {
         <InputBox
           width="600px"
           onChange={handleEtcChange}
-          value={existingData.etc}
+          value={existingInfo.etc}
         />
       </WithTitle>
       <Button onClick={handleSubmit}>제출하기</Button>
@@ -177,7 +203,7 @@ const EditHireContainer = styled.div`
   padding: 100px 50px 50px 50px;
   display: flex;
   flex-direction: column;
-  $ {InputBox} { 
+  input {
     align-items: center;
   }
 `;

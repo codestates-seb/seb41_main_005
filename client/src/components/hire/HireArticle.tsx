@@ -64,7 +64,7 @@ export const cards: CardProps[] = [
 ];
 
 interface DataProps {
-  cardData: {};
+  cardData?: {};
 }
 
 const HireArticle: React.FC<DataProps> = () => {

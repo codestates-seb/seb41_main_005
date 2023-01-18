@@ -2,10 +2,14 @@ package com.gigker.server.global.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.global.exception.BusinessLogicException;
+import com.gigker.server.global.exception.ExceptionCode;
 import com.gigker.server.global.security.dto.LoginDto;
 import com.gigker.server.global.security.jwt.JwtTokenizer;
+import com.gigker.server.global.security.utils.ErrorResponder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,14 +48,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult)
-        throws ServletException, IOException {
+                                            Authentication authResult) throws ServletException, IOException {
         Member member = (Member) authResult.getPrincipal();
+
+        //회원 탈퇴되어있을 시 토큰 반환 대신 exception
+        if(member.getMemberStatus().name().equals("MEMBER_QUIT")) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_STATUS_SECESSION);
+        }
 
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
 
-        response.setHeader("Authorization", "Bearer" +accessToken);
+        response.setHeader("Authorization", "Bearer " +accessToken);
         response.setHeader("Refresh",refreshToken);
 
         this.getSuccessHandler().onAuthenticationSuccess(request,response,authResult);

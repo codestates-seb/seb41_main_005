@@ -4,6 +4,10 @@ import { ReactComponent as Logo } from "../assets/logo.svg";
 import Button from "./Buttons";
 import { Link } from "react-router-dom";
 
+const Block = styled.div`
+  display: block;
+`;
+
 const NavBar = styled.div`
   width: 100vw;
   height: 65px;
@@ -12,6 +16,7 @@ const NavBar = styled.div`
   box-shadow: 0 2px 10px -5px;
   position: fixed;
   background-color: #ffffff;
+  z-index: 900;
 `;
 
 const LogoContainer = styled.a`
@@ -64,30 +69,36 @@ const LogInContainer = styled.div`
 
 const Navigation = () => {
   return (
-    <NavBar>
-      <LogoContainer href="/">
-        <Logo width={65} height={65} />
-      </LogoContainer>
-      <LinkContainer>
-        <LinkButton>
-          <StyledLink to="/">홈</StyledLink>
-        </LinkButton>
-        <LinkButton>
-          <StyledLink to="/hire">구인</StyledLink>
-        </LinkButton>
-        <LinkButton>
-          <StyledLink to="/hunting">구직</StyledLink>
-        </LinkButton>
-      </LinkContainer>
-      <LogInContainer>
-        <Button color={"#6667AB"} width={"5rem"}>
-          로그인
-        </Button>
-        <Button color={"#6F38C5"} width={"5rem"}>
-          회원가입
-        </Button>
-      </LogInContainer>
-    </NavBar>
+    <Block>
+      <NavBar>
+        <LogoContainer href="/">
+          <Logo width={65} height={65} />
+        </LogoContainer>
+        <LinkContainer>
+          <LinkButton>
+            <StyledLink to="/">홈</StyledLink>
+          </LinkButton>
+          <LinkButton>
+            <StyledLink to="/hire">구인</StyledLink>
+          </LinkButton>
+          <LinkButton>
+            <StyledLink to="/hunting">구직</StyledLink>
+          </LinkButton>
+        </LinkContainer>
+        <LogInContainer>
+          <StyledLink to="/login">
+            <Button color={"#6667AB"} width={"5rem"}>
+              로그인
+            </Button>
+          </StyledLink>
+          <StyledLink to="/signup">
+            <Button color={"#6F38C5"} width={"5rem"}>
+              회원가입
+            </Button>
+          </StyledLink>
+        </LogInContainer>
+      </NavBar>
+    </Block>
   );
 };
 

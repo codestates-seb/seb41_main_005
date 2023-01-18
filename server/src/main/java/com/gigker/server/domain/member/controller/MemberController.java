@@ -2,11 +2,14 @@ package com.gigker.server.domain.member.controller;
 
 import com.gigker.server.domain.member.dto.MemberPatchDto;
 import com.gigker.server.domain.member.dto.MemberPostDto;
-import com.gigker.server.domain.member.entity.Member;
 
+import com.gigker.server.domain.member.dto.MemberProfileResponseDto;
+import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.mapper.MemberMapper;
 import com.gigker.server.domain.member.mapper.ProfileMapper;
 import com.gigker.server.domain.member.service.MemberService;
+import com.gigker.server.global.dto.MultiResponseDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
+import java.util.List;
 
 @Validated
 @RestController
@@ -27,7 +31,8 @@ public class MemberController {
 	private final MemberMapper memberMapper;
 	private final ProfileMapper profileMapper;
 
-	public MemberController(MemberService memberService, MemberMapper memberMapper, ProfileMapper profileMapper) {
+	public MemberController(MemberService memberService, MemberMapper memberMapper, ProfileMapper profileMapper)
+	{
 		this.memberService = memberService;
 		this.memberMapper = memberMapper;
 		this.profileMapper = profileMapper;
@@ -48,7 +53,7 @@ public class MemberController {
 	}
 
 	//회원수정
-	@PatchMapping(value = "{member-id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PatchMapping(value ="/{member-id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity updateMember(@PathVariable("member-id") @Positive long memberId,
 									   @Valid @RequestPart(value = "key") MemberPatchDto memberPatchDto,
 									   @RequestParam(value = "image")MultipartFile image) throws IOException
@@ -59,14 +64,41 @@ public class MemberController {
 	}
 
 
+	//멤버아이디로 회원 정보 조회
+	@GetMapping("/{member-id}")
+	public ResponseEntity getMember(@PathVariable("member-id") long memberId)
+	{
+		Member member = memberService.findMemberById(memberId);
+		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member,member.getProfile());
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
 
+	//로그인한 토큰으로 마이페이지 프로필 정보 조회
+	@GetMapping("/profile")
+	public ResponseEntity getMemberProfile()
+	{
+		Member member = memberService.findMemberByProfile();
+		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member,member.getProfile());
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
 
-	//마이페이지 프로필 정보 조회
-//	@GetMapping("/{member-id}")
-//	public ResponseEntity getMember(@PathVariable("member-id") long memberId)
-//	{
-//		//Member findeMember =
-//	}
+	//전체회원조회
+	@GetMapping
+	public ResponseEntity getMembers(@Positive @RequestParam int page,
+									 @Positive @RequestParam int size)
+	{
+		Page<Member> pageMembers = memberService.findMembers(page-1,size);
+		List<Member> members = pageMembers.getContent();
+		return new ResponseEntity<>(
+				new MultiResponseDto<>(memberMapper.memberToMemberResponses(members),
+				pageMembers),HttpStatus.OK);
+	}
 
-
+	//회원탈퇴 (회원 상태 변경)
+	@DeleteMapping("/{member-id}")
+	public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId)
+	{
+		memberService.deleteMember(memberId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 }

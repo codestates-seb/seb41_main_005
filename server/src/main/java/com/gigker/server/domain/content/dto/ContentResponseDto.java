@@ -31,7 +31,7 @@ public class ContentResponseDto {
         private String location;
         private Category category;
         private List<WorkTime> workTimes;
-        private List<ContentTagResponseDto.Tags> contentTagList;
+        private List<ContentTag> contentTags;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
         private LocalDateTime relistedAt;
