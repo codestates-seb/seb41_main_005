@@ -20,7 +20,7 @@ public class ContentPatchDto {
     private String qualification;
     private String preference;
     private String other;
-//    private Category category;
+    private String category;
     private List<ContentTag> contentTags;
     private List<WorkTime> workTimes;
     private String location;

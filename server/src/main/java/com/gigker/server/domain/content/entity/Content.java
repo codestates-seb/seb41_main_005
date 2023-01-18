@@ -6,19 +6,14 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.gigker.server.domain.member.entity.Profile;
 import lombok.Data;
 import lombok.Getter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.common.BaseEntity;
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.member.entity.Member;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
@@ -62,9 +57,9 @@ public class Content extends BaseEntity {
 	private String other;
 
 //	// 카테고리
-//	@OneToOne
-//	@JoinColumn(name = "category_id", nullable = false)
-//	private Category category;
+	@OneToOne
+	@JoinColumn(name = "category_id", nullable = false)
+	private String category;
 
 	// 태그
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)

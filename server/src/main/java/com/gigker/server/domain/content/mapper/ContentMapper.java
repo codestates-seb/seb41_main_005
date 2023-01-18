@@ -1,5 +1,6 @@
 package com.gigker.server.domain.content.mapper;
 
+import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.dto.ContentPatchDto;
 import com.gigker.server.domain.content.dto.ContentPostDto;
 import com.gigker.server.domain.content.dto.ContentResponseDto;
@@ -20,7 +21,6 @@ public interface ContentMapper {
     default Content contentPostDtoToContent(ContentPostDto requestBody) {
         Content content = new Content();
 
-
         List<ContentTag> contentTags = requestBody.getContentTags().stream()
                 .map(contentTagDto -> {
                     ContentTag contentTag = new ContentTag();
@@ -29,10 +29,20 @@ public interface ContentMapper {
                     return contentTag;
                 }).collect(Collectors.toList());
 
+        List<WorkTime> workTimes = requestBody.getWorkTimes().stream()
+                .map(workTimeDto -> {
+                    WorkTime workTime = new WorkTime();
+                    workTime.setStartWorkTime(workTimeDto.getStartWorkTime());
+                    workTime.setEndWorkTime(workTimeDto.getEndWorkTime());
+                    workTime.setContent(content);
+                    return workTime;
+                }).collect(Collectors.toList());
 
         content.setContentType(requestBody.getContentType());
         content.setTitle(requestBody.getTitle());
         content.setContentTags(contentTags);
+        content.setCategory(requestBody.getCategory());
+        content.setWorkTimes(workTimes);
         content.setWorkContent(requestBody.getWorkContent());
         content.setLocation(requestBody.getLocation());
         content.setPrice(requestBody.getPrice());
