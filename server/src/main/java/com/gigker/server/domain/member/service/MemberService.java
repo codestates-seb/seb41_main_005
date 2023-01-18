@@ -98,6 +98,16 @@ public class MemberService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_MEMBER));
     }
 
+    //프로필 정보 조회
+    @Transactional(readOnly = true)
+    public Member findMemberByProfile()
+    {
+        Long memberId = getCurrentMember().getMemberId();
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_MEMBER));
+    }
+
+
     //전체 회원 조회
     @Transactional(readOnly = true)
     public Page<Member> findMembers(int page, int size)
@@ -124,7 +134,7 @@ public class MemberService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication == null || authentication.getName() == null ||
-        authentication.getName().equals("anoymousUser"))
+        authentication.getName().equals("anonymousUser"))
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
 
         Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
