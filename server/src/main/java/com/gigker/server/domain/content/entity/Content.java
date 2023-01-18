@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.gigker.server.domain.category.entity.Category;
 import lombok.Data;
 import lombok.Getter;
 
@@ -57,8 +58,7 @@ public class Content extends BaseEntity {
 	private String other;
 
 //	// 카테고리
-	@OneToOne
-	@JoinColumn(name = "category_id", nullable = false)
+//	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 	private String category;
 
 	// 태그

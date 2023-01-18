@@ -1,5 +1,6 @@
 package com.gigker.server.domain.content.dto;
 
+import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.common.WorkTimeResponseDto;
@@ -17,7 +18,7 @@ public class ContentResponseDto {
     @NoArgsConstructor
     public static class ContentResponse {
         private long contentId;
-        private long memberId;
+        private Long memberId;
         private String nickName;
         private String title;
         private ContentType contentType;

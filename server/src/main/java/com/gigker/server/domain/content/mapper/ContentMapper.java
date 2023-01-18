@@ -1,5 +1,6 @@
 package com.gigker.server.domain.content.mapper;
 
+import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.dto.ContentPatchDto;
 import com.gigker.server.domain.content.dto.ContentPostDto;
@@ -37,13 +38,24 @@ public interface ContentMapper {
                     workTime.setContent(content);
                     return workTime;
                 }).collect(Collectors.toList());
+//        List<Category> categories = requestBody.getCategories().stream()
+//                .map(category1 -> {
+//                    Category category = new Category();
+//                    category.setCategoryName(category1.getCategoryName());
+//                    category.setContent(content);
+//                    return category;
+//                }).collect(Collectors.toList());
 
         content.setContentType(requestBody.getContentType());
+        content.setRecruitingCount(requestBody.getRecruitingCount());
         content.setTitle(requestBody.getTitle());
         content.setContentTags(contentTags);
-        content.setCategory(requestBody.getCategory());
         content.setWorkTimes(workTimes);
+        content.setCategory(requestBody.getCategory());
         content.setWorkContent(requestBody.getWorkContent());
+        content.setQualification(requestBody.getQualification());
+        content.setPreference(requestBody.getPreference());
+        content.setOther(requestBody.getOther());
         content.setLocation(requestBody.getLocation());
         content.setPrice(requestBody.getPrice());
         content.setDeadLine(requestBody.getDeadLine());
@@ -55,6 +67,8 @@ public interface ContentMapper {
     Content contentPatchDtoToContent(ContentPatchDto requestBody);
 
     @Mapping(source = "contentId", target = "contentId")
+    @Mapping(source = "member.memberId", target = "memberId")
+    @Mapping(source = "member.nickName", target = "nickName")
     ContentResponseDto.ContentResponse contentResponseDto(Content content);
 
     @Mapping(source = "contentId", target = "contentId")

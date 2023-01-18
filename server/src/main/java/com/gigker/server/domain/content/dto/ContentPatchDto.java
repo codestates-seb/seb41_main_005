@@ -1,5 +1,6 @@
 package com.gigker.server.domain.content.dto;
 
+import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.ContentTag;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ContentPatchDto {
     private long contentId;
-    private  String title;
+    private String title;
     private Integer recruitingCount;
     private String workContent;
     private String qualification;

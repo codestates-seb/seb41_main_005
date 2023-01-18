@@ -2,8 +2,6 @@ package com.gigker.server.domain.category.controller;
 
 import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.category.repository.CategoryRepository;
-import com.gigker.server.domain.tag.entity.Tag;
-import com.gigker.server.domain.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +20,7 @@ public class categoryController {
     private final CategoryRepository categoryRepository;
 
     @PostMapping
-    public ResponseEntity tagPostDtoToTag(@Valid @RequestBody Category category) {
+    public ResponseEntity createCategory(@Valid @RequestBody Category category) {
         categoryRepository.save(category);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
