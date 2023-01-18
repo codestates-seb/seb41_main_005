@@ -13,6 +13,7 @@ import HireDetail from "./pages/HireDetail";
 import HuntingDetail from "./pages/HuntingDetail";
 import LogInPage from "./pages/LogInPage";
 import SignUpPage from "./pages/SignUpPage";
+import ScrollToTop from "./util/scrollRestoration";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import axios from "axios";
@@ -20,6 +21,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <Navigation />
