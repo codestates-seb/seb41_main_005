@@ -18,6 +18,9 @@ const StyledButton = styled.button<ButtonProps>`
     background-color: ${(props) => props.theme.color.main};
     transition: all 0.5s;
   }
+  &:disabled {
+    background-color: ${(props) => props.theme.color.back};
+  }
 `;
 
 const Button = (props: ButtonProps) => {
