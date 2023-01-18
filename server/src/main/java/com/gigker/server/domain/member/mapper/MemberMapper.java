@@ -7,6 +7,7 @@ import com.gigker.server.domain.member.dto.MemberProfileResponseDto;
 import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.entity.Profile;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,18 +27,18 @@ public interface MemberMapper {
 
     Member memberPatchToMember(MemberPatchDto memberPatchDto);
 
-    default MemberProfileResponseDto memberToMemberResponse(Member member, Profile profile) {
-        MemberProfileResponseDto memberProfileResponseDto = MemberProfileResponseDto.builder()
-                .email(member.getEmail())
-                .nickName(member.getNickName())
-                .about(member.getAbout())
-                .pictureUrl(member.getPictureUrl())
-                .count_like(profile.getBuyLikeCount() + profile.getSellLikeCount())         //종합 좋아요 수
-                .count_dislike(profile.getBuyDislikeCount() + profile.getSellDislikeCount())//종합 싫어요 수
-                .complete(profile.getCompletedBuyCount() + profile.getCompletedSellCount()) //종합 완료 건 수
-                .build();
-        return memberProfileResponseDto;
-    }
+    // @Mapping(target = "likeCount", expression = )
+    // @Mapping(target = "dislikeCount", expression = )
+    @Mapping(source = "profile.buyLikeCount", target = "buyLikeCount")
+    @Mapping(source = "profile.buyDislikeCount", target = "buyDislikeCount")
+    //sell Count
+    // @Mapping(source = "profile.reviewCount", expression = )
+    @Mapping(source = "profile.completedBuyCount", target = "completedBuyCount")
+    @Mapping(source = "profile.completedSellCount", target = "completedSellCount")
+    @Mapping(target = "totalLikeCount", expression = "java(member.getTotalLikeCount())")
+    // @Mapping(target = "totalDislikeCount", expression = "java(profile.buyDisLikeCount + profile.sellDisLikeCount)")
+    // @Mapping(target = "totalCompleted", expression = "java(new LocalDateTime().getTime())")
+    MemberProfileResponseDto memberToMemberResponse(Member member);
 
     List<MemberProfileResponseDto> memberToMemberResponses(List<Member> members);
 }

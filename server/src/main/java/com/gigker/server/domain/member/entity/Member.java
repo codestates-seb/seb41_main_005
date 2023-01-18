@@ -88,4 +88,9 @@ public class Member extends BaseEntity {
 			this.status = status;
 		}
 	}
+
+	public int getTotalLikeCount() {
+
+		return profile.getBuyLikeCount() + profile.getSellLikeCount();
+	}
 }
