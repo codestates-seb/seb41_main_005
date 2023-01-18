@@ -100,4 +100,15 @@ public class ContentApplyController {
 
 		return ResponseEntity.noContent().build();
 	}
+
+	// TODO: 테스트를 위한 코드 (추후 삭제)
+	@PatchMapping("/{content-apply-id}/completed")
+	public ResponseEntity completed(
+		@PathVariable("content-id") @Positive Long contentId,
+		@PathVariable("content-apply-id") @Positive Long applyId) {
+
+		applyService.completeApply(applyId);
+
+		return ResponseEntity.ok().build();
+	}
 }
