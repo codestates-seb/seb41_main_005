@@ -13,5 +13,5 @@ import java.util.List;
 public class TagResponseDto {
     private Long tagId;
     private String tagName;
-    private List<ContentTag> contentTagList;
+    private List<ContentTag> contentTags;
 }

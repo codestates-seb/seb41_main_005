@@ -23,10 +23,6 @@ public class Tag extends BaseEntity {
 	@Column(nullable = false)
 	private String tagName;
 
-	@OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
-	private List<ContentTag> contentTagList = new ArrayList<>();
-	
-//	public void addContent(List<ContentTag> contentTagList) {
-//		this.contentTagList = contentTagList;
-//	}
+	@OneToMany(mappedBy = "tagName", cascade = CascadeType.ALL)
+	private List<ContentTag> contentTags = new ArrayList<>();
 }
