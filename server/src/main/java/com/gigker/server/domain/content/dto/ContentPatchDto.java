@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class ContentPatchDto {
-    private long contentId;
+    private Long contentId;
     private String title;
     private Integer recruitingCount;
     private String workContent;
