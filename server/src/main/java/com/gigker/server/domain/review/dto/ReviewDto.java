@@ -16,12 +16,8 @@ public class ReviewDto {
 	@Setter
 	@NoArgsConstructor
 	public static class ReviewPost {
-		@NotNull(message = "Writer id cannot be null")
-		private Long writerId;
-
-		@NotNull(message = "Recipient id cannot be null")
-		private Long recipientId;
-
+		@NotNull(message = "contentApplyId cannot be null")
+		private Long contentApplyId;
 		private LikeType likeType;
 		private String comment;
 		private boolean isAnonymous;

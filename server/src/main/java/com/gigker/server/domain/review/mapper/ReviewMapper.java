@@ -15,18 +15,14 @@ import com.gigker.server.domain.review.entity.Review;
 	uses = {MemberMapper.class, ContentApplyMapper.class},
 	unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ReviewMapper {
-	// Dto.writerId <=> Review.contentApply.contentApplyId 매핑
-	// Dto.recipientId <=> Review.member.memberId 매핑
-
-	@Mapping(source = "writerId", target = "contentApply.contentApplyId")
-	@Mapping(source = "recipientId", target = "member.memberId")
+	@Mapping(source = "contentApplyId", target = "writer.contentApplyId")
 	Review postToReview(ReviewDto.ReviewPost post);
 
-	@Mapping(source = "contentApply.contentApplyId", target = "writerId")
-	@Mapping(source = "member.memberId", target = "recipientId")
+	@Mapping(source = "writer.applicant.memberId", target = "writerId")
+	@Mapping(source = "recipient.memberId", target = "recipientId")
 	ReviewDto.ReviewResponse reviewToResponse(Review review);
 
-	@Mapping(source = "contentApply.contentApplyId", target = "writerId")
-	@Mapping(source = "member.memberId", target = "recipientId")
+	@Mapping(source = "writer.applicant.memberId", target = "writerId")
+	@Mapping(source = "recipient.memberId", target = "recipientId")
 	List<ReviewDto.ReviewResponse> reviewsToResponses(List<Review> reviews);
 }
