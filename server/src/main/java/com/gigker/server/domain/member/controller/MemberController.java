@@ -69,7 +69,7 @@ public class MemberController {
 	public ResponseEntity getMember(@PathVariable("member-id") long memberId)
 	{
 		Member member = memberService.findMemberById(memberId);
-		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member,member.getProfile());
+		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
@@ -78,7 +78,7 @@ public class MemberController {
 	public ResponseEntity getMemberProfile()
 	{
 		Member member = memberService.findMemberByProfile();
-		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member,member.getProfile());
+		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 

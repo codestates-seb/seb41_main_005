@@ -11,6 +11,7 @@ public enum ExceptionCode {
 	NO_PERMISSION(400, "No permission"), //권한이 없는 사용자의 요청
 	BAD_REQUEST_APPLY(400, "Writer cannot apply"),
 	BAD_REQUEST_RECRUITING(400, "This content is not being recruited"),
+	BAD_REQUEST_REVIEW(400, "Review can write when status is completed"),
 	EDIT_NOT_ALLOWED(400, "Edit not allowed"),
 	DELETE_NOT_ALLOWED(400,"No Permission"),
 
@@ -27,7 +28,8 @@ public enum ExceptionCode {
 	EXISTS_MEMBER(409,"Member exists"),
 	EXISTS_EMAIL(409, "This Email is already in use"),
 	EXISTS_NICKNAME(409, "This nickname is already in use"),
-  	EXISTS_APPLY(409, "Applicant already applied");
+  	EXISTS_APPLY(409, "Applicant already applied"),
+	EXISTS_REVIEW(409, "This member already wrote review");
 
 	int code;
 	String message;
