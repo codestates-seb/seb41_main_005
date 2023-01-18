@@ -53,9 +53,15 @@ public class Review {
 	private String secondComment;
 
 	@Column(nullable = false)
-	private Boolean isAnonymous;
+	@Builder.Default
+	private boolean isAnonymous = false;
 
 	@Enumerated(value = EnumType.STRING)
 	@Column(nullable = false)
-	private ContentType contentType;
+	@Builder.Default
+	private ContentType contentType = this.contentApply.getContent().getContentType();
+
+	public void writeSecondReview(String secondComment) {
+		this.secondComment = secondComment;
+	}
 }

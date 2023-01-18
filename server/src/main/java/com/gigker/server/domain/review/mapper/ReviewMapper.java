@@ -20,13 +20,13 @@ public interface ReviewMapper {
 
 	@Mapping(source = "writerId", target = "contentApply.contentApplyId")
 	@Mapping(source = "recipientId", target = "member.memberId")
-	Review postToReview(ReviewDto.Post post);
+	Review postToReview(ReviewDto.ReviewPost post);
 
 	@Mapping(source = "contentApply.contentApplyId", target = "writerId")
 	@Mapping(source = "member.memberId", target = "recipientId")
-	ReviewDto.Response reviewToResponse(Review review);
+	ReviewDto.ReviewResponse reviewToResponse(Review review);
 
 	@Mapping(source = "contentApply.contentApplyId", target = "writerId")
 	@Mapping(source = "member.memberId", target = "recipientId")
-	List<ReviewDto.Response> reviewsToResponses(List<Review> reviews);
+	List<ReviewDto.ReviewResponse> reviewsToResponses(List<Review> reviews);
 }
