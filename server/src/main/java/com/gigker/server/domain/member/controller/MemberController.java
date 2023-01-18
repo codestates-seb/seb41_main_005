@@ -64,11 +64,20 @@ public class MemberController {
 	}
 
 
-	//마이페이지 프로필 정보 조회
-	@GetMapping("/{member-id}/profile")
+	//멤버아이디로 회원 정보 조회
+	@GetMapping("/{member-id}")
 	public ResponseEntity getMember(@PathVariable("member-id") long memberId)
 	{
 		Member member = memberService.findMemberById(memberId);
+		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member,member.getProfile());
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+
+	//로그인한 토큰으로 마이페이지 프로필 정보 조회
+	@GetMapping("/profile")
+	public ResponseEntity getMemberProfile()
+	{
+		Member member = memberService.findMemberByProfile();
 		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member,member.getProfile());
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
