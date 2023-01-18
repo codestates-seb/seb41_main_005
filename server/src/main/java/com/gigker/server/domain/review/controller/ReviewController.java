@@ -1,5 +1,6 @@
 package com.gigker.server.domain.review.controller;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 import org.springframework.http.HttpStatus;
@@ -9,9 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gigker.server.domain.review.dto.ReviewDto;
+import com.gigker.server.domain.review.entity.Review;
 import com.gigker.server.domain.review.mapper.ReviewMapper;
 import com.gigker.server.domain.review.service.ReviewService;
 
@@ -28,7 +32,11 @@ public class ReviewController {
 
 	// 리뷰 작성
 	@PostMapping
-	public ResponseEntity postReview() {
+	public ResponseEntity postReview(
+		@RequestBody @Valid ReviewDto.ReviewPost post) {
+
+		Review review = reviewMapper.postToReview(post);
+		reviewService.writeReview(review);
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -36,7 +44,10 @@ public class ReviewController {
 	// 2차 리뷰 작성
 	@PatchMapping("/{review-id}")
 	public ResponseEntity patchReview(
-		@PathVariable("review-id") @Positive Long reviewId) {
+		@PathVariable("review-id") @Positive Long reviewId,
+		@RequestBody @Valid ReviewDto.ReviewPatch patch) {
+
+		reviewService.writeSecondReview(reviewId, patch);
 
 		return ResponseEntity.ok().build();
 	}
