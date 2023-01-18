@@ -13,6 +13,7 @@ interface Props {
     startTime: string;
     endTime: string;
   }>;
+  onChange?: any;
 }
 
 // 업무시간 컨테이너

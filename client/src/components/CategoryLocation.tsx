@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 interface Props {
   value: string;
+  onChange?: any;
 }
 //카테고리 컨테이너
 const CategoryContainer: React.FC<Props> = () => {

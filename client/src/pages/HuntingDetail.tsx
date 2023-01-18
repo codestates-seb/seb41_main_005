@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import axios from "axios";
 import styled from "styled-components";
 import CalloutBox from "../components/detail/CalloutBox";
 import UserInfo from "../components/detail/UserInfo";
 import Warning from "../components/detail/Warning";
+import { getDetailData } from "../api/getDetail";
+import { RootState } from "../util/store";
+import { huntingDetailProps } from "../util/huntingDetailData";
 
 const Container = styled.div`
   display: block;
@@ -76,75 +81,90 @@ const Container = styled.div`
 `;
 
 function HuntingDetail() {
-  const data = {
-    type: "sell",
-    nickname: "느낌오조",
-    worktime: ["1월 22일 11:00 ~ 18:00"],
-    location: "강남구",
-    price: "100,000",
-    status: "좋아요 3 | 싫어요 0",
-    review_count: 10,
-    title: "설날 배송 알바 구합니다",
-    tags: ["#초보자가능", "#방학알바"],
-    work_content: "설날 서울, 경기권 배송 업무",
-    other:
-      "자세한 궁금한 사항은 전화 연락 바랍니다. 평일이나 주말에도 일이 많으니 관심있으신 분들은 지원해주세요.",
-  };
-  const nickname = data.nickname;
+  // const data = {
+  //   type: "sell",
+  //   nickname: "느낌오조",
+  //   worktime: ["1월 22일 11:00 ~ 18:00"],
+  //   location: "강남구",
+  //   price: "100,000",
+  //   status: "좋아요 3 | 싫어요 0",
+  //   review_count: 10,
+  //   title: "설날 배송 알바 구합니다",
+  //   tags: ["#초보자가능", "#방학알바"],
+  //   work_content: "설날 서울, 경기권 배송 업무",
+  //   other:
+  //     "자세한 궁금한 사항은 전화 연락 바랍니다. 평일이나 주말에도 일이 많으니 관심있으신 분들은 지원해주세요.",
+  // };
 
   const [isLogin, setIsLogin] = useState(true);
-  const [isDisable, setIsDisable] = useState(true);
+  const [data, setData] = useState<huntingDetailProps>();
   const navigate = useNavigate();
 
+  const contentId = 1;
+  const memberId = 1;
+
+  useEffect(() => {
+    const detailData = async () => {
+      const data = await getDetailData(contentId);
+      setData(data);
+    };
+    detailData();
+  }, []);
+
   const HandleEditButton = () => {
-    isLogin
-      ? navigate("/edithunting") //useNavigate
-      : console.log("login 필수");
+    isLogin ? navigate("/edithunting") : console.log("login 필수");
   };
 
   const HandleApplyButton = () => {
-    isDisable ? console.log("disabled") : console.log("clicked");
-    setIsDisable(!isDisable);
+    axios({
+      url: `http://gigker.iptime.org:8080/contents/${contentId}/apply`,
+      data: {
+        memberId: memberId,
+        contentId: contentId,
+      },
+    }).then((res) => console.log(res.data));
   };
 
   return (
     <Container>
-      <div className="wrapper">
-        <div className="left">
-          <section className="header">
-            <div className="title">
-              <p>{data.title}</p>
-              <button onClick={HandleEditButton}>게시글 작성</button>
-            </div>
-            <div className="tags">
-              <ul>
-                {data.tags
-                  ? data.tags.map((tag, idx) => <li key={idx}>{tag}</li>)
-                  : (data.tags = [])}
-              </ul>
-            </div>
-          </section>
-          <section className="description">
-            <div>
-              <span>업무 내용</span>
-              <p>{data.work_content}</p>
-            </div>
-            <div>
-              <span>기타</span>
-              <p>{data.other}</p>
-            </div>
-          </section>
-          <UserInfo data={data} />
-          <Warning nickname={nickname} />
+      {data && (
+        <div className="wrapper">
+          <div className="left">
+            <section className="header">
+              <div className="title">
+                <p>{data.title}</p>
+                <button onClick={HandleEditButton}>게시글 작성</button>
+              </div>
+              <div className="tags">
+                <ul>
+                  {data.tags
+                    ? data.tags.map((tag, idx) => <li key={idx}>{tag}</li>)
+                    : (data.tags = [])}
+                </ul>
+              </div>
+            </section>
+            <section className="description">
+              <div>
+                <span>업무 내용</span>
+                <p>{data.work_content}</p>
+              </div>
+              <div>
+                <span>기타</span>
+                <p>{data.other}</p>
+              </div>
+            </section>
+            <UserInfo data={data} />
+            <Warning nickname={data.nickname} />
+          </div>
+          <div className="right">
+            <CalloutBox
+              data={data}
+              isLogin={isLogin}
+              handlebutton={HandleApplyButton}
+            />
+          </div>
         </div>
-        <div className="right">
-          <CalloutBox
-            data={data}
-            isDisable={isDisable}
-            handlebutton={HandleApplyButton}
-          />
-        </div>
-      </div>
+      )}
     </Container>
   );
 }

@@ -13,6 +13,7 @@ const initialState: ApplicationState = {
   logInPassword: "",
   emailMessage: "",
   isEmail: false,
+  token: "",
 };
 
 export const reducer = (
@@ -44,6 +45,8 @@ export const reducer = (
       return { ...state, emailMessage: action.payload };
     case "IS_EMAIL":
       return { ...state, isEmail: action.payload };
+    case "TOKEN":
+      return { ...state, token: action.payload };
     default:
       return state;
   }

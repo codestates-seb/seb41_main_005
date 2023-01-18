@@ -34,7 +34,7 @@ public class ContentApplyService {
 	public ContentApply createApply(ContentApply apply) {
 		// Member, Content 유효성 검사
 		Member applicant = memberService.findMemberById(apply.getApplicant().getMemberId());
-		Content content = contentService.findContentByContentId(apply.getContent().getContentId());
+		Content content = getContentByContentId(apply.getContent().getContentId());
 
 		// 모집 중인 게시글인지 확인
 		if (isContentRecruiting(content)) {
@@ -72,8 +72,7 @@ public class ContentApplyService {
 		return findVerifiedApply(applyId);
 	}
 
-	public Page<ContentApply> findAllApplies(Long contentId, int page, int size) {
-		Content content = contentService.findContentByContentId(contentId);
+	public Page<ContentApply> findAllApplies(Content content, int page, int size) {
 
 		return applyRepository.findAllByContent(content,
 			PageRequest.of(page, size, Sort.by("contentApplyId").descending()));
@@ -83,6 +82,10 @@ public class ContentApplyService {
 		ContentApply apply = findVerifiedApply(applyId);
 
 		applyRepository.delete(apply);
+	}
+
+	public Content getContentByContentId(Long contentId) {
+		return contentService.findContentByContentId(contentId);
 	}
 
 	// == Find ==

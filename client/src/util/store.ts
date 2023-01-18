@@ -14,6 +14,7 @@ export interface RootState {
   logInPassword: string;
   emailMessage: string;
   isEmail: boolean;
+  token: any;
 }
 
 export const store = createStore(reducer);

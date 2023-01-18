@@ -7,7 +7,7 @@ import { BsFacebook } from "react-icons/bs";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../util/store";
-import { setLogInEmail, setLogInPassword } from "../../util/types";
+import { setLogInEmail, setLogInPassword, setToken } from "../../util/types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -54,7 +54,7 @@ const LogInForm = () => {
   const navigate = useNavigate();
   const logInEmail = useSelector((state: RootState) => state.logInEmail);
   const logInPassword = useSelector((state: RootState) => state.logInPassword);
-
+  const token = useSelector((state: RootState) => state.token);
   const handleLoginEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setLogInEmail(e.currentTarget.value));
   };
@@ -65,12 +65,13 @@ const LogInForm = () => {
 
   const handleLogIn = async () => {
     axios
-      .post("http://gigker.iptime.org:8080/auth/login", {
+      .post("http://gigker.iptime.org:8080/auth", {
         username: logInEmail,
         password: logInPassword,
       })
       .then((res) => {
-        console.log(res.headers.authorization);
+        dispatch(setToken(res.headers.autorization));
+        console.log("token: " + token);
       })
       .catch((err) => {
         console.log(err);

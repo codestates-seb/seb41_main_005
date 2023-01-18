@@ -11,6 +11,7 @@ export type ApplicationState = {
   logInPassword: string;
   emailMessage: string;
   isEmail: boolean;
+  token: string;
 };
 
 export type ApplicationActions =
@@ -25,7 +26,8 @@ export type ApplicationActions =
   | { type: "LOGIN_EMAIL"; payload: string }
   | { type: "LOGIN_PASSWORD"; payload: string }
   | { type: "EMAIL_MESSAGE"; payload: string }
-  | { type: "IS_EMAIL"; payload: boolean };
+  | { type: "IS_EMAIL"; payload: boolean }
+  | { type: "TOKEN"; payload: string };
 
 export const selectCategory = (category: string) => ({
   type: "SELECT_CATEGORY",
@@ -85,4 +87,9 @@ export const setEmailMessage = (message: string) => ({
 export const setIsEmail = (isEmail: boolean) => ({
   type: "IS_EMAIL",
   payload: isEmail,
+});
+
+export const setToken = (token: any) => ({
+  type: "TOKEN",
+  payload: token,
 });

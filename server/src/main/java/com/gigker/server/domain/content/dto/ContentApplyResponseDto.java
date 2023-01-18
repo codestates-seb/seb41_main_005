@@ -2,13 +2,14 @@ package com.gigker.server.domain.content.dto;
 
 import javax.validation.constraints.NotNull;
 
+import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.ContentApply;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-public class ContentApplyDto {
+public class ContentApplyResponseDto {
 	@Getter
 	@Setter
 	@NoArgsConstructor
@@ -21,9 +22,8 @@ public class ContentApplyDto {
 	@Getter
 	@Setter
 	@NoArgsConstructor
-	public static class Response {
+	public static class Applicant {
 		private Long contentApplyId;
-		private Long contentId;
 		private Long applicantId;
 		private String nickName;
 		private String pictureUrl;

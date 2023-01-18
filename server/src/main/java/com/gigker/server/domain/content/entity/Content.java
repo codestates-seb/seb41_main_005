@@ -98,8 +98,8 @@ public class Content extends BaseEntity {
 	private LocalDateTime deadLine;
 
 	@Enumerated(value = EnumType.STRING)
-	@Column(length = 20, nullable = false)
-	private Status status;
+	@Column//(length = 20, nullable = false)
+	private Status status = Status.RECRUITING;
 
 	// 프리미엄 여부
 	@Column(nullable = false)

@@ -20,11 +20,11 @@ const Container = styled.aside`
 
 export default function CalloutBox({
   data,
-  isDisable,
+  isLogin,
   handlebutton,
 }: {
   data: any;
-  isDisable: any;
+  isLogin: boolean;
   handlebutton: any;
 }) {
   return (
@@ -47,14 +47,19 @@ export default function CalloutBox({
         </span>
         <span>{data.price}원</span>
       </div>
-      <Button
-        color={"#6F38C5"}
-        width={"300px"}
-        disabled={!isDisable}
-        onClick={() => handlebutton()}
-      >
-        지원하기
-      </Button>
+      {isLogin ? (
+        <Button color={"#6F38C5"} width={"300px"} disabled={true}>
+          지원하기
+        </Button>
+      ) : (
+        <Button
+          color={"#6F38C5"}
+          width={"300px"}
+          onClick={() => handlebutton()}
+        >
+          지원하기
+        </Button>
+      )}
     </Container>
   );
 }

@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gigker.server.domain.content.dto.ContentApplyDto;
+import com.gigker.server.domain.content.dto.ContentApplyResponseDto;
+import com.gigker.server.domain.content.dto.ContentResponseDto;
+import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.mapper.ContentApplyMapper;
+import com.gigker.server.domain.content.mapper.ContentMapper;
 import com.gigker.server.domain.content.service.ContentApplyService;
 import com.gigker.server.global.dto.MultiResponseDto;
 import com.gigker.server.global.dto.SingleResponseDto;
@@ -35,16 +38,16 @@ import lombok.extern.slf4j.Slf4j;
 public class ContentApplyController {
 	private final ContentApplyService applyService;
 	private final ContentApplyMapper applyMapper;
+	private final ContentMapper contentMapper;
 
 	// 게시글에 지원
 	@PostMapping
 	public ResponseEntity postApply(
 		@PathVariable("content-id") @Positive Long contentId,
-		@RequestBody @Valid ContentApplyDto.Post post) {
+		@RequestBody @Valid ContentApplyResponseDto.Post post) {
 
 		ContentApply apply = applyMapper.postToApply(post, contentId);
-		ContentApply createdApply = applyService.createApply(apply);
-		ContentApplyDto.Response response = applyMapper.applyToResponse(createdApply);
+		applyService.createApply(apply);
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -55,7 +58,7 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
-		ContentApply apply = applyService.acceptApply(applyId);
+		applyService.acceptApply(applyId);
 
 		return ResponseEntity.ok().build();
 	}
@@ -66,11 +69,13 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@RequestParam @Positive int page) {
 
+		Content content = applyService.getContentByContentId(contentId);
 		// 페이지당 출력 수는 15로 고정
-		Page<ContentApply> pageApplies = applyService.findAllApplies(contentId, page - 1, 15);
-		List<ContentApplyDto.Response> responses = applyMapper.appliesToResponses(pageApplies.getContent());
+		Page<ContentApply> pageApplies = applyService.findAllApplies(content, page - 1, 15);
+		List<ContentApplyResponseDto.Applicant> applicants = applyMapper.appliesToApplicants(pageApplies.getContent());
+		ContentResponseDto.SimpleContentResponse simpleContent = contentMapper.contentToSimpleContent(content);
 
-		return ResponseEntity.status(HttpStatus.OK).body(new MultiResponseDto<>(responses, pageApplies));
+		return ResponseEntity.status(HttpStatus.OK).body(new MultiResponseDto<>(simpleContent, applicants, pageApplies));
 	}
 
 	// 단일 신청자 목록 조회
@@ -80,9 +85,9 @@ public class ContentApplyController {
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
 		ContentApply apply = applyService.findApply(applyId);
-		ContentApplyDto.Response response = applyMapper.applyToResponse(apply);
+		ContentApplyResponseDto.Applicant applicant = applyMapper.applyToApplicant(apply);
 
-		return ResponseEntity.status(HttpStatus.OK).body(new SingleResponseDto<>(response));
+		return ResponseEntity.status(HttpStatus.OK).body(new SingleResponseDto<>(applicant));
 	}
 
 	// 지원 취소
