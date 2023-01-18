@@ -6,6 +6,7 @@ import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.entity.ContentTag;
+import com.gigker.server.domain.tag.entity.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,7 +32,7 @@ public class ContentResponseDto {
         private String location;
         private Category category;
         private List<WorkTime> workTimes;
-        private List<ContentTag> contentTags;
+        private List<ContentTagResponseDto> contentTags;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
         private LocalDateTime relistedAt;

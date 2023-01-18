@@ -30,20 +30,26 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final MemberService memberService;
     private final CustomBeanUtils<Content> beanUtils;
-    private final TagService tagService;
     private final ContentTagRepository contentTagRepository;
     private final MemberRepository memberRepository;
 
+    //    public Content createContent(Content content) {
+//        Member member = memberService.findMemberById(memberService.getCurrentMember().getMemberId());
+//        List<Tag> tags = tagService.findAllBy(content.getNames());
+////        List<Long> tagIdList = new ArrayList<>();
+////        for (int i = 0; i < content.getContentTags().size(); i++) {
+////            tagIdList.add(content.getContentTags().get(i).getTag().getTagId());
+////        }
+//        content.setMember(member);
+////        contentTagRepository.save(new ContentTag());
+//
+//        return contentRepository.save(content);
+//    }
     public Content createContent(Content content) {
         Member member = memberService.findMemberById(memberService.getCurrentMember().getMemberId());
-//        List<Long> tagIdList = new ArrayList<>();
-//        for (int i = 0; i < content.getContentTagList().size(); i++) {
-//            tagIdList.add(content.getContentTagList().get(i).getTag().getTagId());
-//        }
         content.setMember(member);
-//        contentTagRepository.save(new ContentTag());
-
-        return contentRepository.save(content);
+        Content saveContent = contentRepository.save(content);
+        return saveContent;
     }
 
     public Content updateContent(Content content) //throws BusinessLogicException
@@ -88,5 +94,8 @@ public class ContentService {
 //        if(findContent.getMember().getMemberId() != getCurrentMember().getMemberId())
 //            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
         contentRepository.delete(findContent);
+    }
+    private Content save(Content content) {
+        return contentRepository.save(content);
     }
 }

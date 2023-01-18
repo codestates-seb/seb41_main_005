@@ -18,7 +18,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class ContentPostDto {
-    private Long memberId;
     private String title;
     private ContentType contentType;
     private Integer recruitingCount;
@@ -26,8 +25,8 @@ public class ContentPostDto {
     private String qualification;
     private String preference;
     private String other;
-//    private Category category;
-    private List<ContentTagResponseDto.Post> contentTagList;
+    //    private Category category;
+    private List<ContentTag> contentTags;
     private List<WorkTime> workTimes;
     private String location;
     private int price;

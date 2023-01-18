@@ -68,16 +68,10 @@ public class Content extends BaseEntity {
 
 	// 태그
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ContentTag> contentTagList = new ArrayList<>();
-	public void addContentTag(ContentTag contentTag) {
-		this.contentTagList.add(contentTag);
-		if (contentTag.getContent() != this) {
-			contentTag.addContent(this);
-		}
-	}
+	private List<ContentTag> contentTags = new ArrayList<>();
 
 
-//	// 업무 시간
+	//	// 업무 시간
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<WorkTime> workTimes = new ArrayList<>();
 
@@ -123,5 +117,9 @@ public class Content extends BaseEntity {
 		Status(String status) {
 			this.status = status;
 		}
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
 	}
 }

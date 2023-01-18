@@ -23,20 +23,30 @@ public class ContentController {
     private final ContentService contentService;
     private final ContentMapper contentMapper;
 
+//    @PostMapping
+//    public ResponseEntity contentPostDtoToContent(@Valid @RequestBody ContentPostDto contentPostDto) {
+//        Content content = contentService.createContent(contentMapper.contentPostDtoToContent(contentPostDto));
+//        Optional.ofNullable(contentPostDto.getContentTags())
+//                .ifPresent(tags -> contentPostDto.getContentTags().forEach(content::addTagFromTagList));
+//        Content createContent = contentService.createContent(content);
+//
+////        return new ResponseEntity<>(
+////                new SingleResponseDto<>(contentMapper.contentToContentResponseDto(content)), HttpStatus.CREATED
+////        );
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
+
     @PostMapping
-    public ResponseEntity contentPostDtoToContent(@Valid @RequestBody ContentPostDto contentPostDto) {
+    public ResponseEntity postContent(@Valid @RequestBody ContentPostDto contentPostDto) {
         Content content = contentMapper.contentPostDtoToContent(contentPostDto);
         Content createContent = contentService.createContent(content);
 
-//        return new ResponseEntity<>(
-//                new SingleResponseDto<>(contentMapper.contentToContentResponseDto(content)), HttpStatus.CREATED
-//        );
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
     @PatchMapping("/{content_id}")
     public ResponseEntity patchContentDtoToContent(@Valid @RequestBody ContentPatchDto contentPatchDto,
-                                        @PathVariable("content_id") @Positive long contentId) {
+                                                   @PathVariable("content_id") @Positive long contentId) {
 //        contentPatchDto.setContentId(contentId);
 
         Content content = contentMapper.contentPatchDtoToContent(contentPatchDto);
