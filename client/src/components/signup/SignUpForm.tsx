@@ -9,16 +9,26 @@ import {
   setEmail,
   setNickname,
   setPassword,
+  setPasswordConfirm,
   setIntroduction,
   setImage,
   setEmailMessage,
   setIsEmail,
+  setNickNameMessage,
+  setIsNickName,
+  setPasswordMessage,
+  setIsPassword,
+  setPasswordConfirmMessage,
+  setIsPasswordConfirm,
+  setIntroductionMessage,
+  setIsIntroduction,
+  setIsUpload,
 } from "../../util/types";
 
 interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
 
 const SignUpBox = styled.form<FormProps>`
-  margin-top: 15rem;
+  margin-top: 20rem;
   width: 30rem;
   height: auto;
   border: 1px solid ${(props) => props.theme.color.back};
@@ -42,6 +52,7 @@ const InputSection = styled.div`
 
 const IntroduceSection = styled.div`
   margin: 1rem 0 1rem 0;
+  height: 12rem;
   display: flex;
   flex-direction: column;
   label {
@@ -112,49 +123,117 @@ const SignUpForm = () => {
   const signUpPassword = useSelector(
     (state: RootState) => state.signUpPassword
   );
+  const signUpPasswordConfirm = useSelector(
+    (state: RootState) => state.signUpPasswordConfirm
+  );
   const signUpIntroduction = useSelector(
     (state: RootState) => state.signUpIntroduction
   );
   const signUpImg = useSelector((state: RootState) => state.signUpImg);
   const emailMessage = useSelector((state: RootState) => state.emailMessage);
   const isEmail = useSelector((state: RootState) => state.isEmail);
+  const nickNameMessage = useSelector(
+    (state: RootState) => state.nickNameMessage
+  );
+  const isNickName = useSelector((state: RootState) => state.isNickName);
+  const passwordMessage = useSelector(
+    (state: RootState) => state.passwordMessage
+  );
+  const isPassword = useSelector((state: RootState) => state.isPassword);
+  const passwordConfirmMessage = useSelector(
+    (state: RootState) => state.passwordConfirmMessage
+  );
+  const isPasswordConfirm = useSelector(
+    (state: RootState) => state.isPasswordConfirm
+  );
+  const introductionMessage = useSelector(
+    (state: RootState) => state.introductionMessage
+  );
+  const isIntroduction = useSelector(
+    (state: RootState) => state.isIntroduction
+  );
+  const isUpload = useSelector((state: RootState) => state.isUpload);
 
-  const emailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     const emailCurrent = e.currentTarget.value;
     dispatch(setEmail(emailCurrent));
     if (!emailRegex.test(emailCurrent)) {
-      dispatch(
-        setEmailMessage("이메일 형식이 틀렸어요! 다시 확인해주세요 ㅜㅜ")
-      );
+      dispatch(setEmailMessage("이메일 형식이 틀렸어요! 다시 확인해주세요"));
       dispatch(setIsEmail(false));
     } else {
-      dispatch(setEmailMessage("올바른 이메일 형식이에요 :)"));
+      dispatch(setEmailMessage("올바른 이메일 형식입니다 :)"));
       dispatch(setIsEmail(true));
     }
   };
 
-  const nickNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setNickname(e.currentTarget.value));
-  };
-
-  const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setPassword(e.currentTarget.value));
-  };
-
-  const introductionHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch(setIntroduction(e.currentTarget.value));
-  };
-
-  const imageUploder = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (e.currentTarget.files) {
-      dispatch(setImage(e.currentTarget.files[0]));
+  const handleNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nicknameRegex = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
+    const nickNameCurrent = e.currentTarget.value;
+    dispatch(setNickname(nickNameCurrent));
+    if (!nicknameRegex.test(nickNameCurrent)) {
+      dispatch(
+        setNickNameMessage("영문 또는 한글 2자 이상 16자 이하로 입력해주세요")
+      );
+      dispatch(setIsNickName(false));
+    } else {
+      dispatch(setNickNameMessage("올바른 닉네임 형식입니다 :)"));
+      dispatch(setIsNickName(true));
     }
   };
 
-  const signUpHandler = async () => {
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/;
+    const passwordCurrent = e.currentTarget.value;
+    dispatch(setPassword(passwordCurrent));
+    if (!passwordRegex.test(passwordCurrent)) {
+      dispatch(
+        setPasswordMessage(
+          "숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요!"
+        )
+      );
+      dispatch(setIsPassword(false));
+    } else {
+      dispatch(setPasswordMessage("안전한 비밀번호입니다 :)"));
+      dispatch(setIsPassword(true));
+    }
+  };
+
+  const handlePasswordConfirm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const passwordConfirmCurrent = e.currentTarget.value;
+    dispatch(setPasswordConfirm(passwordConfirmCurrent));
+    if (signUpPassword === passwordConfirmCurrent) {
+      dispatch(setPasswordConfirmMessage("비밀번호가 같습니다 :)"));
+      dispatch(setIsPasswordConfirm(true));
+    } else {
+      dispatch(setPasswordConfirmMessage("비밀번호가 다릅니다"));
+      dispatch(setIsPasswordConfirm(false));
+    }
+  };
+
+  const handleIntroduction = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    dispatch(setIntroduction(e.currentTarget.value));
+    dispatch(setIsIntroduction(true));
+    if (e.currentTarget.value.length > 150) {
+      dispatch(setIntroductionMessage("150자를 초과했습니다"));
+      dispatch(setIsIntroduction(false));
+    }
+  };
+
+  const uploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.files) {
+      dispatch(setImage(e.currentTarget.files[0]));
+      dispatch(setIsUpload(true));
+      if (e.currentTarget.files.length === 0) {
+        dispatch(setImage(""));
+        dispatch(setIsUpload(false));
+      }
+    }
+  };
+
+  const handleSignUp = async () => {
     const formData = new FormData();
     const Data = {
       email: signUpEmail,
@@ -185,7 +264,7 @@ const SignUpForm = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    signUpHandler();
+    handleSignUp();
   };
 
   return (
@@ -197,8 +276,8 @@ const SignUpForm = () => {
           type={"email"}
           name={"email"}
           width={"350px"}
-          placeholder={"이메일을 입력해주세요"}
-          onChange={emailHandler}
+          placeholder={"최대 50자 @을 포함한 이메일 형식"}
+          onChange={handleEmail}
         />
         {signUpEmail.length > 0 && (
           <StyledSpan className={`${isEmail ? "success" : "error"}`}>
@@ -207,26 +286,52 @@ const SignUpForm = () => {
         )}
       </InputSection>
       <InputSection>
-        <label htmlFor={"email"}>닉네임</label>
+        <label htmlFor={"nickname"}>닉네임</label>
         <InputBox
           id={"nickname"}
           type={"text"}
           name={"nickname"}
           width={"350px"}
-          placeholder={"닉네임을 입력해주세요"}
-          onChange={nickNameHandler}
+          placeholder={"영문 또는 한글 2자 이상 16자 이하"}
+          onChange={handleNickName}
         />
+        {signUpNickname.length > 0 && (
+          <StyledSpan className={`${isNickName ? "success" : "error"}`}>
+            {nickNameMessage}
+          </StyledSpan>
+        )}
       </InputSection>
       <InputSection>
-        <label htmlFor={"email"}>비밀번호</label>
+        <label htmlFor={"password"}>비밀번호</label>
         <InputBox
           id={"password"}
           type={"password"}
           name={"password"}
           width={"350px"}
-          placeholder={"비밀번호를 입력해주세요"}
-          onChange={passwordHandler}
+          placeholder={"8자 이상 영문, 숫자, 특수문자 포함"}
+          onChange={handlePassword}
         />
+        {signUpPassword.length > 0 && (
+          <StyledSpan className={`${isPassword ? "success" : "error"}`}>
+            {passwordMessage}
+          </StyledSpan>
+        )}
+      </InputSection>
+      <InputSection>
+        <label htmlFor={"passwordConfirm"}>비밀번호 확인</label>
+        <InputBox
+          id={"passwordConfirm"}
+          type={"password"}
+          name={"passwordConfirm"}
+          width={"350px"}
+          placeholder={"비밀번호를 다시 입력해주세요 (대소문자 구분)"}
+          onChange={handlePasswordConfirm}
+        />
+        {signUpPasswordConfirm.length > 0 && (
+          <StyledSpan className={`${isPasswordConfirm ? "success" : "error"}`}>
+            {passwordConfirmMessage}
+          </StyledSpan>
+        )}
       </InputSection>
       <IntroduceSection>
         <label htmlFor={"introdution"}>자기소개</label>
@@ -234,9 +339,14 @@ const SignUpForm = () => {
           id={"introduction"}
           name={"introduction"}
           width={"350px"}
-          placeholder={"자기소개"}
-          onChange={introductionHandler}
+          placeholder={"내용을 입력해주세요(150자 이내)"}
+          onChange={handleIntroduction}
         />
+        {isIntroduction ? (
+          <StyledSpan></StyledSpan>
+        ) : (
+          <StyledSpan className={"error"}>{introductionMessage}</StyledSpan>
+        )}
       </IntroduceSection>
       <UploadSection>
         <label htmlFor={"file"}>프로필 사진</label>
@@ -246,11 +356,25 @@ const SignUpForm = () => {
           name={"file"}
           width={"350px"}
           placeholder={"이미지 파일"}
-          onChange={imageUploder}
+          onChange={uploadImage}
         />
       </UploadSection>
       <InputSection>
-        <Button color={"#6F38C5"} width={"350px"} type={"submit"}>
+        <Button
+          color={"#6F38C5"}
+          width={"350px"}
+          type={"submit"}
+          disabled={
+            !(
+              isEmail &&
+              isNickName &&
+              isPassword &&
+              isPasswordConfirm &&
+              isIntroduction &&
+              isUpload
+            )
+          }
+        >
           회원가입
         </Button>
       </InputSection>
