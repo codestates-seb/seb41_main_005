@@ -23,6 +23,7 @@ const initialState: ApplicationState = {
   introductionMessage: "",
   isIntroduction: false,
   isUpload: false,
+  isLogIn: false,
 };
 
 export const reducer = (
@@ -74,6 +75,8 @@ export const reducer = (
       return { ...state, isIntroduction: action.payload };
     case "IS_UPLOAD":
       return { ...state, isUpload: action.payload };
+    case "IS_LOGIN":
+      return { ...state, isLogIn: action.payload };
     default:
       return state;
   }

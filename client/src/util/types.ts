@@ -21,6 +21,7 @@ export type ApplicationState = {
   introductionMessage: string;
   isIntroduction: boolean;
   isUpload: boolean;
+  isLogIn: boolean;
 };
 
 export type ApplicationActions =
@@ -45,7 +46,8 @@ export type ApplicationActions =
   | { type: "IS_PASSWORDCONFIRM"; payload: boolean }
   | { type: "INTRODUCTION_MESSAGE"; payload: string }
   | { type: "IS_INTRODUCTION"; payload: boolean }
-  | { type: "IS_UPLOAD"; payload: boolean };
+  | { type: "IS_UPLOAD"; payload: boolean }
+  | { type: "IS_LOGIN"; payload: boolean };
 
 export const selectCategory = (category: string) => ({
   type: "SELECT_CATEGORY",
@@ -155,4 +157,9 @@ export const setIsIntroduction = (isIntroduction: boolean) => ({
 export const setIsUpload = (isUpload: boolean) => ({
   type: "IS_UPLOAD",
   payload: isUpload,
+});
+
+export const setIsLogIn = (isLogIn: boolean) => ({
+  type: "IS_LOGIN",
+  payload: isLogIn,
 });

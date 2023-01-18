@@ -24,6 +24,7 @@ export interface RootState {
   introductionMessage: string;
   isIntroduction: boolean;
   isUpload: boolean;
+  isLogIn: boolean;
 }
 
 export const store = createStore(reducer);
