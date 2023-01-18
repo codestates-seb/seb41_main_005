@@ -7,7 +7,7 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:import/recommended",
-    "plugin:jsx-a11y/recommended",
+    // "plugin:jsx-a11y/recommended", // 리액트로 jsx 작성하면 html처럼 동작하기 때문에 html처럼? 뭔가 관련된거. 접근성을 위해 존재하는애.
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/eslint-recommended"
   ],
@@ -20,8 +20,8 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "react/react-in-jsx-scope": 0,
-    "react/jsx-uses-react": 0,
+    "react/react-in-jsx-scope": "off", // 0이나 off 둘중 하나로 통일할 것
+    "react/jsx-uses-react": "off",
     "react/prop-types": "off",
     "import/no-unresolved": "error",
     "no-unused-vars": "off",

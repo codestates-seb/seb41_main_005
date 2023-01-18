@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 import CalloutBox from "../components/detail/CalloutBox";
 import UserInfo from "../components/detail/UserInfo";
@@ -97,15 +98,32 @@ function HireDetail() {
 
   const [isLogin, setIsLogin] = useState(true);
   const [isDisable, setIsDisable] = useState(true);
+  // const [data, setData] = useState([]);
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   axios({
+  //     method: "get",
+  //     url: `http://gigker.iptime.org:8080/contents/1`,
+  //   }).then((res) => {
+  //     console.log(res.data);
+  //     setData(res.data);
+  //   });
+  // }, []);
 
   const HandleEditButton = () => {
     isLogin ? navigate("/edithire") : console.log("login 필수");
   };
 
   const HandleApplyButton = () => {
-    isDisable ? console.log("disabled") : console.log("clicked");
-    setIsDisable(!isDisable);
+    axios({
+      method: "post",
+      url: "http://gigker.iptime.org:8080/contents/1/apply",
+      data: {
+        memberId: 1,
+        contentId: 1,
+      },
+    }).then((res) => console.log(res));
   };
 
   return (
