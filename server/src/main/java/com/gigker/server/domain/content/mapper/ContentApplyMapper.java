@@ -24,15 +24,15 @@ public interface ContentApplyMapper {
 	@Mapping(source = "applicant.nickName", target = "nickName")
 	@Mapping(source = "applicant.pictureUrl", target = "pictureUrl")
 	@Mapping(source = "applicant.about", target = "about")
-	@Mapping(target = "like", expression = "java(apply.getLikeCount())")
-	@Mapping(target = "dislike", expression = "java(apply.getDislikeCount())")
+	@Mapping(target = "likeCount", expression = "java(apply.getLikeCount())")
+	@Mapping(target = "dislikeCount", expression = "java(apply.getDislikeCount())")
 	ContentApplyResponseDto.Applicant applyToApplicant(ContentApply apply);
 
 	@Mapping(source = "applicant.memberId", target = "applicantId")
 	@Mapping(source = "applicant.nickName", target = "nickName")
 	@Mapping(source = "applicant.pictureUrl", target = "pictureUrl")
 	@Mapping(source = "applicant.about", target = "about")
-	@Mapping(target = "like", expression = "java(apply.getLikeCount())")
-	@Mapping(target = "dislike", expression = "java(apply.getDislikeCount())")
+	@Mapping(target = "likeCount", expression = "java(apply.getLikeCount())")
+	@Mapping(target = "dislikeCount", expression = "java(apply.getDislikeCount())")
 	List<ContentApplyResponseDto.Applicant> appliesToApplicants(List<ContentApply> applies);
 }

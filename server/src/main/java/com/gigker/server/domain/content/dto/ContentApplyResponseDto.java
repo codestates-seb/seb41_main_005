@@ -28,8 +28,8 @@ public class ContentApplyResponseDto {
 		private String nickName;
 		private String pictureUrl;
 		private String about;
-		private int like;
-		private int dislike;
+		private int likeCount;
+		private int dislikeCount;
 		private int reviewCount;
 		private ContentApply.ApplyStatus applyStatus;
 	}

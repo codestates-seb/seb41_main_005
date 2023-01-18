@@ -40,7 +40,7 @@ public class ReviewDto {
 		private Long recipientId;
 		private LikeType likeType;
 		private String comment;
-		private String second_comment;
+		private String secondComment;
 		private boolean isAnonymous;
 		private ContentType type;
 	}
