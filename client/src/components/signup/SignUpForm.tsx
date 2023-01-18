@@ -4,6 +4,7 @@ import InputBox from "../Input";
 import Button from "../Buttons";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { RootState } from "../../util/store";
 import {
   setEmail,
@@ -116,6 +117,7 @@ const StyledSpan = styled.span`
 
 const SignUpForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const signUpEmail = useSelector((state: RootState) => state.signUpEmail);
   const signUpNickname = useSelector(
     (state: RootState) => state.signUpNickname
@@ -256,15 +258,24 @@ const SignUpForm = () => {
       })
       .then((res) => {
         console.log(res);
+        alert(`환영합니다!! ${signUpNickname}님 \n로그인을 해주세요`);
+        navigate("/login", { replace: true });
       })
       .catch((err) => {
         console.log(err);
+        alert(`유효하지 않거나 이미 등록된 회원입니다`);
+        navigate(0);
       });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleSignUp();
+    handleSignUp().then(() => {
+      dispatch(setEmail(""));
+      dispatch(setNickname(""));
+      dispatch(setPassword(""));
+      dispatch(setPasswordConfirm(""));
+    });
   };
 
   return (
