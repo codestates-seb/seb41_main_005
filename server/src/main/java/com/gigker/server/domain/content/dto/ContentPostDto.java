@@ -28,5 +28,5 @@ public class ContentPostDto {
     private String location;
     private int price;
     private LocalDateTime deadLine;
-    private boolean isPremium;
+    private Boolean isPremium;
 }

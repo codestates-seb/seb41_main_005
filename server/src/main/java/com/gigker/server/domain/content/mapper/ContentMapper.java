@@ -66,7 +66,7 @@ public interface ContentMapper {
         content.setLocation(requestBody.getLocation());
         content.setPrice(requestBody.getPrice());
         content.setDeadLine(requestBody.getDeadLine());
-        content.setPremium(requestBody.isPremium());
+        content.setIsPremium(requestBody.getIsPremium());
 
         return content;
     }
@@ -102,7 +102,7 @@ public interface ContentMapper {
         content.setLocation(requestBody.getLocation());
         content.setPrice(requestBody.getPrice());
         content.setDeadLine(requestBody.getDeadLine());
-        content.setPremium(requestBody.isPremium());
+        content.setIsPremium(requestBody.getIsPremium());
 //        content.setRelistedAt(LocalDateTime.now());
 
         return content;

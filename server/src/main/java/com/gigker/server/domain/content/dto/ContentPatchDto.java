@@ -27,6 +27,6 @@ public class ContentPatchDto {
     private String location;
     private int price;
     private LocalDateTime deadLine;
-    private boolean isPremium;
+    private Boolean isPremium;
     private LocalDateTime relistedAt;
 }
