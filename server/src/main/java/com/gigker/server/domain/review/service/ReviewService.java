@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
+import com.gigker.server.domain.content.service.ContentApplyService;
 import com.gigker.server.domain.content.service.ContentService;
 import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.service.MemberService;
@@ -29,39 +30,33 @@ public class ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final MemberService memberService;
 	private final ContentService contentService;
+	private final ContentApplyService applyService;
 
 	@Transactional
 	public Review writeReview(Review review) {
-		// Writer, Recipient 유효성 검사
-		Content content = contentService.findContentByContentId(
-			review.getContentApply().getContent().getContentId());
+		// Writer, Recipient 할당
+		ContentApply apply = applyService.findVerifiedApply(review.getWriter().getContentApplyId());
+		Content content = contentService.findContentByContentId(apply.getContent().getContentId());
 
-		Member writer = memberService.findMemberById(
-			review.getContentApply().getApplicant().getMemberId());
-		Member recipient = memberService.findMemberById(
-			content.getMember().getMemberId());
+		Member writer = memberService.findMemberById(apply.getApplicant().getMemberId());
+		Member recipient = memberService.findMemberById(content.getMember().getMemberId());
 
-		if (writer != review.getContentApply().getApplicant()) {
-			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST_REVIEW);
-		}
-
-		if (recipient != review.getMember()) {
-			throw new BusinessLogicException(ExceptionCode.NOT_FOUND_MEMBER);
-		}
+		// TODO: 로그인한 사용자가 작성자인지 확인 (Authentication Token)
 
 		// Content 및 ContentApply 완료 상태인지 확인
 		verifyContentStatusIsCompleted(content);
-		verifyContentApplyStatusIsCompleted(review.getContentApply());
+		verifyContentApplyStatusIsCompleted(apply);
 
 		// 이미 리뷰를 작성했는지 확인
 		verifyReviewExist(writer, content);
 
-		// TODO: 로그인한 사용자가 작성자인지 확인 (Authentication Token)
+		review.setRecipient(content.getMember());
+		review.setContentType(content.getContentType());
 
 		return reviewRepository.save(review);
 	}
 
-	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
 	public Review writeSecondReview(Long reviewId, ReviewDto.ReviewPatch patch) {
 		Review review = findVerifyReview(reviewId);
 
