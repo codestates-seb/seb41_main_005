@@ -53,7 +53,7 @@ public class MemberController {
 	}
 
 	//회원수정
-	@PatchMapping(value = "{member-id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PatchMapping(value ="/{member-id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity updateMember(@PathVariable("member-id") @Positive long memberId,
 									   @Valid @RequestPart(value = "key") MemberPatchDto memberPatchDto,
 									   @RequestParam(value = "image")MultipartFile image) throws IOException
@@ -95,7 +95,7 @@ public class MemberController {
 	}
 
 	//회원탈퇴 (회원 상태 변경)
-	@DeleteMapping("{member-id}")
+	@DeleteMapping("/{member-id}")
 	public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId)
 	{
 		memberService.deleteMember(memberId);
