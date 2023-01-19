@@ -23,6 +23,7 @@ public enum ExceptionCode {
 	NOT_FOUND_CONTENT(404, "Content not found"),
 	NOT_FOUND_APPLY(404, "Apply not found"),
 	NOT_FOUND_REVIEW(404, "Review not found"),
+	NOT_FOUND_CATEGORY(404, "Category not found"),
 
 	// 409 (중복)
 	EXISTS_MEMBER(409,"Member exists"),

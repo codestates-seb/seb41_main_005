@@ -1,5 +1,7 @@
 package com.gigker.server.domain.content.controller;
 
+import com.gigker.server.domain.category.entity.Category;
+import com.gigker.server.domain.category.service.CategoryService;
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.dto.ContentPatchDto;
 import com.gigker.server.domain.content.dto.ContentPostDto;
@@ -22,6 +24,7 @@ import java.util.List;
 public class ContentController {
     private final ContentService contentService;
     private final ContentMapper contentMapper;
+    private final CategoryService categoryService;
     @PostMapping
     public ResponseEntity postContent(@Valid @RequestBody ContentPostDto contentPostDto) {
         Content content = contentMapper.contentPostDtoToContent(contentPostDto);

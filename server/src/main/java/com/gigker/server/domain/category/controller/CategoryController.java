@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/categories")
-public class categoryController {
+public class CategoryController {
 
     private final CategoryRepository categoryRepository;
 
