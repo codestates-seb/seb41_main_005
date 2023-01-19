@@ -6,19 +6,15 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.gigker.server.domain.member.entity.Profile;
+import com.gigker.server.domain.category.entity.Category;
 import lombok.Data;
 import lombok.Getter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.common.BaseEntity;
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.member.entity.Member;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
@@ -62,9 +58,8 @@ public class Content extends BaseEntity {
 	private String other;
 
 //	// 카테고리
-//	@OneToOne
-//	@JoinColumn(name = "category_id", nullable = false)
-//	private Category category;
+//	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+	private String category;
 
 	// 태그
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -97,7 +92,7 @@ public class Content extends BaseEntity {
 
 	// 프리미엄 여부
 	@Column(nullable = false)
-	private boolean isPremium;
+	private Boolean isPremium;
 
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ContentApply> applies = new ArrayList<>();
