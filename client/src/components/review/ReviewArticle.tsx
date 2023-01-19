@@ -49,6 +49,7 @@ const ReviewArticleContainer = styled.div`
 `;
 const Card = styled.div`
   border: solid 1px #ccc;
+  box-shadow: 1px 1px 1px #ccc;
   padding: 10px;
   margin-bottom: 10px;
 `;
