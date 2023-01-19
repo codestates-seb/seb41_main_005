@@ -1,77 +1,57 @@
-import React from "react";
-import { CardProps } from "./CardProps";
+import React, { useState, useEffect } from "react";
+import { CardProps, ServerData } from "./CardProps";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../util/store";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-export const cards: CardProps[] = [
-  {
-    title: `배달 알바 구합니다.`,
-    nickname: `느낌오조`,
-    price: `6만원`,
-    startWorkTime: `2023.1.25 11:00`,
-    endWorkTime: `2023.1.25 18:00`,
-    memberId: `1`,
-    location: `강남구`,
-    categories: `유통/물류`,
-    tag: `식사제공🍴`,
-  },
-  {
-    title: `애견시설 알바 구합니다.`,
-    nickname: `애견맘`,
-    price: `8만원`,
-    startWorkTime: `2023.2.2 9:00`,
-    endWorkTime: `2023.2.2 15:00`,
-    memberId: `2`,
-    location: `용산구`,
-    categories: `매장관리/판매`,
-    tag: `초보자가능🐣`,
-  },
-  {
-    title: "아이 돌봄 알바 구합니다.",
-    nickname: "아빠오조",
-    price: "7만원",
-    startWorkTime: "2023.2.10 14:00",
-    endWorkTime: "2023.2.10 19:00",
-    memberId: `3`,
-    location: `종로구`,
-    categories: `기타`,
-    tag: `능력활용🧐`,
-  },
-  {
-    title: `강아지 돌봄 알바 구합니다.`,
-    nickname: `집사오조`,
-    price: `7만원`,
-    startWorkTime: `2023.2.15 14:00`,
-    endWorkTime: `2023.2.15 19:00`,
-    memberId: `4`,
-    location: `중랑구`,
-    categories: `기타`,
-    tag: `최저시급💰`,
-  },
-  {
-    title: `카페 알바 구합니다.`,
-    nickname: `집사오조`,
-    price: `7만원`,
-    startWorkTime: `2023.2.15 14:00`,
-    endWorkTime: `2023.2.15 19:00`,
-    memberId: `5`,
-    location: `서대문구`,
-    categories: `외식/음료`,
-    tag: `역세권🚇`,
-  },
-];
-
-interface DataProps {
-  cardData?: {};
-}
-
-const HireArticle: React.FC<DataProps> = () => {
-  const navigate = useNavigate();
-  const HandleClick = () => {
-    navigate("/hiredetail");
+const mapDataToCardProps = (data: ServerData): CardProps => {
+  return {
+    title: data.title,
+    nickName: data.nickName,
+    price: data.price,
+    workTimes: {
+      startWorkTime:
+        data.workTimes && data.workTimes.length > 0
+          ? data.workTimes[0].startWorkTime
+          : null,
+      endWorkTime:
+        data.workTimes && data.workTimes.length > 0
+          ? data.workTimes[1].endWorkTime
+          : null,
+    },
+    memberId: data.memberId,
+    location: data.location,
+    categories: data.category,
+    tag: "Unknown",
   };
+};
+
+const HireArticle: React.FC = () => {
+  const [cards, setCards] = useState<CardProps[]>([]);
+
+  useEffect(() => {
+    const getData = async (contentType: string) => {
+      try {
+        const response = await axios.get(
+          "http://gigker.iptime.org:8080/contents",
+          {
+            params: {
+              contentType: contentType,
+            },
+          }
+        );
+        if (response.data.data) {
+          setCards(response.data.data.map(mapDataToCardProps));
+        } else {
+          console.log("Data is undefined or null, cannot map to CardProps.");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getData("BUY");
+  }, []);
 
   const selectedCategory = useSelector(
     (state: RootState) => state.selectedCategory
@@ -96,12 +76,12 @@ const HireArticle: React.FC<DataProps> = () => {
   return (
     <HireArticleContainer>
       {filteredCards.map((card, index) => (
-        <Card key={index} onClick={HandleClick}>
+        <Card key={index}>
           <CardTitle>{card.title}</CardTitle>
-          <CardWriter>작성자 {card.nickname}</CardWriter>
+          <CardWriter>작성자 {card.nickName}</CardWriter>
           <CardPay>보수 {card.price}</CardPay>
-          <CardStart>{card.startWorkTime}</CardStart>
-          <CardEnd>{card.endWorkTime}</CardEnd>
+          <CardStart>{card.workTimes.startWorkTime}</CardStart>
+          <CardEnd>{card.workTimes.endWorkTime}</CardEnd>
         </Card>
       ))}
     </HireArticleContainer>
@@ -129,7 +109,6 @@ const Card = styled.div`
   justify-content: flex-start;
   flex-wrap: wrap;
   text-overflow: ellipsis;
-  cursor: pointer;
 `;
 
 const CardTitle = styled.div`
