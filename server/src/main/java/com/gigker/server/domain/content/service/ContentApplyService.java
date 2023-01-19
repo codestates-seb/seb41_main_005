@@ -31,7 +31,7 @@ public class ContentApplyService {
 	private final ContentService contentService;
 
 	@Transactional
-	public ContentApply createApply(ContentApply apply) {
+	public void createApply(ContentApply apply) {
 		// Member, Content 유효성 검사
 		Member applicant = memberService.findMemberById(apply.getApplicant().getMemberId());
 		Content content = getContentByContentId(apply.getContent().getContentId());
@@ -44,13 +44,18 @@ public class ContentApplyService {
 			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST_RECRUITING);
 		}
 
-		return applyRepository.save(apply);
+		applyRepository.save(apply);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-	public ContentApply acceptApply(Long applyId) {
+	public void acceptApply(Long applyId, Long contentId) {
 		// TODO: 추후 토큰의 memberId와 content.member.memberId 비교하는 로직 추가 (작성자만 승인 가능)
 		ContentApply apply = findVerifiedApply(applyId);
+
+		// contentId와 Apply.Content.ContentId가 같은지 확인한다.
+		if (!Objects.equals(apply.getContent().getContentId(), contentId)) {
+			throw new BusinessLogicException(ExceptionCode.EDIT_NOT_ALLOWED);
+		}
 
 		// ApplyStatus 가 None 인지 확인
 		if (isApplyStatusNone(apply)) {
@@ -63,18 +68,14 @@ public class ContentApplyService {
 		}
 
 		otherApplicantsAutoDelete(apply.getContent());
-
-		return apply;
 	}
 
 	// TODO: 테스트를 위한 코드 (추후 삭제)
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-	public ContentApply completeApply(Long applyId) {
+	public void completeApply(Long applyId) {
 		ContentApply apply = findVerifiedApply(applyId);
 		apply.complete();
 		apply.getContent().setStatus(Content.Status.COMPLETED);
-
-		return apply;
 	}
 
 	public ContentApply findApply(Long applyId) {
@@ -85,7 +86,7 @@ public class ContentApplyService {
 	public Page<ContentApply> findAllApplies(Content content, int page, int size) {
 
 		return applyRepository.findAllByContent(content,
-			PageRequest.of(page, size, Sort.by("contentApplyId").descending()));
+			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
 	}
 
 	public void deleteApply(Long applyId) {
@@ -105,10 +106,7 @@ public class ContentApplyService {
 	public ContentApply findVerifiedApply(Long contentApplyId) {
 		Optional<ContentApply> optionalApply = applyRepository.findById(contentApplyId);
 
-		ContentApply findApply =
-			optionalApply.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_APPLY));
-
-		return findApply;
+		return optionalApply.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_APPLY));
 	}
 
 	// == Create ==

@@ -58,7 +58,7 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
-		applyService.acceptApply(applyId);
+		applyService.acceptApply(applyId, contentId);
 
 		return ResponseEntity.ok().build();
 	}

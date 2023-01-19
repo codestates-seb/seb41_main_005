@@ -152,14 +152,29 @@ public class ContentApplyServiceTest {
 
 	@Transactional
 	@Test
+	void 게시글_아이디와_지원자의_게시글_아이디가_동일한지_확인한다() throws Exception {
+		// given
+		Long contentId = 111L;
+		Long applyId = existApplies.get(0).getContentApplyId();
+
+		// when then
+		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
+			() -> applyService.acceptApply(applyId, contentId));
+
+		assertEquals(ExceptionCode.EDIT_NOT_ALLOWED, ex.getExceptionCode());
+	}
+
+	@Transactional
+	@Test
 	void 이미_승인된_게시글인지_확인한다() throws Exception {
 		// given
 		applyRepository.save(matchedApply);
 		Long matchedApplyId = matchedApply.getContentApplyId();
+		Long contentId = matchedApply.getContent().getContentId();
 
 		// when then
 		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
-			() -> applyService.acceptApply(matchedApplyId));
+			() -> applyService.acceptApply(matchedApplyId, contentId));
 
 		assertEquals(ExceptionCode.EXISTS_APPLY, ex.getExceptionCode());
 	}
@@ -169,9 +184,10 @@ public class ContentApplyServiceTest {
 	void 지원요청_승인_시_나머지_지원자는_자동취소_됐는지_확인한다() throws Exception {
 		// given
 		Long applyId = existApplies.get(0).getContentApplyId();
+		Long contentId = existApplies.get(0).getContent().getContentId();
 
 		// when
-		applyService.acceptApply(applyId);
+		applyService.acceptApply(applyId, contentId);
 		ContentApply apply = applyRepository.findById(applyId).get();
 
 		// then
