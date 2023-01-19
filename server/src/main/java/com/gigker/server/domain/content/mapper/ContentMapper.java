@@ -14,7 +14,8 @@ import org.mapstruct.ReportingPolicy;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = MemberMapper.class)
+@Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = MemberMapper.class)
 public interface ContentMapper {
 
     @Mapping(source = "memberId", target = "member.memberId")
