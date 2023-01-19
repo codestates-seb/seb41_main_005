@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-
+//드롭다운 기능 커스텀훅
 const useDetectClose = (
   initialState: boolean
 ): [boolean, React.RefObject<any>, () => void] => {

@@ -88,6 +88,35 @@ const LocationContainer: React.FC<Props> = () => {
   );
 };
 
+const TagContainer: React.FC<Props> = () => {
+  const [tag, setTag] = useState("");
+
+  const tagOptions = [
+    { value: "재택근무🏠", label: "재택근무🏠" },
+    { value: "야간🌙", label: "야간🌙" },
+    { value: "초보자가능🐣", label: "초보자가능🐣" },
+    { value: "최저시급💰", label: "최저시급💰" },
+    { value: "당일지급💵", label: "당일지급💵" },
+    { value: "능력활용🧐", label: "능력활용🧐" },
+    { value: "역세권🚇", label: "역세권🚇" },
+    { value: "식사제공🍴", label: "식사제공🍴" },
+    { value: "경력1년이상💡", label: "경력1년이상💡" },
+  ];
+  const handleTagChange = (selectedOption: any) => {
+    setTag(selectedOption.value);
+  };
+
+  return (
+    <TagWrapper>
+      <StyledSelect
+        placeholder={"태그"}
+        options={tagOptions}
+        onChange={handleTagChange}
+      />
+    </TagWrapper>
+  );
+};
+
 const StyledSelect = styled(Select)`
   width: 150px;
 `;
@@ -102,4 +131,9 @@ const LocationWrapper = styled.div`
   padding: 10px;
 `;
 
-export { LocationContainer, CategoryContainer };
+const TagWrapper = styled.div`
+  margin: 10px;
+  padding: 10px;
+`;
+
+export { LocationContainer, CategoryContainer, TagContainer };

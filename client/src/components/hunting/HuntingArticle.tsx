@@ -94,7 +94,7 @@ const HuntingArticle: React.FC<DataProps> = () => {
             (selectedTag === "" || card.tag === selectedTag)
         );
   return (
-    <HireArticleContainer>
+    <HuntingArticleContainer>
       {filteredCards.map((card, index) => (
         <Card key={index} onClick={HandleClick}>
           <CardTitle>{card.title}</CardTitle>
@@ -104,11 +104,11 @@ const HuntingArticle: React.FC<DataProps> = () => {
           <CardEnd>{card.endWorkTime}</CardEnd>
         </Card>
       ))}
-    </HireArticleContainer>
+    </HuntingArticleContainer>
   );
 };
 
-const HireArticleContainer = styled.div`
+const HuntingArticleContainer = styled.div`
   margin-top: 30px;
   width: 100%;
   display: flex;
