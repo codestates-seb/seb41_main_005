@@ -20,7 +20,7 @@ values (default, '재택근무'),
        (default, 'TEST'),
        (default, 'TEST2');
 
-insert into category (category_id, category_name)
+insert into category (category_id, category)
 values (default, '외식/음료'),
        (default, '매장관리/판매'),
        (default, '서비스'),
@@ -60,4 +60,4 @@ values (default, '서울', '강남구', '11680'),
        (default, '서울', '은평구', '11380'),
        (default, '서울', '종로구', '11110'),
        (default, '서울', '중구', '11140'),
-       (default, '서울', '중랑구', '11260'),
+       (default, '서울', '중랑구', '11260');
