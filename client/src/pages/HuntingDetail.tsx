@@ -154,7 +154,7 @@ function HuntingDetail() {
               </div>
             </section>
             <UserInfo data={data} />
-            <Warning nickname={data.nickName} />
+            <Warning nickName={data.nickName} />
           </div>
           <div className="right">
             <CalloutBox

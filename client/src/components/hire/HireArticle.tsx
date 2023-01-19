@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../util/store";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const mapDataToCardProps = (data: ServerData): CardProps => {
   return {
@@ -42,6 +43,7 @@ const HireArticle: React.FC = () => {
           }
         );
         if (response.data.data) {
+          console.log(response.data.data);
           setCards(response.data.data.map(mapDataToCardProps));
         } else {
           console.log("Data is undefined or null, cannot map to CardProps.");
@@ -73,16 +75,19 @@ const HireArticle: React.FC = () => {
               card.location === selectedLocation) &&
             (selectedTag === "" || card.tag === selectedTag)
         );
+
   return (
     <HireArticleContainer>
       {filteredCards.map((card, index) => (
-        <Card key={index}>
-          <CardTitle>{card.title}</CardTitle>
-          <CardWriter>작성자 {card.nickName}</CardWriter>
-          <CardPay>보수 {card.price}</CardPay>
-          <CardStart>{card.workTimes.startWorkTime}</CardStart>
-          <CardEnd>{card.workTimes.endWorkTime}</CardEnd>
-        </Card>
+        <StyledLink to={`/contents/`}>
+          <Card key={index}>
+            <CardTitle>{card.title}</CardTitle>
+            <CardWriter>작성자 {card.nickName}</CardWriter>
+            <CardPay>보수 {card.price}</CardPay>
+            <CardStart>{card.workTimes.startWorkTime}</CardStart>
+            <CardEnd>{card.workTimes.endWorkTime}</CardEnd>
+          </Card>
+        </StyledLink>
       ))}
     </HireArticleContainer>
   );
@@ -97,6 +102,12 @@ const HireArticleContainer = styled.div`
   flex-wrap: wrap;
   margin-left: 60px;
   margin-right: 60px;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
 `;
 
 const Card = styled.div`
