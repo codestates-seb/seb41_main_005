@@ -1,14 +1,17 @@
 package com.gigker.server.domain.review.service;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.service.ContentApplyService;
@@ -33,7 +36,7 @@ public class ReviewService {
 	private final ContentApplyService applyService;
 
 	@Transactional
-	public Review writeReview(Review review) {
+	public void writeReview(Review review) {
 		// Writer, Recipient 할당
 		ContentApply apply = applyService.findVerifiedApply(review.getWriter().getContentApplyId());
 		Content content = contentService.findContentByContentId(apply.getContent().getContentId());
@@ -53,11 +56,11 @@ public class ReviewService {
 		review.setRecipient(content.getMember());
 		review.setContentType(content.getContentType());
 
-		return reviewRepository.save(review);
+		reviewRepository.save(review);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-	public Review writeSecondReview(Long reviewId, ReviewDto.ReviewPatch patch) {
+	public void writeSecondReview(Long reviewId, ReviewDto.ReviewPatch patch) {
 		Review review = findVerifyReview(reviewId);
 
 		// 이미 2차 리뷰를 작성했는지 확인
@@ -66,8 +69,6 @@ public class ReviewService {
 		}
 
 		review.writeSecondReview(patch.getSecondComment());
-
-		return review;
 	}
 
 	public void deleteReview(Long reviewId) {
@@ -76,14 +77,26 @@ public class ReviewService {
 		reviewRepository.delete(review);
 	}
 
+	// 단일 리뷰 조회
 	public Review findReview(Long reviewId) {
 
-		return null;
+		return findVerifyReview(reviewId);
 	}
 
-	public List<Review> findAll() {
+	// ContentType 에 따른 받은 리뷰 조회
+	public Page<Review> findAllReviewsByRecipient(Content content, Member member, int page, int size) {
+		ContentType type = content.getContentType();
 
-		return null;
+		return reviewRepository.findAllByRecipientAndContentType(member, type,
+			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
+	}
+
+	// ContentType 에 따른 작성한 리뷰 조회
+	public Page<Review> findAllReviewsByWriter(Content content, Member member, int page, int size) {
+		ContentType type = content.getContentType();
+
+		return reviewRepository.findAllByWriterAndContentType(member, type,
+			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
 	}
 
 	// == Create ==
