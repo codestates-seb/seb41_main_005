@@ -100,8 +100,8 @@ function HuntingDetail() {
   const [data, setData] = useState<huntingDetailProps>();
   const navigate = useNavigate();
 
-  const contentId = 1;
-  const memberId = 1;
+  const contentId = 5;
+  const memberId = 5;
 
   useEffect(() => {
     const detailData = async () => {
@@ -146,7 +146,7 @@ function HuntingDetail() {
             <section className="description">
               <div>
                 <span>업무 내용</span>
-                <p>{data.work_content}</p>
+                <p>{data.workContent}</p>
               </div>
               <div>
                 <span>기타</span>
@@ -154,7 +154,7 @@ function HuntingDetail() {
               </div>
             </section>
             <UserInfo data={data} />
-            <Warning nickname={data.nickname} />
+            <Warning nickname={data.nickName} />
           </div>
           <div className="right">
             <CalloutBox

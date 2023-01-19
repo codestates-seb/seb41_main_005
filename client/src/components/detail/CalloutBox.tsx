@@ -33,7 +33,7 @@ export default function CalloutBox({
         <span className="title">
           {data.type === "buy" ? "업무 시간" : "희망 시간"}
         </span>
-        <span>{data.worktime}</span>
+        <span>{data.workTimes}</span>
       </div>
       <div>
         <span className="title">
@@ -48,15 +48,15 @@ export default function CalloutBox({
         <span>{data.price}원</span>
       </div>
       {isLogin ? (
-        <Button color={"#6F38C5"} width={"300px"} disabled={true}>
-          지원하기
-        </Button>
-      ) : (
         <Button
           color={"#6F38C5"}
           width={"300px"}
           onClick={() => handlebutton()}
         >
+          지원하기
+        </Button>
+      ) : (
+        <Button color={"#6F38C5"} width={"300px"} disabled={true}>
           지원하기
         </Button>
       )}

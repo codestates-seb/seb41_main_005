@@ -1,16 +1,18 @@
 export interface hireDetailProps {
   contentId: number;
-  type: string;
-  nickname: string;
-  worktime: string[];
+  memberId: number;
+  contentType: string;
+  contentTags: string[];
+  nickName: string;
+  workTimes: string[];
   location: string;
   price: string;
   status: string;
   review_count: number;
   title: string;
   tags: string[];
-  recruiting_count: number;
-  work_content: string;
+  recruitingCount: number;
+  workContent: string;
   qualification: string;
   preference: string;
   other: string;

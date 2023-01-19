@@ -105,8 +105,8 @@ function HireDetail() {
   const token = useSelector((state: RootState) => state.token);
   const navigate = useNavigate();
 
-  const contentId = 1;
-  const memberId = 1;
+  const contentId = 2;
+  const memberId = 3;
 
   useEffect(() => {
     const detailData = async () => {
@@ -122,14 +122,15 @@ function HireDetail() {
 
   const HandleApplyButton = () => {
     axios({
+      method: "post",
       url: `http://gigker.iptime.org:8080/contents/${contentId}/apply`,
       data: {
         memberId: memberId,
         contentId: contentId,
       },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
     }).then((res) => console.log(res.data));
   };
 
@@ -145,20 +146,22 @@ function HireDetail() {
               </div>
               <div className="tags">
                 <ul>
-                  {data.tags
-                    ? data.tags.map((tag, idx) => <li key={idx}>{tag}</li>)
-                    : (data.tags = [])}
+                  {data.contentTags
+                    ? data.contentTags.map((tag, idx) => (
+                        <li key={idx}>{tag}</li>
+                      ))
+                    : (data.contentTags = [])}
                 </ul>
               </div>
             </section>
             <section className="description">
               <div>
                 <span>모집 인원</span>
-                <p>{data.recruiting_count}명</p>
+                <p>{data.recruitingCount}명</p>
               </div>
               <div>
                 <span>업무 내용</span>
-                <p>{data.work_content}</p>
+                <p>{data.workContent}</p>
               </div>
               <div>
                 <span>자격 요건</span>
@@ -174,7 +177,7 @@ function HireDetail() {
               </div>
             </section>
             <UserInfo data={data} />
-            <Warning nickname={data.nickname} />
+            <Warning nickname={data.nickName} />
           </div>
           <div className="right">
             <CalloutBox
