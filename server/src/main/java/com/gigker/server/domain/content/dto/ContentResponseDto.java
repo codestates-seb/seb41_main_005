@@ -31,6 +31,7 @@ public class ContentResponseDto {
         private String category;
         private List<WorkTimeResponseDto> workTimes;
         private List<ContentTagResponseDto> contentTags;
+        private int price;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
         private LocalDateTime relistedAt;
