@@ -34,12 +34,12 @@ public class Review {
 	private Long reviewId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
-	private Member member;
+	@JoinColumn(name = "recipient_id", nullable = false)
+	private Member recipient;
 
 	@OneToOne
-	@JoinColumn(name = "content_apply_id", nullable = false)
-	private ContentApply contentApply;
+	@JoinColumn(name = "apply_id", nullable = false)
+	private ContentApply writer;
 
 	@Enumerated(value = EnumType.STRING)
 	@Column
@@ -53,9 +53,22 @@ public class Review {
 	private String secondComment;
 
 	@Column(nullable = false)
-	private Boolean isAnonymous;
+	@Builder.Default
+	private boolean isAnonymous = false;
 
 	@Enumerated(value = EnumType.STRING)
 	@Column(nullable = false)
 	private ContentType contentType;
+
+	public void writeSecondReview(String secondComment) {
+		this.secondComment = secondComment;
+	}
+
+	public void setRecipient(Member recipient) {
+		this.recipient = recipient;
+	}
+
+	public void setContentType(ContentType contentType) {
+		this.contentType = contentType;
+	}
 }

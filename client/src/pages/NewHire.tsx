@@ -6,7 +6,8 @@ import { WorkSchedule } from "../components/TimeSelect";
 import {
   LocationContainer,
   CategoryContainer,
-} from "../components/CategoryLocation";
+  TagContainer,
+} from "../components/CateLocaTag";
 import axios from "axios";
 
 const NewHire = () => {
@@ -19,6 +20,7 @@ const NewHire = () => {
   const [etc, setEtc] = useState("");
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("");
+  const [tag, setTag] = useState("");
   const [workTime, setWorkTime] = useState<any>([]);
 
   const handleLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +29,10 @@ const NewHire = () => {
 
   const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCategory(event.target.value);
+  };
+
+  const handleTagChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTag(event.target.value);
   };
 
   const handleWorkTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -91,6 +97,8 @@ const NewHire = () => {
         <InputBox width="400px" onChange={handleTitleChange} />
         카테고리
         <CategoryContainer value={category} onChange={handleCategoryChange} />
+        태그
+        <TagContainer value={tag} onChange={handleTagChange} />
       </TitleContainer>
       <WithTitle>
         업무시간

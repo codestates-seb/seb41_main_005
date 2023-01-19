@@ -27,6 +27,7 @@ spring:
     properties:
       hibernate:
         format_sql: true  # SQL pretty print
+    defer-datasource-initialization: true
   output:
     ansi:
       enabled: always   # colorful console

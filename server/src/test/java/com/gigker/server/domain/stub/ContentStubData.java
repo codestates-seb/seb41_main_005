@@ -11,6 +11,7 @@ public class ContentStubData {
 		content.setMember(MemberStubData.getMember());
 		content.setContentType(ContentType.BUY);
 		content.setTitle("제목");
+		content.setRecruitingCount(3);
 		content.setWorkContent("일할 사람");
 		// content.setCategory();
 		content.setLocation("444123");
@@ -26,6 +27,7 @@ public class ContentStubData {
 		content.setMember(MemberStubData.getMember());
 		content.setContentType(ContentType.BUY);
 		content.setTitle("제목");
+		content.setRecruitingCount(3);
 		content.setWorkContent("일할 사람");
 		// content.setCategory();
 		content.setLocation("444123");

@@ -6,7 +6,7 @@ import { WorkSchedule } from "../components/TimeSelect";
 import {
   LocationContainer,
   CategoryContainer,
-} from "../components/CategoryLocation";
+} from "../components/CateLocaTag";
 import axios from "axios";
 
 interface ExistingData {

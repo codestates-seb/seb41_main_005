@@ -36,7 +36,7 @@ public class Member extends BaseEntity {
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Bookmark> bookmarks = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews = new ArrayList<>();
 
 	@OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -87,5 +87,10 @@ public class Member extends BaseEntity {
 		MemberStatus(String status) {
 			this.status = status;
 		}
+	}
+
+	public int getTotalLikeCount() {
+
+		return profile.getBuyLikeCount() + profile.getSellLikeCount();
 	}
 }
