@@ -75,7 +75,7 @@ const DropdownT = () => {
 
   const navigate = useNavigate();
   const newHuntingClickHandler = () => {
-    navigate("/edithunting");
+    navigate("/newhunting");
     console.log("새 글 작성");
   };
 
