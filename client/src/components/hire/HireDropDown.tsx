@@ -18,10 +18,6 @@ const tags = [
   "경력1년이상💡",
 ];
 
-const TagButton = ({ tag }: { tag: string; onClick: () => void }) => (
-  <button>{tag}</button>
-);
-
 const category = [
   "카테고리",
   "외식/음료",
@@ -100,6 +96,12 @@ const DropdownMenu = () => {
     console.log("새 글 작성");
   };
 
+  const TagButton = ({ tag }: { tag: string; onClick: () => void }) => (
+    <span className="tag">
+      <button>{tag}</button>
+    </span>
+  );
+
   return (
     <>
       <UpperWrapper>
@@ -141,17 +143,17 @@ const DropdownMenu = () => {
         </AddHire>
       </UpperWrapper>
       <LowerWrapper>
-        <CategoryButton>
+        <TagWrapper>
           <div>
-            {tags.map((tag) => (
+            {tags.map((tag, index) => (
               <TagButton
-                key={""}
+                key={index}
                 tag={tag}
                 onClick={() => handleTagClick(selectedTag)}
               />
             ))}
           </div>
-        </CategoryButton>
+        </TagWrapper>
         <FilterButton>
           <div>
             <button>조회순</button>
@@ -274,10 +276,16 @@ const LowerWrapper = styled.div`
   border-bottom: 1px solid #dadbdc;
 `;
 
-const CategoryButton = styled.button`
-  margin: 16px 50px 8px;
+const TagWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 500px;
+  margin: 10px 0 0 20px;
   border: none;
   background-color: white;
+  .tag {
+    padding: 3px;
+  }
 `;
 
 const FilterButton = styled.div`
