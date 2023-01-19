@@ -75,15 +75,15 @@ const Navigation = () => {
           <Logo width={65} height={65} />
         </LogoContainer>
         <LinkContainer>
-          <LinkButton>
-            <StyledLink to="/">홈</StyledLink>
-          </LinkButton>
-          <LinkButton>
-            <StyledLink to="/hire">구인</StyledLink>
-          </LinkButton>
-          <LinkButton>
-            <StyledLink to="/hunting">구직</StyledLink>
-          </LinkButton>
+          <StyledLink to="/">
+            <LinkButton>홈</LinkButton>
+          </StyledLink>
+          <StyledLink to="/hire">
+            <LinkButton>구인</LinkButton>
+          </StyledLink>
+          <StyledLink to="/hunting">
+            <LinkButton>구직</LinkButton>
+          </StyledLink>
         </LinkContainer>
         <LogInContainer>
           <StyledLink to="/login">
