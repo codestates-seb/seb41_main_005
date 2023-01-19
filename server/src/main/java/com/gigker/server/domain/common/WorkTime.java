@@ -13,12 +13,14 @@ import javax.persistence.ManyToOne;
 
 import com.gigker.server.domain.content.entity.Content;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor
+@Data
 public class WorkTime {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,12 +1,9 @@
 package com.gigker.server.domain.content.dto;
 
+import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.WorkTime;
-import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentTag;
-import com.gigker.server.domain.member.entity.Member;
-import com.gigker.server.domain.member.repository.MemberRepository;
-import com.gigker.server.domain.tag.entity.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,11 +22,11 @@ public class ContentPostDto {
     private String qualification;
     private String preference;
     private String other;
-    //    private Category category;
+    private String category;
     private List<ContentTag> contentTags;
     private List<WorkTime> workTimes;
     private String location;
     private int price;
     private LocalDateTime deadLine;
-    private boolean isPremium;
+    private Boolean isPremium;
 }
