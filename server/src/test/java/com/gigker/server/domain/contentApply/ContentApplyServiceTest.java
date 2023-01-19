@@ -1,4 +1,4 @@
-package com.gigker.server.domain.contentApply.service;
+package com.gigker.server.domain.contentApply;
 
 import static com.gigker.server.domain.stub.ContentApplyStubData.*;
 import static com.gigker.server.domain.stub.ContentStubData.*;

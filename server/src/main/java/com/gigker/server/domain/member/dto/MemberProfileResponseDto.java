@@ -2,6 +2,8 @@ package com.gigker.server.domain.member.dto;
 
 
 
+import javax.persistence.Column;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,12 +19,30 @@ public class MemberProfileResponseDto {
 
     private String pictureUrl;
 
+    private int likeCount;
+
+    private int dislikeCount;
+
+    private int buyLikeCount;
+
+    private int buyDislikeCount;
+
+    private int sellLikeCount;
+
+    private int sellDislikeCount;
+
+    private int reviewCount;
+
+    private int completedBuyCount;
+
+    private int completedSellCount;
+
     //종합 좋아요 수
-    private int count_like;
+    private int totalLikeCount;
 
     //종합 싫어요 수
-    private int count_dislike;
+    private int totalDislikeCount;
 
     //종합 완료 건 수
-    private int complete;
+    private int totalCompleted;
 }

@@ -67,6 +67,16 @@ public class ContentApplyService {
 		return apply;
 	}
 
+	// TODO: 테스트를 위한 코드 (추후 삭제)
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+	public ContentApply completeApply(Long applyId) {
+		ContentApply apply = findVerifiedApply(applyId);
+		apply.complete();
+		apply.getContent().setStatus(Content.Status.COMPLETED);
+
+		return apply;
+	}
+
 	public ContentApply findApply(Long applyId) {
 
 		return findVerifiedApply(applyId);
