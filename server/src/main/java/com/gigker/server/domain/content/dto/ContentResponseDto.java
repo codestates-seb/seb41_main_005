@@ -27,7 +27,7 @@ public class ContentResponseDto {
         private String qualification;
         private String preference;
         private String other;
-        private String location;
+        private String cityName;
         private String categoryName;
         private List<WorkTimeResponseDto> workTimes;
         private List<ContentTagResponseDto> contentTags;

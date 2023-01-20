@@ -8,6 +8,7 @@ import com.gigker.server.domain.content.entity.ContentTag;
 import com.gigker.server.domain.content.repository.ContentRepository;
 import com.gigker.server.domain.common.CustomBeanUtils;
 import com.gigker.server.domain.content.repository.ContentTagRepository;
+import com.gigker.server.domain.location.entity.Location;
 import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.repository.MemberRepository;
 import com.gigker.server.domain.member.service.MemberService;
@@ -36,15 +37,15 @@ public class ContentService {
     private final MemberRepository memberRepository;
     private final CategoryService categoryService;
 
-    public Content createContent(Content content, Category category) {
+    public Content createContent(Content content, Category category, Location location) {
         Member member = memberService.getCurrentMember();
         content.setCategory(category);
         content.setMember(member);
-        Content saveContent = contentRepository.save(content);
-        return saveContent;
+        content.setLocation(location);
+        return contentRepository.save(content);
     }
 
-    public Content updateContent(Content content) //throws BusinessLogicException
+    public Content updateContent(Content content, Category category, Location location) //throws BusinessLogicException
     {
         Content findContent = findContentByContentId(content.getContentId());
 //findContent(대상)에 대한 수정요청자 권한 검증, 글 작성자가 아닌경우 400 예외코드
@@ -52,6 +53,8 @@ public class ContentService {
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
 //NOT Null 속성값을 수정하지 않으면 기존 게시물의 속성을 그대로 사용
         Content updateContent = beanUtils.copyNonNullProperties(content, findContent);
+        content.setCategory(category);
+        content.setLocation(location);
         return contentRepository.save(updateContent);
     }
 

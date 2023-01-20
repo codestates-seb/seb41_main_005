@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.gigker.server.domain.category.entity.Category;
+import com.gigker.server.domain.location.entity.Location;
 import lombok.Data;
 import lombok.Getter;
 
@@ -72,8 +73,9 @@ public class Content extends BaseEntity {
 	private List<WorkTime> workTimes = new ArrayList<>();
 
 	// TODO : 지역 정보 추후에 API 연동
-	@Column(nullable = false)
-	private String location;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "location_id")
+	private Location location;
 
 	// 보수
 	@Column(nullable = false)

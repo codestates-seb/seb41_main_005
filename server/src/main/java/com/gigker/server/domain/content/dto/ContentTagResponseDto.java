@@ -6,7 +6,5 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 public class ContentTagResponseDto {
-    private Long ContentId;
-    private Long tagId;
     private String tagName;
 }
