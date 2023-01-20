@@ -3,6 +3,10 @@ import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import Button from "./Buttons";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../util/redux";
+import { MdOutlineEditCalendar } from "react-icons/md";
+import Profile from "./Profile";
 
 const Block = styled.div`
   display: block;
@@ -19,7 +23,7 @@ const NavBar = styled.div`
   z-index: 900;
 `;
 
-const LogoContainer = styled.a`
+const ImgWrapper = styled.a`
   /* margin-left: 40px; */
 `;
 
@@ -59,6 +63,17 @@ const StyledLink = styled(Link)`
   color: black;
 `;
 
+const SvgContainer = styled.div`
+  margin: 0 1.5rem 0 1rem;
+  color: ${(props) => props.theme.color.sub1};
+  &:hover {
+    .schedule {
+      color: ${(props) => props.theme.color.main};
+      transition: all 0.5s;
+    }
+  }
+`;
+
 const LogInContainer = styled.div`
   /* margin-right: 40px; */
   display: flex;
@@ -68,12 +83,14 @@ const LogInContainer = styled.div`
 `;
 
 const Navigation = () => {
+  const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
+
   return (
     <Block>
       <NavBar>
-        <LogoContainer href="/">
+        <ImgWrapper href={"/"}>
           <Logo width={65} height={65} />
-        </LogoContainer>
+        </ImgWrapper>
         <LinkContainer>
           <StyledLink to="/">
             <LinkButton>홈</LinkButton>
@@ -86,16 +103,34 @@ const Navigation = () => {
           </StyledLink>
         </LinkContainer>
         <LogInContainer>
-          <StyledLink to="/login">
-            <Button color={"#6667AB"} width={"5rem"}>
-              로그인
-            </Button>
-          </StyledLink>
-          <StyledLink to="/signup">
-            <Button color={"#6F38C5"} width={"5rem"}>
-              회원가입
-            </Button>
-          </StyledLink>
+          {isLogIn ? (
+            <>
+              <StyledLink to={"/"}>
+                <Profile width={"40px"} height={"40px"} />
+              </StyledLink>
+              <StyledLink to={"/login"}>
+                <SvgContainer>
+                  <MdOutlineEditCalendar className={"schedule"} size={42} />
+                </SvgContainer>
+              </StyledLink>
+              <Button color={"#6F38C5"} width={"5rem"}>
+                로그아웃
+              </Button>
+            </>
+          ) : (
+            <>
+              <StyledLink to="/login">
+                <Button color={"#6667AB"} width={"5rem"}>
+                  로그인
+                </Button>
+              </StyledLink>
+              <StyledLink to="/signup">
+                <Button color={"#6F38C5"} width={"5rem"}>
+                  회원가입
+                </Button>
+              </StyledLink>
+            </>
+          )}
         </LogInContainer>
       </NavBar>
     </Block>
