@@ -7,7 +7,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.gigker.server.domain.content.dto.ContentApplyResponseDto;
-import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.member.mapper.MemberMapper;
 
@@ -38,5 +37,6 @@ public interface ContentApplyMapper {
 	@Mapping(source = "applicant.about", target = "about")
 	@Mapping(target = "likeCount", expression = "java(apply.getLikeCount())")
 	@Mapping(target = "dislikeCount", expression = "java(apply.getDislikeCount())")
+	@Mapping(target = "reviewCount", expression = "java(apply.getReviewCount())")
 	List<ContentApplyResponseDto.Applicant> appliesToApplicants(List<ContentApply> applies);
 }
