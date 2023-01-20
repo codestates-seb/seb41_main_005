@@ -20,7 +20,7 @@ values (default, '재택근무'),
        (default, 'TEST'),
        (default, 'TEST2');
 
-insert into category (category_id, category)
+insert into category (category_id, category_name)
 values (default, '외식/음료'),
        (default, '매장관리/판매'),
        (default, '서비스'),
