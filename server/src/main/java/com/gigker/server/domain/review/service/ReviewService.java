@@ -44,7 +44,8 @@ public class ReviewService {
 		Member writer = memberService.findMemberById(apply.getApplicant().getMemberId());
 		Member recipient = memberService.findMemberById(content.getMember().getMemberId());
 
-		// TODO: 로그인한 사용자가 작성자인지 확인 (Authentication Token)
+		// 로그인한 사용자가 작성자인지 확인
+		applyService.verifyThisMemberIsWriter(writer);
 
 		// Content 및 ContentApply 완료 상태인지 확인
 		verifyContentStatusIsCompleted(content);
@@ -62,6 +63,10 @@ public class ReviewService {
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
 	public void writeSecondReview(Long reviewId, ReviewDto.ReviewPatch patch) {
 		Review review = findVerifyReview(reviewId);
+		Member writer = review.getWriter().getApplicant();
+
+		// 로그인한 사용자가 작성자인지 확인
+		applyService.verifyThisMemberIsWriter(writer);
 
 		// 이미 2차 리뷰를 작성했는지 확인
 		if (review.getSecondComment() != null) {
@@ -73,6 +78,10 @@ public class ReviewService {
 
 	public void deleteReview(Long reviewId) {
 		Review review = findVerifyReview(reviewId);
+		Member writer = review.getWriter().getApplicant();
+
+		// 로그인한 사용자가 작성자인지 확인
+		applyService.verifyThisMemberIsWriter(writer);
 
 		reviewRepository.delete(review);
 	}
