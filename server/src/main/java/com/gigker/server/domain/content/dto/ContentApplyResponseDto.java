@@ -22,6 +22,16 @@ public class ContentApplyResponseDto {
 	@Getter
 	@Setter
 	@NoArgsConstructor
+	public static class ApplyResponse {
+		private Long contentApplyId;
+		private Long applicantId;
+		private Long contentId;
+		private ContentApply.ApplyStatus applyStatus;
+	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
 	public static class Applicant {
 		private Long contentApplyId;
 		private Long applicantId;

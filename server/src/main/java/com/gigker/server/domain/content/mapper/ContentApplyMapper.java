@@ -21,6 +21,10 @@ public interface ContentApplyMapper {
 	ContentApply postToApply(ContentApplyResponseDto.Post post, Long contentId);
 
 	@Mapping(source = "applicant.memberId", target = "applicantId")
+	@Mapping(source = "content.contentId", target = "contentId")
+	ContentApplyResponseDto.ApplyResponse applyToResponse(ContentApply apply);
+
+	@Mapping(source = "applicant.memberId", target = "applicantId")
 	@Mapping(source = "applicant.nickName", target = "nickName")
 	@Mapping(source = "applicant.pictureUrl", target = "pictureUrl")
 	@Mapping(source = "applicant.about", target = "about")

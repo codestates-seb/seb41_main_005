@@ -34,7 +34,7 @@ public class ContentApplyService {
 	private final ContentService contentService;
 
 	@Transactional
-	public void createApply(ContentApply apply) {
+	public ContentApply createApply(ContentApply apply) {
 		// Member, Content 유효성 검사
 		Member applicant = memberService.findMemberById(apply.getApplicant().getMemberId());
 		Content content = getContentByContentId(apply.getContent().getContentId());
@@ -47,7 +47,7 @@ public class ContentApplyService {
 			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST_RECRUITING);
 		}
 
-		applyRepository.save(apply);
+		return applyRepository.save(apply);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
