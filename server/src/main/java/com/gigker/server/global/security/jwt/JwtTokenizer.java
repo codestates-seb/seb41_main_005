@@ -54,6 +54,7 @@ public class JwtTokenizer {
                 .compact();
     }
 
+    //토큰재발급에 사용할 generateAccessToken OverLoad
     public String generateAccessToken(Member member,String base64EncodeSecretKey){
         Key key = getKeyFromBase64EncodedKey(base64EncodeSecretKey);
         Date expiration = getTokenExpiration(getAccessTokenExpirationMinutes());

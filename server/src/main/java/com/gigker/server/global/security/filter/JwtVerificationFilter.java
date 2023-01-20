@@ -76,6 +76,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter{
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
+    //로그아웃한 토큰이면 접근못하게
     private void verifyBlacklist(HttpServletRequest request){
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
 
