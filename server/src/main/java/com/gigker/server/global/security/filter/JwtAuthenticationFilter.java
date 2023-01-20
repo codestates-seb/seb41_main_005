@@ -9,6 +9,7 @@ import com.gigker.server.global.security.jwt.JwtTokenizer;
 import com.gigker.server.global.security.utils.ErrorResponder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,12 +24,13 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
-
+    private final RedisTemplate<String,String> redisTemplate;
 
 
     @SneakyThrows
@@ -36,10 +38,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response){
         ObjectMapper objectMapper = new ObjectMapper();
-        LoginDto loginDto = objectMapper.readValue(request.getInputStream(),
-                LoginDto.class);
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
-                loginDto.getPassword());
+        LoginDto.Post postDto = objectMapper.readValue(request.getInputStream(),
+                LoginDto.Post.class);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(postDto.getUsername(),
+                postDto.getPassword());
 
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -57,12 +59,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
 
         String accessToken = delegateAccessToken(member);
-        String refreshToken = delegateRefreshToken(member);
+        Map<String, Object> map = delegateRefreshToken(member);
+        String refreshToken = (String)map.get("refresh");
+
+        //리프레쉬토큰 레디스에 저장
+        redisTemplate.opsForValue()
+                        .set("RT:" + member.getEmail(),refreshToken,((Date)map.get("expiration")).getTime(),
+                                TimeUnit.MINUTES);
 
         response.setHeader("Authorization", "Bearer " +accessToken);
         response.setHeader("Refresh",refreshToken);
 
         this.getSuccessHandler().onAuthenticationSuccess(request,response,authResult);
+
     }
 
     private String delegateAccessToken(Member member){
@@ -79,7 +88,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = jwtTokenizer.generateAccessToken(claims,subject,expiration,base64EncodedSecretKey);
         return accessToken;
     }
-    private String delegateRefreshToken(Member member){
+
+    private Map<String,Object> delegateRefreshToken(Member member){
         String subject = member.getEmail();
         Date expiration = jwtTokenizer.
                 getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
@@ -87,9 +97,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
         String refreshToken = jwtTokenizer.generateRefreshToken(subject,expiration,base64EncodedSecretKey);
 
-        return refreshToken;
+        Map<String,Object> map = new HashMap<>();
+        map.put("refresh",refreshToken);
+        map.put("expiration",expiration);
+        return map;
     }
-
-
-
 }
