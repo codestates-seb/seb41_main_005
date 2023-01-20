@@ -2,8 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import useDetectClose from "../../util/useDetectClose";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../util/store";
-import { selectCategory, selectLocation, selectTag } from "../../util/types";
+import { RootState } from "../../util/redux";
+import {
+  selectCategory,
+  selectLocation,
+  selectTag,
+} from "../../util/redux/DropDown";
 import { useNavigate } from "react-router";
 
 const tags = [
@@ -66,12 +70,14 @@ const location = [
 const DropdownMenu = () => {
   const dispatch = useDispatch();
   const selectedCategory = useSelector(
-    (state: RootState) => state.selectedCategory
+    (state: RootState) => state.DropDown.selectedCategory
   );
   const selectedLocation = useSelector(
-    (state: RootState) => state.selectedLocation
+    (state: RootState) => state.DropDown.selectedLocation
   );
-  const selectedTag = useSelector((state: RootState) => state.selectedTag);
+  const selectedTag = useSelector(
+    (state: RootState) => state.DropDown.selectedTag
+  );
 
   const handleCategoryClick = (category: string) => {
     dispatch(selectCategory(category));

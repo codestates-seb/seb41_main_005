@@ -6,8 +6,13 @@ import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../util/store";
-import { setLogInEmail, setLogInPassword, setIsLogIn } from "../../util/types";
+import { RootState } from "../../util/redux";
+import {
+  setLogInEmail,
+  setLogInPassword,
+  setIsLogIn,
+  setImgUrl,
+} from "../../util/redux/LogIn";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -52,9 +57,10 @@ const SocialLogin = styled.div`
 const LogInForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const logInEmail = useSelector((state: RootState) => state.logInEmail);
-  const logInPassword = useSelector((state: RootState) => state.logInPassword);
-  const isLogIn = useSelector((state: RootState) => state.isLogIn);
+  const logInEmail = useSelector((state: RootState) => state.LogIn.logInEmail);
+  const logInPassword = useSelector(
+    (state: RootState) => state.LogIn.logInPassword
+  );
 
   const handleLoginEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setLogInEmail(e.currentTarget.value));
@@ -66,7 +72,7 @@ const LogInForm = () => {
 
   const handleLogIn = async () => {
     axios
-      .post("http://gigker.iptime.org:8080/auth/login", {
+      .post("http://gigker.iptime.org:8080/auth", {
         username: logInEmail,
         password: logInPassword,
       })
@@ -77,6 +83,7 @@ const LogInForm = () => {
           JSON.stringify(res.headers.authorization)
         );
         dispatch(setIsLogIn(true));
+        dispatch(setImgUrl(res.data.pictureUrl));
         alert("어서옵쇼~");
         navigate("/", { replace: true });
       })
@@ -88,7 +95,7 @@ const LogInForm = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleLogIn().then(() => {
+    await handleLogIn().then(() => {
       const AUTH_TOKEN = localStorage.getItem("Authorization");
       axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
     });

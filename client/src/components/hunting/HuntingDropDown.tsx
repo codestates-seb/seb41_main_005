@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import useDetectClose from "../../util/useDetectClose";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../util/store";
-import { selectCategory, selectLocation } from "../../util/types";
+import { RootState } from "../../util/redux";
+import { selectCategory, selectLocation } from "../../util/redux/DropDown";
 import { useNavigate } from "react-router";
 
 const category = [
@@ -54,10 +54,10 @@ const location = [
 const DropdownT = () => {
   const dispatch = useDispatch();
   const selectedCategory = useSelector(
-    (state: RootState) => state.selectedCategory
+    (state: RootState) => state.DropDown.selectedCategory
   );
   const selectedLocation = useSelector(
-    (state: RootState) => state.selectedLocation
+    (state: RootState) => state.DropDown.selectedLocation
   );
 
   const handleCategoryClick = (category: string) => {
