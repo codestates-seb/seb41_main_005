@@ -48,7 +48,7 @@ public class ContentApplyController {
 
 		ContentApply apply = applyMapper.postToApply(post, contentId);
 		ContentApply createdApply = applyService.createApply(apply);
-		ContentApplyResponseDto.Applicant response = applyMapper.applyToApplicant(createdApply);
+		ContentApplyResponseDto.ApplyResponse response = applyMapper.applyToResponse(createdApply);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
