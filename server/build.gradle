@@ -47,13 +47,13 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final' 	// mapper
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'	// mapper
 
-	runtimeOnly 'com.h2database:h2'					//h2 database
-	runtimeOnly 'com.mysql:mysql-connector-j'		//mysql database
+	//db
+	runtimeOnly 'com.h2database:h2'					//h2
+	implementation 'mysql:mysql-connector-java'		//mysql
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis' //redis
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-
-
 }
 
 tasks.named('test') {

@@ -14,6 +14,7 @@ public enum ExceptionCode {
 	BAD_REQUEST_REVIEW(400, "Review can write when status is completed"),
 	EDIT_NOT_ALLOWED(400, "Edit not allowed"),
 	DELETE_NOT_ALLOWED(400,"No Permission"),
+	INVALID_TOKEN(400,"Invalid token"),
 
 	// 401 (권한없음)
 	MEMBER_STATUS_SECESSION(401,"현재 회원은 탈퇴된 상태입니다"),

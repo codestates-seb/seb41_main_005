@@ -89,8 +89,10 @@ public class Member extends BaseEntity {
 		}
 	}
 
-	public int getTotalLikeCount() {
+	//profile 종합 메서드
+	public int getTotalLikeCount() {return profile.getBuyLikeCount() + profile.getSellLikeCount();}
 
-		return profile.getBuyLikeCount() + profile.getSellLikeCount();
-	}
+	public int getTotalDisLikeCount() {return profile.getBuyDislikeCount() + profile.getSellDislikeCount();}
+
+	public int getTotalComplete(){return profile.getCompletedBuyCount() + profile.getCompletedSellCount();}
 }
