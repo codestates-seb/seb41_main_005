@@ -36,7 +36,7 @@ public class ReviewService {
 	private final ContentApplyService applyService;
 
 	@Transactional
-	public void writeReview(Review review) {
+	public Review writeReview(Review review) {
 		// Writer, Recipient 할당
 		ContentApply apply = applyService.findVerifiedApply(review.getWriter().getContentApplyId());
 		Content content = contentService.findContentByContentId(apply.getContent().getContentId());
@@ -56,7 +56,7 @@ public class ReviewService {
 		review.setRecipient(content.getMember());
 		review.setContentType(content.getContentType());
 
-		reviewRepository.save(review);
+		return reviewRepository.save(review);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)

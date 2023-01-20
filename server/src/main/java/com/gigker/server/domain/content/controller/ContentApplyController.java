@@ -47,9 +47,10 @@ public class ContentApplyController {
 		@RequestBody @Valid ContentApplyResponseDto.Post post) {
 
 		ContentApply apply = applyMapper.postToApply(post, contentId);
-		applyService.createApply(apply);
+		ContentApply createdApply = applyService.createApply(apply);
+		ContentApplyResponseDto.ApplyResponse response = applyMapper.applyToResponse(createdApply);
 
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	// 지원 요청 승인

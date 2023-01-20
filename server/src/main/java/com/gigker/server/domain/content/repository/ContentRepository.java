@@ -10,4 +10,8 @@ import java.util.List;
 public interface ContentRepository extends JpaRepository<Content, Long> {
 
     List<Content> findContentsByContentType(ContentType contentType);
+
+    List<Content> findAllByStatus(Content.Status status);
+
+    List<Content> findAllByStatusAndContentType(Content.Status status, ContentType type);
 }

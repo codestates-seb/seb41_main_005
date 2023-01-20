@@ -2,8 +2,6 @@ package com.gigker.server.domain.member.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Builder
@@ -28,16 +26,4 @@ public class MemberProfileResponseDto {
     private int totalDislikeCount;
     //종합 완료 건 수
     private int totalCompleted;
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class SimpleMemberResponse {
-        private int memberId;
-        private String nickName;
-        private String pictureUrl;
-        private int likeCount;
-        private int dislikeCount;
-        private int reviewCount;
-    }
 }

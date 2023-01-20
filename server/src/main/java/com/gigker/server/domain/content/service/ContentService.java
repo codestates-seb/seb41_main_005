@@ -17,12 +17,11 @@ import com.gigker.server.domain.tag.service.TagService;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +76,8 @@ public class ContentService {
     }
 
     public List<Content> findContentsByContentType(ContentType contentType){
-        return contentRepository.findContentsByContentType(contentType);
+        // 모집 중인 게시글만 조회한다.
+        return contentRepository.findAllByStatusAndContentType(Content.Status.RECRUITING, contentType);
     }
 
     public Content findContent(long contentId){
@@ -90,6 +90,20 @@ public class ContentService {
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
         contentRepository.delete(findContent);
     }
+
+    // 30분 마다 만료된 글을 찾아서 상태를 변경해준다.
+    @Scheduled(cron = "2 0/30 * * * *")
+    public void scheduledExpiry() {
+        List<Content> contents = contentRepository.findAllByStatus(Content.Status.RECRUITING);
+
+        for (Content content : contents) {
+            // null 아니고, 마감 시간(0초)이 현재 시간(1초)보다 이후인가?
+            if (content.getDeadLine() != null && content.getDeadLine().isAfter(LocalDateTime.now())) {
+                content.setStatus(Content.Status.EXPIRED);
+            }
+        }
+    }
+
     private Content save(Content content) {
         return contentRepository.save(content);
     }
