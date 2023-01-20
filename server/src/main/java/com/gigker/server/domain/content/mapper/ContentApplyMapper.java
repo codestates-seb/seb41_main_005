@@ -15,10 +15,6 @@ import com.gigker.server.domain.member.mapper.MemberMapper;
 	unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ContentApplyMapper {
 
-	@Mapping(source = "post.applicantId", target = "applicant.memberId")
-	@Mapping(source = "contentId", target = "content.contentId")
-	ContentApply postToApply(ContentApplyResponseDto.Post post, Long contentId);
-
 	@Mapping(source = "applicant.memberId", target = "applicantId")
 	@Mapping(source = "content.contentId", target = "contentId")
 	ContentApplyResponseDto.ApplyResponse applyToResponse(ContentApply apply);
