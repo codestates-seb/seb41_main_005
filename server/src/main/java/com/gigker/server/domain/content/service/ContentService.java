@@ -1,5 +1,7 @@
 package com.gigker.server.domain.content.service;
 
+import com.gigker.server.domain.category.entity.Category;
+import com.gigker.server.domain.category.service.CategoryService;
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentTag;
@@ -32,9 +34,11 @@ public class ContentService {
     private final CustomBeanUtils<Content> beanUtils;
     private final ContentTagRepository contentTagRepository;
     private final MemberRepository memberRepository;
+    private final CategoryService categoryService;
 
-    public Content createContent(Content content) {
-        Member member = memberService.findMemberById(memberService.getCurrentMember().getMemberId());
+    public Content createContent(Content content, Category category) {
+        Member member = memberService.getCurrentMember();
+        content.setCategory(category);
         content.setMember(member);
         Content saveContent = contentRepository.save(content);
         return saveContent;

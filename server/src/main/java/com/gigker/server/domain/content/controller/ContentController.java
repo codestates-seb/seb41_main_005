@@ -1,5 +1,7 @@
 package com.gigker.server.domain.content.controller;
 
+import com.gigker.server.domain.category.entity.Category;
+import com.gigker.server.domain.category.service.CategoryService;
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.dto.ContentPatchDto;
 import com.gigker.server.domain.content.dto.ContentPostDto;
@@ -22,10 +24,15 @@ import java.util.List;
 public class ContentController {
     private final ContentService contentService;
     private final ContentMapper contentMapper;
+    private final CategoryService categoryService;
     @PostMapping
     public ResponseEntity postContent(@Valid @RequestBody ContentPostDto contentPostDto) {
+
+        String categoryName = String.valueOf(contentPostDto.getCategoryName()); // Mapping
+        Category findCategory = categoryService.findExistCategory(categoryName); // DB에 존재하는 카테고리인지 확인
+
         Content content = contentMapper.contentPostDtoToContent(contentPostDto);
-        Content createContent = contentService.createContent(content);
+        Content createContent = contentService.createContent(content, findCategory); // service에서 Category를 Setter로 넣기
 
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
