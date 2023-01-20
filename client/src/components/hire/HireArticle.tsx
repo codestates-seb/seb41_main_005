@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../util/store";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const mapDataToCardProps = (data: ServerData): CardProps => {
   return {
@@ -30,6 +30,8 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
 
 const HireArticle: React.FC = () => {
   const [cards, setCards] = useState<CardProps[]>([]);
+  const navigate = useNavigate();
+  const { contentId } = useParams();
 
   useEffect(() => {
     const getData = async (contentType: string) => {
@@ -76,18 +78,20 @@ const HireArticle: React.FC = () => {
             (selectedTag === "" || card.tag === selectedTag)
         );
 
+  const handleClick = () => {
+    console.log(contentId);
+  };
+
   return (
     <HireArticleContainer>
       {filteredCards.map((card, index) => (
-        <StyledLink to={`/contents/`}>
-          <Card key={index}>
-            <CardTitle>{card.title}</CardTitle>
-            <CardWriter>작성자 {card.nickName}</CardWriter>
-            <CardPay>보수 {card.price}</CardPay>
-            <CardStart>{card.workTimes.startWorkTime}</CardStart>
-            <CardEnd>{card.workTimes.endWorkTime}</CardEnd>
-          </Card>
-        </StyledLink>
+        <Card key={index} onClick={handleClick}>
+          <CardTitle>{card.title}</CardTitle>
+          <CardWriter>작성자 {card.nickName}</CardWriter>
+          <CardPay>보수 {card.price}</CardPay>
+          <CardStart>{card.workTimes.startWorkTime}</CardStart>
+          <CardEnd>{card.workTimes.endWorkTime}</CardEnd>
+        </Card>
       ))}
     </HireArticleContainer>
   );
@@ -104,11 +108,11 @@ const HireArticleContainer = styled.div`
   margin-right: 60px;
 `;
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-`;
+// const StyledLink = styled(Link)`
+//   text-decoration: none;
+//   color: black;
+//   cursor: pointer;
+// `;
 
 const Card = styled.div`
   width: 250px;

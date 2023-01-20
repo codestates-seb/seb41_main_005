@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const mapDataToCardProps = (data: ServerData): CardProps => {
   return {
+    contentId: data.contentId,
     title: data.title,
     nickName: data.nickName,
     price: data.price,
@@ -55,7 +56,7 @@ const HuntingArticle: React.FC = () => {
   }, []);
 
   const navigate = useNavigate();
-  const HandleClick = () => {
+  const handleClick = () => {
     navigate("/huntingdetail");
   };
 
@@ -82,7 +83,7 @@ const HuntingArticle: React.FC = () => {
   return (
     <HuntingArticleContainer>
       {filteredCards.map((card, index) => (
-        <Card key={index} onClick={HandleClick}>
+        <Card key={index} onClick={handleClick}>
           <CardTitle>{card.title}</CardTitle>
           <CardWriter>작성자 {card.nickName}</CardWriter>
           <CardPay>보수 {card.price}</CardPay>
