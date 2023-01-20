@@ -118,4 +118,41 @@ public class Content extends BaseEntity {
 	public void setMember(Member member) {
 		this.member = member;
 	}
+
+	// 작성자 정보 조회 시 좋아요 및 싫어요 정보를 가져온다.
+	public int getLikeCount() {
+		ContentType type = this.getContentType();
+		switch (type) {
+			case BUY:
+				return this.member.getBuyLikeCount();
+			case SELL:
+				return this.member.getSellLikeCount();
+			default:
+				return 0;
+		}
+	}
+
+	public int getDislikeCount() {
+		ContentType type = this.getContentType();
+		switch (type) {
+			case BUY:
+				return this.member.getBuyDislikeCount();
+			case SELL:
+				return this.member.getSellDislikeCount();
+			default:
+				return 0;
+		}
+	}
+
+	public int getReviewCount() {
+		ContentType type = this.getContentType();
+		switch (type) {
+			case BUY:
+				return this.member.getBuyReviewCount();
+			case SELL:
+				return this.member.getSellReviewCount();
+			default:
+				return 0;
+		}
+	}
 }
