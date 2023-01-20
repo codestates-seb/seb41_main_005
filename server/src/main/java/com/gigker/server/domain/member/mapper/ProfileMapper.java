@@ -7,12 +7,12 @@ import org.mapstruct.Mapper;
 public interface ProfileMapper {
     default Profile profileCreate(){
         Profile profile = Profile.builder()
-                .buyLikeCount(10)
-                .buyDislikeCount(10)
-                .sellLikeCount(10)
-                .sellDislikeCount(10)
-                .completedBuyCount(10)
-                .completedSellCount(10)
+                .buyLikeCount(0)
+                .buyDislikeCount(0)
+                .sellLikeCount(0)
+                .sellDislikeCount(0)
+                .completedBuyCount(0)
+                .completedSellCount(0)
                 .buyerPoint(0)
                 .sellerPoint(0)
                 .build();
