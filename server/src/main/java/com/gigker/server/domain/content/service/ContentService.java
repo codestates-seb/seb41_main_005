@@ -37,7 +37,7 @@ public class ContentService {
     private final CategoryService categoryService;
 
     public Content createContent(Content content, Category category) {
-        Member member = memberService.findMemberById(memberService.getCurrentMember().getMemberId());
+        Member member = memberService.getCurrentMember();
         content.setCategory(category);
         content.setMember(member);
         Content saveContent = contentRepository.save(content);
