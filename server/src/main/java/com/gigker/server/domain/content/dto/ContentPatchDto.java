@@ -24,7 +24,7 @@ public class ContentPatchDto {
     private String categoryName;
     private List<ContentTag> contentTags;
     private List<WorkTime> workTimes;
-    private String location;
+    private String cityName;
     private int price;
     private LocalDateTime deadLine;
     private Boolean isPremium;

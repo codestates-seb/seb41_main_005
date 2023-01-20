@@ -5,12 +5,10 @@ import com.gigker.server.domain.member.dto.MemberPatchDto;
 import com.gigker.server.domain.member.dto.MemberPostDto;
 import com.gigker.server.domain.member.dto.MemberProfileResponseDto;
 import com.gigker.server.domain.member.entity.Member;
-import com.gigker.server.domain.member.entity.Profile;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
@@ -41,9 +39,4 @@ public interface MemberMapper {
     MemberProfileResponseDto memberToMemberResponse(Member member);
 
     List<MemberProfileResponseDto> memberToMemberResponses(List<Member> members);
-
-    // @Mapping(target = "likeCount", expression = "")
-    // @Mapping(target = "dislikeCount", expression = "")
-    // @Mapping(target = "reviewCount", expression = "")
-    MemberProfileResponseDto.SimpleMemberResponse memberToSimpleMember(Member member);
 }

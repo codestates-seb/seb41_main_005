@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter @Builder
 @Entity
 @NoArgsConstructor
@@ -30,7 +32,10 @@ public class Profile {
 	private int sellDislikeCount;
 
 	@Column(nullable = false)
-	private int reviewCount;
+	private int buyReviewCount;
+
+	@Column(nullable = false)
+	private int sellReviewCount;
 
 	@Column(nullable = false)
 	private int completedBuyCount;

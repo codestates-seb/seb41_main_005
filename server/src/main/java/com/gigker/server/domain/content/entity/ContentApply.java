@@ -68,14 +68,11 @@ public class ContentApply extends BaseEntity {
 	// 지원자 정보 조회 시 좋아요 및 싫어요 정보를 가져온다.
 	public int getLikeCount() {
 		ContentType type = this.content.getContentType();
-
 		switch (type) {
 			case BUY:
-				return this.applicant.getProfile().getSellLikeCount();
-
+				return this.applicant.getSellLikeCount();
 			case SELL:
-				return this.applicant.getProfile().getBuyLikeCount();
-
+				return this.applicant.getBuyLikeCount();
 			default:
 				return 0;
 		}
@@ -83,14 +80,23 @@ public class ContentApply extends BaseEntity {
 
 	public int getDislikeCount() {
 		ContentType type = this.content.getContentType();
-
 		switch (type) {
 			case BUY:
-				return this.applicant.getProfile().getSellDislikeCount();
-
+				return this.applicant.getSellDislikeCount();
 			case SELL:
-				return this.applicant.getProfile().getBuyDislikeCount();
+				return this.applicant.getBuyDislikeCount();
+			default:
+				return 0;
+		}
+	}
 
+	public int getReviewCount() {
+		ContentType type = this.content.getContentType();
+		switch (type) {
+			case BUY:
+				return this.applicant.getBuyReviewCount();
+			case SELL:
+				return this.applicant.getSellReviewCount();
 			default:
 				return 0;
 		}

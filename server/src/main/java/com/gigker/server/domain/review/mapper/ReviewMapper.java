@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.mapper.ContentApplyMapper;
 import com.gigker.server.domain.member.mapper.MemberMapper;
 import com.gigker.server.domain.review.dto.ReviewDto;
@@ -25,4 +26,12 @@ public interface ReviewMapper {
 	@Mapping(source = "writer.applicant.memberId", target = "writerId")
 	@Mapping(source = "recipient.memberId", target = "recipientId")
 	List<ReviewDto.ReviewResponse> reviewsToResponses(List<Review> reviews);
+
+	@Mapping(target = "memberId", source = "member.memberId")
+	@Mapping(target = "nickName", source = "member.nickName")
+	@Mapping(target = "pictureUrl", source = "member.pictureUrl")
+	@Mapping(target = "likeCount", expression = "java(content.getLikeCount())")
+	@Mapping(target = "dislikeCount", expression = "java(content.getDislikeCount())")
+	@Mapping(target = "reviewCount", expression = "java(content.getReviewCount())")
+	ReviewDto.SimpleMemberResponse contentToSimpleMember(Content content);
 }

@@ -43,9 +43,10 @@ public class ContentApplyController {
 	public ResponseEntity postApply(
 		@PathVariable("content-id") @Positive Long contentId) {
 
-		applyService.createApply(contentId);
+	  ContentApply apply = applyService.createApply(contentId);
+		ContentApplyResponseDto.ApplyResponse response = applyMapper.applyToResponse(apply);
 
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	// 지원 요청 승인

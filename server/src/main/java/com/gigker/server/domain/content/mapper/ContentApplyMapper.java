@@ -16,6 +16,10 @@ import com.gigker.server.domain.member.mapper.MemberMapper;
 public interface ContentApplyMapper {
 
 	@Mapping(source = "applicant.memberId", target = "applicantId")
+	@Mapping(source = "content.contentId", target = "contentId")
+	ContentApplyResponseDto.ApplyResponse applyToResponse(ContentApply apply);
+
+	@Mapping(source = "applicant.memberId", target = "applicantId")
 	@Mapping(source = "applicant.nickName", target = "nickName")
 	@Mapping(source = "applicant.pictureUrl", target = "pictureUrl")
 	@Mapping(source = "applicant.about", target = "about")
@@ -29,5 +33,6 @@ public interface ContentApplyMapper {
 	@Mapping(source = "applicant.about", target = "about")
 	@Mapping(target = "likeCount", expression = "java(apply.getLikeCount())")
 	@Mapping(target = "dislikeCount", expression = "java(apply.getDislikeCount())")
+	@Mapping(target = "reviewCount", expression = "java(apply.getReviewCount())")
 	List<ContentApplyResponseDto.Applicant> appliesToApplicants(List<ContentApply> applies);
 }
