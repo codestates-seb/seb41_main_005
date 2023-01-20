@@ -1,6 +1,7 @@
 package com.gigker.server.domain.content.mapper;
 
 import com.gigker.server.domain.common.WorkTime;
+import com.gigker.server.domain.common.WorkTimeMapper;
 import com.gigker.server.domain.content.dto.ContentPatchDto;
 import com.gigker.server.domain.content.dto.ContentPostDto;
 import com.gigker.server.domain.content.dto.ContentResponseDto;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = MemberMapper.class)
+        uses = {MemberMapper.class, WorkTimeMapper.class})
 public interface ContentMapper {
 
     @Mapping(source = "memberId", target = "member.memberId")
