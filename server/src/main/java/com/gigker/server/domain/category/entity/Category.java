@@ -4,6 +4,7 @@ import com.gigker.server.domain.content.entity.Content;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -18,9 +19,5 @@ public class Category {
     private Long categoryId;
 
     @Column(nullable = false, unique = true)
-    private String category;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "content_id")
-    private Content content;
+    private String categoryName;
 }

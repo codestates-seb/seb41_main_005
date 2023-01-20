@@ -41,4 +41,9 @@ public interface MemberMapper {
     MemberProfileResponseDto memberToMemberResponse(Member member);
 
     List<MemberProfileResponseDto> memberToMemberResponses(List<Member> members);
+
+    // @Mapping(target = "likeCount", expression = "")
+    // @Mapping(target = "dislikeCount", expression = "")
+    // @Mapping(target = "reviewCount", expression = "")
+    MemberProfileResponseDto.SimpleMemberResponse memberToSimpleMember(Member member);
 }

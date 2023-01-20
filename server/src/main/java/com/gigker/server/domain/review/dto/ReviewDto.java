@@ -42,6 +42,6 @@ public class ReviewDto {
 		private String comment;
 		private String secondComment;
 		private boolean isAnonymous;
-		private ContentType type;
+		private ContentType contentType;
 	}
 }

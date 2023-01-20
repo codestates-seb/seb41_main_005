@@ -28,7 +28,7 @@ public class ContentResponseDto {
         private String preference;
         private String other;
         private String location;
-        private String category;
+        private String categoryName;
         private List<WorkTimeResponseDto> workTimes;
         private List<ContentTagResponseDto> contentTags;
         private int price;
@@ -46,6 +46,7 @@ public class ContentResponseDto {
     @NoArgsConstructor
     public static class SimpleContentResponse {
         private Long contentId;
+        private String title;
         private int price;
         private List<WorkTime> workTimes;
         private Long memberId;

@@ -57,9 +57,10 @@ public class Content extends BaseEntity {
 	@Column(columnDefinition = "MEDIUMTEXT")
 	private String other;
 
-//	// 카테고리
-//	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-	private String category;
+	// 카테고리
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "category_id")
+	private Category category;
 
 	// 태그
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)

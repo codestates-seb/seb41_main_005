@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.gigker.server.domain.common.BaseEntity;
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.LikeType;
 import com.gigker.server.domain.content.entity.ContentApply;
@@ -28,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Review {
+public class Review extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long reviewId;
@@ -46,7 +47,7 @@ public class Review {
 	private LikeType likeType;
 
 	// 작성 제한 150자
-	@Column(length = 150, nullable = false)
+	@Column(length = 150)
 	private String comment;
 
 	@Column(length = 150)
