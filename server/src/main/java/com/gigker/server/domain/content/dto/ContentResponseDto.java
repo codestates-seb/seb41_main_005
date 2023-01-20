@@ -48,7 +48,7 @@ public class ContentResponseDto {
         private Long contentId;
         private String title;
         private int price;
-        private List<WorkTime> workTimes;
+        private List<WorkTimeResponseDto> workTimes;
         private Long memberId;
         private String nickName;
     }
