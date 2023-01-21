@@ -27,8 +27,11 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final' // mapper
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'com.google.code.gson:gson'	// gson
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // AWS S3(이미지저장소)
 	implementation 'org.springframework.boot:spring-boot-starter-security' //Security
+
+	// aws
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // AWS S3(이미지저장소)
+	implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'// AWS paramStore
 
 	// sql 쿼리 파라미터에 실제 값을 넣기 위한 라이브러리
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1' // 쿼리문을 예쁘게 표시해주는? 설정을 하기 위한 dependency
@@ -54,6 +57,13 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+//aws paramStore
+dependencyManagement {
+	imports {
+		mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:2.3.3"
+	}
 }
 
 tasks.named('test') {

@@ -1,83 +1,88 @@
-#aws S3
+#Aws DB and Jpa and Jwt and debug setting
+spring:
+  config:
+    import: "aws-parameterstore:"
+  server:
+    port: 8080
+    servlet:
+      encoding:
+        force-response: true
+
+  # redis
+  redis:
+    host: ${redis.host}
+    port: ${redis.port}
+
+  # db
+  datasource:
+    url: ${jdbc.url}
+    username: ${jdbc.username}
+    password: ${jdbc.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # jpa
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    # auto create schema
+    hibernate:
+      ddl-auto: update
+    # show sql query
+    show-sql: true
+    # SQL pretty print
+    properties:
+      hibernate:
+        format_sql: true
+    # colorful console
+    output:
+      ansi:
+        enabled: always
+    # image size
+    servlet:
+      multipart:
+        max-request-size: 10MB
+        max-file-size: 10MB
+
+
+#aws S3 setting
 cloud:
   aws:
     credentials:
-      accessKey:
-      secretKey:
+      accessKey: ${s3.accessKey}
+      secretKey: ${s3.secretKey}
     s3:
-      bucket:
+      bucket: ${s3.bucket}
     region:
       static: ap-northeast-2
     stack:
       auto: false
 
-spring:
-  application:
-    name: gigker
-  h2:
-    console:
-      enabled: true
-      path: /h2
-  datasource:
-    url: jdbc:h2:mem:test
-  jpa:
-    hibernate:
-      ddl-auto: create  # auto create schema
-    show-sql: true      # show sql query
-    properties:
-      hibernate:
-        format_sql: true  # SQL pretty print
-    defer-datasource-initialization: true
-  output:
-    ansi:
-      enabled: always   # colorful console
-  servlet:
-    multipart:
-      max-request-size: 10MB
-      max-file-size: 10MB
 
-server:
-  port: 8080
-  servlet:
-    encoding:
-      force-response: true
+# jwt
+jwt:
+  access-token-expiration-minutes: 10
+  refresh-token-expiration-minutes: 1440
+mail:
+  address:
+    admin: ${mail.admin}
 
-# configuration to put the actual value in sql query parameter
+
+## configuration to put the actual value in sql query parameter
 decorator.datasource.p6spy:
   enable-logging: true
   multiline: true
 
-# logging above debugs
+
+## logging above debugs
 logging:
   level:
     org:
       springframework:
         orm:
           jpa: DEBUG
-mail:
-  address:
-    admin: admin@gmail.com
-
-jwt:
-#  key: ${JWT_SECRET_KEY}
-  access-token-expiration-minutes: 40
-  refresh-token-expiration-minutes: 420
-
-#spring:
-#  jpa:
-#    database: mysql
-#    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-#
-#
-##  datasource:
-##    driver-class-name: com.mysql.cj.jdbc.Driver
-##    url: jdbc:mysql://localhost:3306/gigkerdev?allowPublicKeyRetrieval=true&characterEncoding=UTF-8
-##    username: ${MYSQL_NAME}
-##    password: ${MYSQL_SECRET}
-#
-##  ssl:
-##    key-store-type: PKCS12
-##    key-store: classpath:localhost.p12      #HTTPS SETTING
-##    key-password: changeit
-#
-
+aws:
+  paramstore:
+    enabled: true
+    prefix: /config
+    profile-separator: _
+    name: gigker
