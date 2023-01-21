@@ -1,7 +1,5 @@
 #Aws DB and Jpa and Jwt and debug setting
 spring:
-  config:
-    import: "aws-parameterstore:"
   server:
     port: 8080
     servlet:
@@ -10,14 +8,14 @@ spring:
 
   # redis
   redis:
-    host: ${redis.host}
-    port: ${redis.port}
+    host:
+    port:
 
   # db
   datasource:
-    url: ${jdbc.url}
-    username: ${jdbc.username}
-    password: ${jdbc.password}
+    url:
+    username:
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   # jpa
@@ -48,10 +46,10 @@ spring:
 cloud:
   aws:
     credentials:
-      accessKey: ${s3.accessKey}
-      secretKey: ${s3.secretKey}
+      accessKey:
+      secretKey:
     s3:
-      bucket: ${s3.bucket}
+      bucket:
     region:
       static: ap-northeast-2
     stack:
@@ -60,11 +58,11 @@ cloud:
 
 # jwt
 jwt:
-  access-token-expiration-minutes: 10
+  access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 1440
 mail:
   address:
-    admin: ${mail.admin}
+    admin: admin@gmail.com
 
 
 ## configuration to put the actual value in sql query parameter
@@ -80,9 +78,3 @@ logging:
       springframework:
         orm:
           jpa: DEBUG
-aws:
-  paramstore:
-    enabled: true
-    prefix: /config
-    profile-separator: _
-    name: gigker
