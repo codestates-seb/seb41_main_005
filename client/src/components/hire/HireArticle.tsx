@@ -11,19 +11,14 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
     nickName: data.nickName,
     price: data.price,
     workTimes: {
-      startWorkTime:
-        data.workTimes && data.workTimes.length > 0
-          ? data.workTimes[0].startWorkTime
-          : null,
-      endWorkTime:
-        data.workTimes && data.workTimes.length > 0
-          ? data.workTimes[1].endWorkTime
-          : null,
+      startWorkTime: data.workTimes?.startWorkTime || null,
+      endWorkTime: data.workTimes?.endWorkTime || null,
     },
     memberId: data.memberId,
     location: data.location,
     categories: data.category,
     tag: "Unknown",
+    contentId: data.contentId,
   };
 };
 

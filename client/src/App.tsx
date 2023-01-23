@@ -31,7 +31,7 @@ function App() {
           <Route path="/hunting" element={<Hunting />} />
           <Route path="/edithire" element={<EditHire />} />
           <Route path="/newhire" element={<NewHire />} />
-          <Route path="/newhire" element={<NewHunting />} />
+          <Route path="/newhunting" element={<NewHunting />} />
           <Route path="/edithunting" element={<EditHunting />} />
           <Route path="/hiredetail" element={<HireDetail />} />
           <Route path="/huntingdetail" element={<HuntingDetail />} />
