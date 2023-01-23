@@ -13,7 +13,7 @@ import {
 interface ExistingData {
   title: string;
   category: string;
-  workTime: Array<{ startDate: Date; startTime: string; endTime: string }>;
+  workTime: WorkSchedule[];
   volume: string;
   pay: string;
   location: string;
@@ -27,10 +27,13 @@ interface ExistingData {
 interface Props {
   existingData?: ExistingData;
 }
-
 interface WorkSchedule {
   startWorkTime: string;
   endWorkTime: string;
+  startDate: Date;
+  startTime: string;
+  endDate: Date;
+  endTime: string;
 }
 
 const EditHire = (props: Props) => {

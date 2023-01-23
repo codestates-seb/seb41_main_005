@@ -9,14 +9,12 @@ import { categoryOptions, locationOptions } from "../components/CateLocaTag";
 interface ExistingData {
   title: string;
   category: string;
-  workTime: Array<{ startDate: Date; startTime: string; endTime: string }>;
-  volume: string;
+  workTime: WorkSchedule[];
   pay: string;
   location: string;
   workDetail: string;
-  qualification: string;
-  preferential: string;
   etc: string;
+  tag: string;
 }
 interface Props {
   existingData?: ExistingData;
@@ -24,6 +22,10 @@ interface Props {
 interface WorkSchedule {
   startWorkTime: string;
   endWorkTime: string;
+  startDate: Date;
+  startTime: string;
+  endDate: Date;
+  endTime: string;
 }
 const EditHunting = (props: Props) => {
   const { existingData } = props;
@@ -46,13 +48,11 @@ const EditHunting = (props: Props) => {
     title: "",
     category: "",
     workTime: [],
-    volume: "",
     pay: "",
     location: "",
     workDetail: "",
-    qualification: "",
-    preferential: "",
     etc: "",
+    tag: "",
   });
 
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -123,7 +123,7 @@ const EditHunting = (props: Props) => {
       <WithTitle>
         희망 업무시간
         <WorkSchedule
-          workTime={workTime}
+          workTime={existingInfo.workTime}
           onWorkTimeChange={handleWorkTimeChange}
         />
       </WithTitle>
