@@ -6,10 +6,15 @@ import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../util/store";
-import { setLogInEmail, setLogInPassword, setToken } from "../../util/types";
+import { RootState } from "../../util/redux";
+import {
+  setLogInEmail,
+  setLogInPassword,
+  setIsLogIn,
+  setImgUrl,
+} from "../../util/redux/LogIn";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const LoginBox = styled.form`
   width: 25rem;
@@ -52,9 +57,11 @@ const SocialLogin = styled.div`
 const LogInForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const logInEmail = useSelector((state: RootState) => state.logInEmail);
-  const logInPassword = useSelector((state: RootState) => state.logInPassword);
-  const token = useSelector((state: RootState) => state.token);
+  const logInEmail = useSelector((state: RootState) => state.LogIn.logInEmail);
+  const logInPassword = useSelector(
+    (state: RootState) => state.LogIn.logInPassword
+  );
+
   const handleLoginEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setLogInEmail(e.currentTarget.value));
   };
@@ -70,18 +77,28 @@ const LogInForm = () => {
         password: logInPassword,
       })
       .then((res) => {
-        dispatch(setToken(res.headers.autorization));
-        console.log("token: " + token);
+        // console.log(res.headers.authorization);
+        window.localStorage.setItem(
+          "Authorization",
+          JSON.stringify(res.headers.authorization)
+        );
+        dispatch(setIsLogIn(true));
+        dispatch(setImgUrl(res.data.pictureUrl));
+        alert("어서옵쇼~");
+        navigate("/", { replace: true });
       })
       .catch((err) => {
         console.log(err);
+        alert("회원이 아니거나 이메일 비밀번호가 다릅니다");
       });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleLogIn();
-    navigate("/");
+    await handleLogIn().then(() => {
+      const AUTH_TOKEN = localStorage.getItem("Authorization");
+      axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+    });
   };
 
   return (
@@ -109,7 +126,12 @@ const LogInForm = () => {
         />
       </InputSection>
       <ButtonSection>
-        <Button color={"#6F38C5"} width={"300px"} type={"submit"}>
+        <Button
+          color={"#6F38C5"}
+          width={"300px"}
+          type={"submit"}
+          disabled={!(logInEmail && logInPassword)}
+        >
           로그인
         </Button>
       </ButtonSection>
@@ -125,7 +147,7 @@ const LogInForm = () => {
         </a>
       </SocialLogin>
       <InputSection>
-        <a href={"/"}>회원가입</a>
+        <Link to={"/signup"}>회원가입</Link>
       </InputSection>
     </LoginBox>
   );

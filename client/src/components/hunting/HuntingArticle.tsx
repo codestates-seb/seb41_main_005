@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CardProps, ServerData } from "./CardProps";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { RootState } from "../../util/store";
+import { RootState } from "../../util/redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -13,14 +13,8 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
     nickName: data.nickName,
     price: data.price,
     workTimes: {
-      startWorkTime:
-        data.workTimes && data.workTimes.length > 0
-          ? data.workTimes[0].startWorkTime
-          : null,
-      endWorkTime:
-        data.workTimes && data.workTimes.length > 0
-          ? data.workTimes[1].endWorkTime
-          : null,
+      startWorkTime: data.workTimes ? data.workTimes.startWorkTime : null,
+      endWorkTime: data.workTimes ? data.workTimes.endWorkTime : null,
     },
     memberId: data.memberId,
     location: data.location,
@@ -61,12 +55,14 @@ const HuntingArticle: React.FC = () => {
   };
 
   const selectedCategory = useSelector(
-    (state: RootState) => state.selectedCategory
+    (state: RootState) => state.DropDown.selectedCategory
   );
   const selectedLocation = useSelector(
-    (state: RootState) => state.selectedLocation
+    (state: RootState) => state.DropDown.selectedLocation
   );
-  const selectedTag = useSelector((state: RootState) => state.selectedTag);
+  const selectedTag = useSelector(
+    (state: RootState) => state.DropDown.selectedTag
+  );
   const filteredCards =
     selectedCategory === "카테고리" &&
     selectedLocation === "지역" &&

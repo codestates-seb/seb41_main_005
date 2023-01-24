@@ -7,7 +7,6 @@ import CalloutBox from "../components/detail/CalloutBox";
 import UserInfo from "../components/detail/UserInfo";
 import Warning from "../components/detail/Warning";
 import { getDetailData } from "../api/getDetail";
-import { RootState } from "../util/store";
 import { hireDetailProps } from "../util/hireDetailData";
 
 const Container = styled.div`
@@ -102,7 +101,6 @@ function HireDetail() {
 
   const [isLogin, setIsLogin] = useState(true);
   const [data, setData] = useState<hireDetailProps>();
-  const token = useSelector((state: RootState) => state.token);
   const navigate = useNavigate();
 
   const contentId = 2;
