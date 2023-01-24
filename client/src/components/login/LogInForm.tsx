@@ -72,16 +72,21 @@ const LogInForm = () => {
 
   const handleLogIn = async () => {
     axios
-      .post("http://gigker.iptime.org:8080/auth", {
-        username: logInEmail,
-        password: logInPassword,
-      })
+      .post(
+        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth/login",
+        {
+          username: logInEmail,
+          password: logInPassword,
+        }
+      )
       .then((res) => {
-        // console.log(res.headers.authorization);
-        window.localStorage.setItem(
-          "Authorization",
-          JSON.stringify(res.headers.authorization)
-        );
+        console.log(res.headers);
+        const AUTH_TOKEN = res.headers.authorization;
+        console.log(AUTH_TOKEN);
+        if (AUTH_TOKEN) {
+          window.localStorage.setItem("Authorization", AUTH_TOKEN);
+          axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+        }
         dispatch(setIsLogIn(true));
         dispatch(setImgUrl(res.data.pictureUrl));
         alert("어서옵쇼~");
@@ -95,10 +100,7 @@ const LogInForm = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await handleLogIn().then(() => {
-      const AUTH_TOKEN = localStorage.getItem("Authorization");
-      axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
-    });
+    await handleLogIn();
   };
 
   return (
