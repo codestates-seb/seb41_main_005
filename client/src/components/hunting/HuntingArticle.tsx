@@ -30,7 +30,7 @@ const HuntingArticle: React.FC = () => {
     const getData = async (contentType: string) => {
       try {
         const response = await axios.get(
-          "http://gigker.iptime.org:8080/contents",
+          "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
           {
             params: {
               contentType: contentType,

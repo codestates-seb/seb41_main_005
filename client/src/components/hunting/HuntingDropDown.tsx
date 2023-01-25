@@ -59,6 +59,17 @@ const DropdownT = () => {
   const selectedLocation = useSelector(
     (state: RootState) => state.DropDown.selectedLocation
   );
+  //로그인 되어있다면 새글작성버튼 보이게
+  // const [showNewHireButton, setShowNewHireButton] = useState(false);
+
+  // useEffect(() => {
+  //   const accessToken = localStorage.getItem("access_token");
+  //   if (accessToken) {
+  //     setShowNewHireButton(true);
+  //   } else {
+  //     setShowNewHireButton(false);
+  //   }
+  // }, []);
 
   const handleCategoryClick = (category: string) => {
     dispatch(selectCategory(category));
@@ -117,6 +128,7 @@ const DropdownT = () => {
         </DropdownContainer>
 
         <AddHire onClick={newHuntingClickHandler}>
+          {/* {showNewHireButton && <button> 게시글 작성</button>} */}
           <button>게시글 작성</button>
         </AddHire>
       </UpperWrapper>
