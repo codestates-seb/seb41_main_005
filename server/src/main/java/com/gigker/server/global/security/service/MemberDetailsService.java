@@ -1,4 +1,4 @@
-package com.gigker.server.global.security.userdetails;
+package com.gigker.server.global.security.service;
 
 import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.repository.MemberRepository;

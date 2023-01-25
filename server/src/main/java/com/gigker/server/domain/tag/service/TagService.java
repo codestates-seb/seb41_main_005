@@ -14,7 +14,4 @@ public class TagService {
     public Tag createTag(Tag tag){
         return tagRepository.save(tag);
     }
-//    public List<Tag> createTagList(List<Tag> tagList){
-//        return tagList.stream().map(tag -> tagRepository.save(tag)).collect(Collectors.toList());
-//    }
 }

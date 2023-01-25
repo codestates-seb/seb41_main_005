@@ -1,9 +1,22 @@
 package com.gigker.server.global.security.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
-@Getter
+
 public class LoginDto {
-    private String username;
-    private String password;
+    @Getter
+    public static class Post {
+        private String username;
+        private String password;
+    }
+
+    @Getter
+    @Setter
+    public static class Response {
+        private long memberId;
+        private String email;
+        private String nickName;
+        private String pictureUrl;
+    }
 }

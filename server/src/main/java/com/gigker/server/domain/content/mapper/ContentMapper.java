@@ -1,6 +1,7 @@
 package com.gigker.server.domain.content.mapper;
 
 import com.gigker.server.domain.common.WorkTime;
+import com.gigker.server.domain.common.WorkTimeMapper;
 import com.gigker.server.domain.content.dto.ContentPatchDto;
 import com.gigker.server.domain.content.dto.ContentPostDto;
 import com.gigker.server.domain.content.dto.ContentResponseDto;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = MemberMapper.class)
+        uses = {MemberMapper.class, WorkTimeMapper.class})
 public interface ContentMapper {
 
     @Mapping(source = "memberId", target = "member.memberId")
@@ -48,7 +49,6 @@ public interface ContentMapper {
         content.setQualification(requestBody.getQualification());
         content.setPreference(requestBody.getPreference());
         content.setOther(requestBody.getOther());
-        content.setLocation(requestBody.getLocation());
         content.setPrice(requestBody.getPrice());
         content.setDeadLine(requestBody.getDeadLine());
         content.setIsPremium(requestBody.getIsPremium());
@@ -84,7 +84,6 @@ public interface ContentMapper {
         content.setOther(requestBody.getOther());
         content.setContentTags(contentTags);
         content.setWorkTimes(workTimes);
-        content.setLocation(requestBody.getLocation());
         content.setPrice(requestBody.getPrice());
         content.setDeadLine(requestBody.getDeadLine());
         content.setIsPremium(requestBody.getIsPremium());
@@ -97,6 +96,7 @@ public interface ContentMapper {
     @Mapping(source = "member.memberId", target = "memberId")
     @Mapping(source = "member.nickName", target = "nickName")
     @Mapping(source = "category.categoryName", target = "categoryName")
+    @Mapping(source = "location.cityName", target = "cityName")
     ContentResponseDto.ContentResponse contentResponseDto(Content content);
 
     @Mapping(source = "contentId", target = "contentId")

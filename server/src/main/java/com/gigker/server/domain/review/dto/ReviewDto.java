@@ -44,4 +44,16 @@ public class ReviewDto {
 		private boolean isAnonymous;
 		private ContentType contentType;
 	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class SimpleMemberResponse {
+		private int memberId;
+		private String nickName;
+		private String pictureUrl;
+		private int likeCount;
+		private int dislikeCount;
+		private int reviewCount;
+	}
 }

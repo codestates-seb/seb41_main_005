@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.gigker.server.domain.category.entity.Category;
+import com.gigker.server.domain.location.entity.Location;
 import lombok.Data;
 import lombok.Getter;
 
@@ -58,7 +59,7 @@ public class Content extends BaseEntity {
 	private String other;
 
 	// 카테고리
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id")
 	private Category category;
 
@@ -72,8 +73,9 @@ public class Content extends BaseEntity {
 	private List<WorkTime> workTimes = new ArrayList<>();
 
 	// TODO : 지역 정보 추후에 API 연동
-	@Column(nullable = false)
-	private String location;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "location_id")
+	private Location location;
 
 	// 보수
 	@Column(nullable = false)
@@ -117,5 +119,42 @@ public class Content extends BaseEntity {
 
 	public void setMember(Member member) {
 		this.member = member;
+	}
+
+	// 작성자 정보 조회 시 좋아요 및 싫어요 정보를 가져온다.
+	public int getLikeCount() {
+		ContentType type = this.getContentType();
+		switch (type) {
+			case BUY:
+				return this.member.getBuyLikeCount();
+			case SELL:
+				return this.member.getSellLikeCount();
+			default:
+				return 0;
+		}
+	}
+
+	public int getDislikeCount() {
+		ContentType type = this.getContentType();
+		switch (type) {
+			case BUY:
+				return this.member.getBuyDislikeCount();
+			case SELL:
+				return this.member.getSellDislikeCount();
+			default:
+				return 0;
+		}
+	}
+
+	public int getReviewCount() {
+		ContentType type = this.getContentType();
+		switch (type) {
+			case BUY:
+				return this.member.getBuyReviewCount();
+			case SELL:
+				return this.member.getSellReviewCount();
+			default:
+				return 0;
+		}
 	}
 }
