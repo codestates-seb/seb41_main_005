@@ -32,7 +32,7 @@ public class ContentApplyStubData {
 			ContentApply apply = ContentApply.builder()
 				.contentApplyId((long)i)
 				.applicant(MemberStubData.getMembers().get(i))
-				.content(ContentStubData.getContent())
+				.content(ContentStubData.getContents().get(i))
 				.applyStatus(ContentApply.ApplyStatus.NONE)
 				.build();
 
