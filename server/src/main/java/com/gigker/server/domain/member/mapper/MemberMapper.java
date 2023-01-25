@@ -3,14 +3,13 @@ package com.gigker.server.domain.member.mapper;
 
 import com.gigker.server.domain.member.dto.MemberPatchDto;
 import com.gigker.server.domain.member.dto.MemberPostDto;
-import com.gigker.server.domain.member.dto.MemberProfileResponseDto;
+import com.gigker.server.domain.member.dto.MemberResponseDto;
 import com.gigker.server.domain.member.entity.Member;
-import com.gigker.server.domain.member.entity.Profile;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
@@ -27,23 +26,11 @@ public interface MemberMapper {
 
     Member memberPatchToMember(MemberPatchDto memberPatchDto);
 
-    // @Mapping(target = "likeCount", expression = )
-    // @Mapping(target = "dislikeCount", expression = )
-    @Mapping(source = "profile.buyLikeCount", target = "buyLikeCount")
-    @Mapping(source = "profile.buyDislikeCount", target = "buyDislikeCount")
-    //sell Count
-    // @Mapping(source = "profile.reviewCount", expression = )
-    @Mapping(source = "profile.completedBuyCount", target = "completedBuyCount")
-    @Mapping(source = "profile.completedSellCount", target = "completedSellCount")
+
     @Mapping(target = "totalLikeCount", expression = "java(member.getTotalLikeCount())")
-    // @Mapping(target = "totalDislikeCount", expression = "java(profile.buyDisLikeCount + profile.sellDisLikeCount)")
-    // @Mapping(target = "totalCompleted", expression = "java(new LocalDateTime().getTime())")
-    MemberProfileResponseDto memberToMemberResponse(Member member);
+    @Mapping(target = "totalDislikeCount", expression = "java(member.getTotalDisLikeCount())")
+    @Mapping(target = "totalCompleted", expression = "java(member.getTotalComplete())")
+    MemberResponseDto.Profile memberToProfileResponse(Member member);
 
-    List<MemberProfileResponseDto> memberToMemberResponses(List<Member> members);
-
-    // @Mapping(target = "likeCount", expression = "")
-    // @Mapping(target = "dislikeCount", expression = "")
-    // @Mapping(target = "reviewCount", expression = "")
-    MemberProfileResponseDto.SimpleMemberResponse memberToSimpleMember(Member member);
+    List<MemberResponseDto.Profile> memberToMemberResponses(List<Member> members);
 }

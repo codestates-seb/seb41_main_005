@@ -8,11 +8,13 @@ import com.gigker.server.global.security.handler.MemberAuthenticationEntryPoint;
 import com.gigker.server.global.security.handler.MemberAuthenticationFailureHandler;
 import com.gigker.server.global.security.handler.MemberAuthenticationSuccessHandler;
 import com.gigker.server.global.security.jwt.JwtTokenizer;
+import com.gigker.server.global.security.mapper.LoginMapper;
 import com.gigker.server.global.security.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -37,6 +39,8 @@ public class SecurityConfiguration{
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final LoginMapper mapper;
+    private final RedisTemplate<String,String> redisTemplate;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -65,10 +69,12 @@ public class SecurityConfiguration{
                         .antMatchers(HttpMethod.POST, "/*/contents").hasAnyRole("ADMIN", "USER")
                         .antMatchers(HttpMethod.PATCH, "/*/contents/**").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/*/contents/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/**/apply").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/**/apply/**").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/*/reviews").permitAll()
                         .antMatchers(HttpMethod.DELETE, "/*/reviews/**").hasAnyRole("USER", "ADMIN")
-                        .antMatchers(HttpMethod.POST, "/**/reviews/**").permitAll()  //.hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH, "/**/reviews/**").permitAll() // TODO: .hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.POST, "/**/reviews/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/**/reviews/**").hasAnyRole("USER", "ADMIN")
                         .antMatchers(HttpMethod.DELETE, "/**/reviews/**").hasAnyRole("USER", "ADMIN")
                         .antMatchers(HttpMethod.POST, "/*/profiles").hasRole("USER")
                         .antMatchers(HttpMethod.PATCH, "/*/profiles/**").hasAnyRole("USER", "ADMIN")
@@ -104,19 +110,17 @@ public class SecurityConfiguration{
         return source;
     }
 
-
     public class CustomFilterConfigure extends AbstractHttpConfigurer<CustomFilterConfigure, HttpSecurity> {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
-            jwtAuthenticationFilter.setFilterProcessesUrl("/auth");
-            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer,redisTemplate);
+            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler(mapper));
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
-
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils,redisTemplate);
 
             builder
                     .addFilter(jwtAuthenticationFilter)

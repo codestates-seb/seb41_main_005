@@ -69,7 +69,7 @@ public class MemberService {
 
     //회원 정보 수정(닉네임,자기소개,이미지)
     public Member updateMember(Member member,MultipartFile image) throws IOException{
-        Member findMember = findMemberById(member.getMemberId());
+        Member findMember = findMemberById(getCurrentMember().getMemberId());
 
         //현재사용자가 작성자인지 체크 아니라면 예외처리
         if(getCurrentMember().getMemberId() != findMember.getMemberId())    {
@@ -107,7 +107,6 @@ public class MemberService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_MEMBER));
     }
 
-
     //전체 회원 조회
     @Transactional(readOnly = true)
     public Page<Member> findMembers(int page, int size)
@@ -117,9 +116,9 @@ public class MemberService {
     }
 
     //회원 삭제
-    public void deleteMember(Long memberId)
+    public void deleteMember()
     {
-        Member findmember = findMemberById(memberId);
+        Member findmember = findMemberById(getCurrentMember().getMemberId());
 
         if(getCurrentMember().getMemberId() != findmember.getMemberId())
             throw new BusinessLogicException(ExceptionCode.DELETE_NOT_ALLOWED);
@@ -127,7 +126,6 @@ public class MemberService {
         findmember.setMemberStatus(Member.MemberStatus.MEMBER_QUIT);
         memberRepository.save(findmember);
     }
-
 
     //현재 로그인한 멤버 조회
     public Member getCurrentMember(){
@@ -146,7 +144,6 @@ public class MemberService {
         return member;
     }
 
-
     //이메일 중복 검사
     @Transactional(readOnly = true)
     private void verifyMemberByEmail(String email){
@@ -154,7 +151,6 @@ public class MemberService {
         if(member.isPresent())
             throw new BusinessLogicException(ExceptionCode.EXISTS_MEMBER);
     }
-
 
     //닉네임 중복 검사
     @Transactional(readOnly = true)

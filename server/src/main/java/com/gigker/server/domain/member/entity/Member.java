@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.gigker.server.domain.common.BaseEntity;
+import com.gigker.server.domain.common.ContentType;
+import com.gigker.server.domain.common.LikeType;
 import com.gigker.server.domain.content.entity.Bookmark;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
@@ -89,8 +91,69 @@ public class Member extends BaseEntity {
 		}
 	}
 
-	public int getTotalLikeCount() {
+	//profile 종합 메서드
+	public int getTotalLikeCount() {return profile.getBuyLikeCount() + profile.getSellLikeCount();}
 
-		return profile.getBuyLikeCount() + profile.getSellLikeCount();
+	public int getTotalDisLikeCount() {return profile.getBuyDislikeCount() + profile.getSellDislikeCount();}
+
+	public int getTotalComplete(){return profile.getCompletedBuyCount() + profile.getCompletedSellCount();}
+
+
+	public int getBuyLikeCount() {
+		int count = (int)reviews.stream()
+			.filter(review -> review.getContentType() == ContentType.BUY)
+			.filter(review -> review.getLikeType() == LikeType.LIKE)
+			.count();
+
+		this.profile.setBuyLikeCount(count);
+		return count;
+	}
+
+	public int getBuyDislikeCount() {
+		int count = (int)reviews.stream()
+			.filter(review -> review.getContentType() == ContentType.BUY)
+			.filter(review -> review.getLikeType() == LikeType.DISLIKE)
+			.count();
+
+		this.profile.setBuyDislikeCount(count);
+		return count;
+	}
+
+	public int getSellLikeCount() {
+		int count = (int)reviews.stream()
+			.filter(review -> review.getContentType() == ContentType.SELL)
+			.filter(review -> review.getLikeType() == LikeType.LIKE)
+			.count();
+
+		this.profile.setSellLikeCount(count);
+		return count;
+	}
+
+	public int getSellDislikeCount() {
+		int count = (int)reviews.stream()
+			.filter(review -> review.getContentType() == ContentType.SELL)
+			.filter(review -> review.getLikeType() == LikeType.DISLIKE)
+			.count();
+
+		this.profile.setSellDislikeCount(count);
+		return count;
+	}
+
+	public int getBuyReviewCount() {
+		int count = (int)reviews.stream()
+			.filter(review -> review.getContentType() == ContentType.BUY)
+			.count();
+
+		this.profile.setBuyReviewCount(count);
+		return count;
+	}
+
+	public int getSellReviewCount() {
+		int count = (int)reviews.stream()
+			.filter(review -> review.getContentType() == ContentType.SELL)
+			.count();
+
+		this.profile.setSellReviewCount(count);
+		return count;
 	}
 }

@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.service.ContentService;
-import com.gigker.server.domain.member.dto.MemberProfileResponseDto;
 import com.gigker.server.domain.member.entity.Member;
-import com.gigker.server.domain.member.mapper.MemberMapper;
 import com.gigker.server.domain.review.dto.ReviewDto;
 import com.gigker.server.domain.review.entity.Review;
 import com.gigker.server.domain.review.mapper.ReviewMapper;
@@ -40,7 +38,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ReviewController {
 	private final ReviewService reviewService;
 	private final ReviewMapper reviewMapper;
-	private final MemberMapper memberMapper;
 	private final ContentService contentService;
 
 	// 리뷰 작성
@@ -49,9 +46,10 @@ public class ReviewController {
 		@RequestBody @Valid ReviewDto.ReviewPost post) {
 
 		Review review = reviewMapper.postToReview(post);
-		reviewService.writeReview(review);
+		Review createdReview = reviewService.writeReview(review);
+		ReviewDto.ReviewResponse response = reviewMapper.reviewToResponse(createdReview);
 
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	// 2차 리뷰 작성
@@ -86,7 +84,7 @@ public class ReviewController {
 		// 페이지당 출력 수는 15로 고정
 		Page<Review> pageReviews = reviewService.findAllReviewsByRecipient(content, member, page - 1, 15);
 		List<ReviewDto.ReviewResponse> reviews = reviewMapper.reviewsToResponses(pageReviews.getContent());
-		MemberProfileResponseDto.SimpleMemberResponse simpleMember = memberMapper.memberToSimpleMember(member);
+		ReviewDto.SimpleMemberResponse simpleMember = reviewMapper.contentToSimpleMember(content);
 
 		return ResponseEntity.ok().body(new MultiResponseDto<>(simpleMember, reviews, pageReviews));
 	}

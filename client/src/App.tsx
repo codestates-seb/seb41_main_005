@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import Navigation from "./components/Navigation";
 import { ThemeProvider } from "styled-components";
 import GlobalStyle from "./assets/styles/global-styles";
@@ -13,13 +14,21 @@ import HireDetail from "./pages/HireDetail";
 import HuntingDetail from "./pages/HuntingDetail";
 import LogInPage from "./pages/LogInPage";
 import SignUpPage from "./pages/SignUpPage";
+import ScrollToTop from "./util/scrollRestoration";
+import { handleRefresh } from "./util/logInApi";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import axios from "axios";
 
 function App() {
+  // 새로고침 시 토큰 재발급 함수 실행
+  const HandleRefresh = handleRefresh();
+  useEffect(() => {
+    HandleRefresh;
+  }, []);
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <Navigation />
@@ -29,7 +38,7 @@ function App() {
           <Route path="/hunting" element={<Hunting />} />
           <Route path="/edithire" element={<EditHire />} />
           <Route path="/newhire" element={<NewHire />} />
-          <Route path="/newhire" element={<NewHunting />} />
+          <Route path="/newhunting" element={<NewHunting />} />
           <Route path="/edithunting" element={<EditHunting />} />
           <Route path="/hiredetail" element={<HireDetail />} />
           <Route path="/huntingdetail" element={<HuntingDetail />} />

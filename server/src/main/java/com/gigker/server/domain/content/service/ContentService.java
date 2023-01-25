@@ -1,19 +1,28 @@
 package com.gigker.server.domain.content.service;
 
 import com.gigker.server.domain.category.entity.Category;
+import com.gigker.server.domain.category.service.CategoryService;
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.CustomBeanUtils;
 import com.gigker.server.domain.content.entity.Content;
+import com.gigker.server.domain.content.entity.ContentTag;
 import com.gigker.server.domain.content.repository.ContentRepository;
+import com.gigker.server.domain.common.CustomBeanUtils;
+import com.gigker.server.domain.content.repository.ContentTagRepository;
 import com.gigker.server.domain.location.entity.Location;
 import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.domain.member.repository.MemberRepository;
 import com.gigker.server.domain.member.service.MemberService;
+import com.gigker.server.domain.tag.entity.Tag;
+import com.gigker.server.domain.tag.service.TagService;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +33,9 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final MemberService memberService;
     private final CustomBeanUtils<Content> beanUtils;
+    private final ContentTagRepository contentTagRepository;
+    private final MemberRepository memberRepository;
+    private final CategoryService categoryService;
 
     public Content createContent(Content content, Category category, Location location) {
         Member member = memberService.getCurrentMember();
@@ -65,7 +77,8 @@ public class ContentService {
     }
 
     public List<Content> findContentsByContentType(ContentType contentType){
-        return contentRepository.findContentsByContentType(contentType);
+        // 모집 중인 게시글만 조회한다.
+        return contentRepository.findAllByStatusAndContentType(Content.Status.RECRUITING, contentType);
     }
 
     public Content findContent(long contentId){
@@ -78,6 +91,20 @@ public class ContentService {
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
         contentRepository.delete(findContent);
     }
+
+    // 30분 마다 만료된 글을 찾아서 상태를 변경해준다.
+    @Scheduled(cron = "2 0/30 * * * *")
+    public void scheduledExpiry() {
+        List<Content> contents = contentRepository.findAllByStatus(Content.Status.RECRUITING);
+
+        for (Content content : contents) {
+            // null 아니고, 마감 시간(0초)이 현재 시간(1초)보다 이후인가?
+            if (content.getDeadLine() != null && content.getDeadLine().isAfter(LocalDateTime.now())) {
+                content.setStatus(Content.Status.EXPIRED);
+            }
+        }
+    }
+
     private Content save(Content content) {
         return contentRepository.save(content);
     }

@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import useDetectClose from "../../util/useDetectClose";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../util/store";
-import { selectCategory, selectLocation, selectTag } from "../../util/types";
+import { RootState } from "../../util/redux";
+import {
+  selectCategory,
+  selectLocation,
+  selectTag,
+} from "../../util/redux/DropDown";
 import { useNavigate } from "react-router";
 
 const tags = [
@@ -66,12 +70,25 @@ const location = [
 const DropdownMenu = () => {
   const dispatch = useDispatch();
   const selectedCategory = useSelector(
-    (state: RootState) => state.selectedCategory
+    (state: RootState) => state.DropDown.selectedCategory
   );
   const selectedLocation = useSelector(
-    (state: RootState) => state.selectedLocation
+    (state: RootState) => state.DropDown.selectedLocation
   );
-  const selectedTag = useSelector((state: RootState) => state.selectedTag);
+  const selectedTag = useSelector(
+    (state: RootState) => state.DropDown.selectedTag
+  );
+  //로그인 되어있다면 새글작성버튼 보이게
+  // const [showNewHireButton, setShowNewHireButton] = useState(false);
+
+  // useEffect(() => {
+  //   const accessToken = localStorage.getItem("access_token");
+  //   if (accessToken) {
+  //     setShowNewHireButton(true);
+  //   } else {
+  //     setShowNewHireButton(false);
+  //   }
+  // }, []);
 
   const handleCategoryClick = (category: string) => {
     dispatch(selectCategory(category));
@@ -139,6 +156,7 @@ const DropdownMenu = () => {
           </DropdownTitle>
         </DropdownContainer>
         <AddHire onClick={newHireClickHandler}>
+          {/* {showNewHireButton && <button> 게시글 작성</button>} */}
           <button> 게시글 작성</button>
         </AddHire>
       </UpperWrapper>

@@ -2,7 +2,13 @@ import React from "react"; // eslint-disable-line no-unused-vars
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import Button from "./Buttons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../util/redux";
+import { MdOutlineEditCalendar } from "react-icons/md";
+import Profile from "./Profile";
+import axios from "axios";
+import { removeCookie } from "../util/cookie";
 
 const Block = styled.div`
   display: block;
@@ -19,7 +25,7 @@ const NavBar = styled.div`
   z-index: 900;
 `;
 
-const LogoContainer = styled.a`
+const ImgWrapper = styled.a`
   /* margin-left: 40px; */
 `;
 
@@ -59,6 +65,17 @@ const StyledLink = styled(Link)`
   color: black;
 `;
 
+const SvgContainer = styled.div`
+  margin: 0 1.5rem 0 1rem;
+  color: ${(props) => props.theme.color.sub1};
+  &:hover {
+    .schedule {
+      color: ${(props) => props.theme.color.main};
+      transition: all 0.5s;
+    }
+  }
+`;
+
 const LogInContainer = styled.div`
   /* margin-right: 40px; */
   display: flex;
@@ -68,34 +85,76 @@ const LogInContainer = styled.div`
 `;
 
 const Navigation = () => {
+  const navigate = useNavigate();
+  const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
+
+  // 로그아웃 함수
+  const handleLogOut = async () => {
+    const result = confirm("정말 로그아웃 하시겠습니까?");
+    if (result) {
+      axios
+        .post(
+          "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth/logout"
+        )
+        .then((res) => {
+          localStorage.clear();
+          removeCookie("refresh");
+          alert(res.data.message);
+          navigate(0);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("로그아웃에 실패했습니다");
+        });
+    }
+  };
+
   return (
     <Block>
       <NavBar>
-        <LogoContainer href="/">
+        <ImgWrapper href={"/"}>
           <Logo width={65} height={65} />
-        </LogoContainer>
+        </ImgWrapper>
         <LinkContainer>
-          <LinkButton>
-            <StyledLink to="/">홈</StyledLink>
-          </LinkButton>
-          <LinkButton>
-            <StyledLink to="/hire">구인</StyledLink>
-          </LinkButton>
-          <LinkButton>
-            <StyledLink to="/hunting">구직</StyledLink>
-          </LinkButton>
+          <StyledLink to="/">
+            <LinkButton>홈</LinkButton>
+          </StyledLink>
+          <StyledLink to="/hire">
+            <LinkButton>구인</LinkButton>
+          </StyledLink>
+          <StyledLink to="/hunting">
+            <LinkButton>구직</LinkButton>
+          </StyledLink>
         </LinkContainer>
         <LogInContainer>
-          <StyledLink to="/login">
-            <Button color={"#6667AB"} width={"5rem"}>
-              로그인
-            </Button>
-          </StyledLink>
-          <StyledLink to="/signup">
-            <Button color={"#6F38C5"} width={"5rem"}>
-              회원가입
-            </Button>
-          </StyledLink>
+          {isLogIn ? (
+            <>
+              <StyledLink to={"/"}>
+                <Profile width={"40px"} height={"40px"} />
+              </StyledLink>
+              <StyledLink to={"/login"}>
+                <SvgContainer>
+                  <MdOutlineEditCalendar className={"schedule"} size={42} />
+                </SvgContainer>
+              </StyledLink>
+              <Button color={"#6F38C5"} width={"5rem"} onClick={handleLogOut}>
+                로그아웃
+              </Button>
+            </>
+          ) : (
+            <>
+              <StyledLink to="/login">
+                <Button color={"#6667AB"} width={"5rem"}>
+                  로그인
+                </Button>
+              </StyledLink>
+              <StyledLink to="/signup">
+                <Button color={"#6F38C5"} width={"5rem"}>
+                  회원가입
+                </Button>
+              </StyledLink>
+            </>
+          )}
         </LogInContainer>
       </NavBar>
     </Block>
