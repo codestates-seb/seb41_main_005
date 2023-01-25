@@ -10,24 +10,19 @@ export interface CardProps {
   location: string | null;
   categories: string | null;
   tag: string;
+  contentId: number;
 }
 export interface ServerData {
-  price: number;
-  nickName: string;
   title: string;
-  workTimes: any;
-  category: string | null;
-  location: string | null;
+  nickName: string;
+  price: number;
+  workTimes: {
+    startWorkTime: string | null;
+    endWorkTime: string | null;
+  };
   memberId: number;
-  data: {
-    contentId: number;
-    title: string;
-    price: number;
-    workTimes: {
-      startWorkTime: string | null;
-      endWorkTime: string | null;
-    };
-    memberId: number;
-    nickName: string;
-  }[];
+  location: string | null;
+  category: string | null;
+  tag: string;
+  contentId: number;
 }
