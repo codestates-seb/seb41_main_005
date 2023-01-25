@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
 import InputBox from "../components/Input";
 import Button from "../components/Buttons";
+import TextArea from "../components/TextArea";
 import styled from "styled-components";
 import { WorkSchedule, Deadline } from "../components/TimeSelect";
 import axios from "axios";
@@ -48,7 +49,7 @@ const NewHire = () => {
     setTitle(event.target.value);
   };
 
-  const handleWorkDetailChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleWorkDetailChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setWorkDetail(event.target.value);
   };
 
@@ -60,15 +61,19 @@ const NewHire = () => {
     setPay(event.target.value);
   };
 
-  const handleQualificationChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleQualificationChange = (
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setQualification(event.target.value);
   };
 
-  const handlePreferentialChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handlePreferentialChange = (
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setPreferential(event.target.value);
   };
 
-  const handleEtcChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleEtcChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setEtc(event.target.value);
   };
 
@@ -126,12 +131,16 @@ const NewHire = () => {
     <EditHireContainer>
       <TitleContainer>
         제목
-        <InputBox width="400px" onChange={handleTitleChange} />
+        <InputBox width="350px" onChange={handleTitleChange} />
+        지원마감일
+        <Deadline onChange={handleDeadlineChange} />
+      </TitleContainer>
+      <SelectWrapper>
         카테고리
         <CategoryWrapper>
           <select onChange={handleCategoryChange}>
             <option defaultValue="" hidden>
-              카테고리
+              선택
             </option>
             {categoryOptions.map(({ value, label }) => (
               <option key={value} value={value}>
@@ -144,7 +153,7 @@ const NewHire = () => {
         <TagWrapper>
           <select onChange={handleTagChange}>
             <option defaultValue="" hidden>
-              태그
+              선택
             </option>
             {tagOptions.map(({ value, label }) => (
               <option key={value} value={value}>
@@ -153,17 +162,13 @@ const NewHire = () => {
             ))}
           </select>
         </TagWrapper>
-      </TitleContainer>
+      </SelectWrapper>
       <WithTitle>
         업무시간
         <WorkSchedule
           workTime={workTime}
           onWorkTimeChange={handleWorkTimeChange}
         />
-      </WithTitle>
-      <WithTitle>
-        지원마감일
-        <Deadline onChange={handleDeadlineChange} />
       </WithTitle>
       <ThreeInput>
         <WithTitle>
@@ -174,39 +179,42 @@ const NewHire = () => {
           보수
           <InputBox width="165px" onChange={handlePayChange} />
         </WithTitle>
-        <WithTitle>
-          장소
-          <LocationWrapper>
-            <select onChange={handleLocationChange}>
-              <option defaultValue="" hidden>
-                지역
+
+        <LocationWrapper>
+          지역
+          <select onChange={handleLocationChange}>
+            <option defaultValue="" hidden>
+              선택
+            </option>
+            {locationOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
               </option>
-              {locationOptions.map(({ value, label }) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </LocationWrapper>
-        </WithTitle>
+            ))}
+          </select>
+        </LocationWrapper>
       </ThreeInput>
       <WithTitle>
         업무내용
-        <InputBox width="600px" onChange={handleWorkDetailChange} />
+        <TextArea onChange={handleWorkDetailChange} />
       </WithTitle>
       <WithTitle>
         자격요건
-        <InputBox width="600px" onChange={handleQualificationChange} />
+        <TextArea onChange={handleQualificationChange} />
       </WithTitle>
       <WithTitle>
         우대사항 (선택)
-        <InputBox width="600px" onChange={handlePreferentialChange} />
+        <TextArea onChange={handlePreferentialChange} />
       </WithTitle>
       <WithTitle>
         기타 (선택)
-        <InputBox width="600px" onChange={handleEtcChange} />
+        <TextArea onChange={handleEtcChange} />
       </WithTitle>
-      <Button onClick={handleSubmit}>제출하기</Button>
+      <SubmitWrapper>
+        <Button className="newhire-submit" onClick={handleSubmit}>
+          제출하기
+        </Button>
+      </SubmitWrapper>
     </EditHireContainer>
   );
 };
@@ -232,6 +240,10 @@ const ThreeInput = styled.div`
   display: flex;
   flex-direction: row;
 `;
+const SelectWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 const CategoryWrapper = styled.div`
   margin: 10px;
   padding: 10px;
@@ -243,12 +255,12 @@ const CategoryWrapper = styled.div`
 `;
 const LocationWrapper = styled.div`
   width: 150px;
-  margin: 10px;
   padding: 10px;
   select {
     width: 150px;
     height: 2.5rem;
     border-radius: 5px;
+    margin: 7px;
   }
 `;
 
@@ -259,6 +271,12 @@ const TagWrapper = styled.div`
     width: 150px;
     height: 2.5rem;
     border-radius: 5px;
+  }
+`;
+const SubmitWrapper = styled.div`
+  .newhire-submit {
+    margin-left: 330px;
+    width: 300px;
   }
 `;
 export default NewHire;
