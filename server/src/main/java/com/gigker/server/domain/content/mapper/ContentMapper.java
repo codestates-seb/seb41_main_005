@@ -112,4 +112,6 @@ public interface ContentMapper {
     @Mapping(source = "member.memberId", target = "memberId")
     @Mapping(source = "member.nickName", target = "nickName")
     List<ContentResponseDto.SimpleContentResponse> contentsToSimpleContents(List<Content> content);
+
+    List<ContentResponseDto.ContentResponse> contentsResponseDto(List<Content> contents);
 }
