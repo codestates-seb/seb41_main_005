@@ -68,9 +68,9 @@ mail:
 
 
 ## configuration to put the actual value in sql query parameter
-decorator.datasource.p6spy:
-  enable-logging: true
-  multiline: true
+#decorator.datasource.p6spy:
+#  enable-logging: true
+#  multiline: true
 
 
 ## logging above debugs
@@ -79,7 +79,7 @@ logging:
     org:
       springframework:
         orm:
-          jpa: DEBUG
+          jpa: WARN
 
 
 ## 환경변수 paramStore setting
