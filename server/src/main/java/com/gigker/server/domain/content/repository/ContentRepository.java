@@ -1,5 +1,6 @@
 package com.gigker.server.domain.content.repository;
 
+import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.common.ContentType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,4 +11,5 @@ import java.util.List;
 public interface ContentRepository extends JpaRepository<Content, Long> {
 
     List<Content> findContentsByContentType(ContentType contentType);
+    List<Content> findContentsByCategory(Category category);
 }

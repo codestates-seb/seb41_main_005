@@ -1,28 +1,19 @@
 package com.gigker.server.domain.content.service;
 
 import com.gigker.server.domain.category.entity.Category;
-import com.gigker.server.domain.category.service.CategoryService;
 import com.gigker.server.domain.common.ContentType;
-import com.gigker.server.domain.content.entity.Content;
-import com.gigker.server.domain.content.entity.ContentTag;
-import com.gigker.server.domain.content.repository.ContentRepository;
 import com.gigker.server.domain.common.CustomBeanUtils;
-import com.gigker.server.domain.content.repository.ContentTagRepository;
+import com.gigker.server.domain.content.entity.Content;
+import com.gigker.server.domain.content.repository.ContentRepository;
 import com.gigker.server.domain.location.entity.Location;
 import com.gigker.server.domain.member.entity.Member;
-import com.gigker.server.domain.member.repository.MemberRepository;
 import com.gigker.server.domain.member.service.MemberService;
-import com.gigker.server.domain.tag.entity.Tag;
-import com.gigker.server.domain.tag.service.TagService;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +24,6 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final MemberService memberService;
     private final CustomBeanUtils<Content> beanUtils;
-    private final ContentTagRepository contentTagRepository;
-    private final MemberRepository memberRepository;
-    private final CategoryService categoryService;
 
     public Content createContent(Content content, Category category, Location location) {
         Member member = memberService.getCurrentMember();
@@ -92,5 +80,9 @@ public class ContentService {
     }
     private Content save(Content content) {
         return contentRepository.save(content);
+    }
+
+    public List<Content> findContentsByCategory(Category category) {
+        return contentRepository.findContentsByCategory(category);
     }
 }
