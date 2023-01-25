@@ -51,23 +51,41 @@ const EditHunting = () => {
   };
 
   const handleSubmit = () => {
+    const accessToken = localStorage.getItem("access_token");
+
+    if (accessToken) {
+      console.log("토큰?", accessToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    }
+
     axios
-      .post("http://gigker.iptime.org:8080/contents", {
-        title: title,
-        work_content: workDetail,
-        other: etc,
-        worktime: workTime,
-        price: pay,
-        location: location,
-        category: category,
-      })
+      .post(
+        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
+        {
+          title: title,
+          contentType: "SELL",
+          workContent: workDetail,
+          categoryName: category,
+          workTimes: workTime.map(
+            (schedule: { startWorkTime: any; endWorkTime: any }) => {
+              return {
+                startWorkTime: schedule.startWorkTime,
+                endWorkTime: schedule.endWorkTime,
+              };
+            }
+          ),
+          price: parseInt(pay), // pay string을 int로
+          cityName: location,
+          other: etc,
+          isPremium: false,
+        }
+      )
       .then((response) => {
         console.log(response);
       })
       .catch((error) => {
         console.log(error);
       });
-    console.log("새글제출");
   };
 
   return (

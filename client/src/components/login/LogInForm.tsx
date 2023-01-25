@@ -72,10 +72,13 @@ const LogInForm = () => {
 
   const handleLogIn = async () => {
     axios
-      .post("http://gigker.iptime.org:8080/auth", {
-        username: logInEmail,
-        password: logInPassword,
-      })
+      .post(
+        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth/login",
+        {
+          username: logInEmail,
+          password: logInPassword,
+        }
+      )
       .then((res) => {
         // console.log(res.headers.authorization);
         window.localStorage.setItem(

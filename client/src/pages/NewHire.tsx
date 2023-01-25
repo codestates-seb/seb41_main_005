@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent } from "react";
 import InputBox from "../components/Input";
 import Button from "../components/Buttons";
 import styled from "styled-components";
-import { WorkSchedule } from "../components/TimeSelect";
+import { WorkSchedule, Deadline } from "../components/TimeSelect";
 import axios from "axios";
 import {
   categoryOptions,
@@ -27,6 +27,7 @@ const NewHire = () => {
   const [category, setCategory] = useState("");
   const [tag, setTag] = useState("");
   const [workTime, setWorkTime] = useState<any>([]);
+  const [deadline, setDeadline] = useState("");
 
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setCategory(event.target.value);
@@ -73,38 +74,46 @@ const NewHire = () => {
 
   const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
     setWorkTime(workTime);
-    console.log("worktime:", workTime);
+  };
+
+  const handleDeadlineChange = (deadline: string) => {
+    setDeadline(deadline);
   };
 
   const handleSubmit = () => {
-    console.log("volume", volume);
-    console.log("title", title);
-    console.log("qualification", qualification);
-    // console.log("worktime", workTime);
+    const accessToken = localStorage.getItem("access_token");
+
+    if (accessToken) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    }
 
     axios
-      .post("http://gigker.iptime.org:8080/contents", {
-        title: title,
-        contentType: "BUY",
-        recruitingCount: parseInt(volume), // volume string을 int로
-        workContent: workDetail,
-        qualification: qualification,
-        preference: preferential,
-        categoryName: category,
-        workTimes: workTime.map(
-          (schedule: { startWorkTime: any; endWorkTime: any }) => {
-            return {
-              startWorkTime: schedule.startWorkTime,
-              endWorkTime: schedule.endWorkTime,
-            };
-          }
-        ),
-        contentTags: [{ tagName: tag }],
-        price: parseInt(pay), // pay string을 int로
-        location: location,
-        other: etc,
-        isPremium: false,
-      })
+      .post(
+        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
+        {
+          title: title,
+          contentType: "BUY",
+          recruitingCount: parseInt(volume), // volume string을 int로
+          workContent: workDetail,
+          qualification: qualification,
+          preference: preferential,
+          categoryName: category,
+          workTimes: workTime.map(
+            (schedule: { startWorkTime: any; endWorkTime: any }) => {
+              return {
+                startWorkTime: schedule.startWorkTime,
+                endWorkTime: schedule.endWorkTime,
+              };
+            }
+          ),
+          contentTags: [{ tagName: tag }],
+          price: parseInt(pay), // pay string을 int로
+          cityName: location,
+          other: etc,
+          isPremium: false,
+          deadLine: deadline,
+        }
+      )
       .then((response) => {
         console.log(response);
       })
@@ -151,6 +160,10 @@ const NewHire = () => {
           workTime={workTime}
           onWorkTimeChange={handleWorkTimeChange}
         />
+      </WithTitle>
+      <WithTitle>
+        지원마감일
+        <Deadline onChange={handleDeadlineChange} />
       </WithTitle>
       <ThreeInput>
         <WithTitle>
