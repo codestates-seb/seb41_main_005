@@ -15,7 +15,7 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
     memberId: data.memberId,
     location: data.location,
     categories: data.category,
-    tag: "Unknown",
+    tag: data.tag,
     contentId: data.contentId,
   };
 };

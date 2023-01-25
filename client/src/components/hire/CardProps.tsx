@@ -8,8 +8,8 @@ export interface CardProps {
     endWorkTime: string;
   }>;
   memberId: number;
-  location: string | null;
-  categories: string | null;
+  location: string;
+  categories: string;
   tag: string;
   contentId: number;
 }
@@ -24,8 +24,8 @@ export interface ServerData {
     endWorkTime: string;
   }>;
   memberId: number;
-  location: string | null;
-  category: string | null;
+  location: string;
+  category: string;
   tag: string;
   contentId: number;
 }
