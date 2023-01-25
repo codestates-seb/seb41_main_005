@@ -13,6 +13,8 @@ public interface ProfileMapper {
                 .sellDislikeCount(0)
                 .completedBuyCount(0)
                 .completedSellCount(0)
+                .buyReviewCount(0)
+                .sellReviewCount(0)
                 .buyerPoint(0)
                 .sellerPoint(0)
                 .build();
