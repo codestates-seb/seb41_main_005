@@ -4,16 +4,14 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../util/redux";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const mapDataToCardProps = (data: ServerData): CardProps => {
   return {
     title: data.title,
     nickName: data.nickName,
     price: data.price,
-    workTimes: {
-      startWorkTime: data.workTimes?.startWorkTime || null,
-      endWorkTime: data.workTimes?.endWorkTime || null,
-    },
+    workTimes: data.workTimes,
     memberId: data.memberId,
     location: data.location,
     categories: data.category,
@@ -22,7 +20,7 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
   };
 };
 
-const HireArticle: React.FC = () => {
+const HireArticle: React.FC = (card) => {
   const [cards, setCards] = useState<CardProps[]>([]);
 
   useEffect(() => {
@@ -48,6 +46,11 @@ const HireArticle: React.FC = () => {
     getData("BUY");
   }, []);
 
+  const navigate = useNavigate();
+  const HandleClick = () => {
+    navigate("/hiredetail");
+  };
+
   const selectedCategory = useSelector(
     (state: RootState) => state.DropDown.selectedCategory
   );
@@ -70,15 +73,46 @@ const HireArticle: React.FC = () => {
               card.location === selectedLocation) &&
             (selectedTag === "" || card.tag === selectedTag)
         );
+
   return (
     <HireArticleContainer>
       {filteredCards.map((card, index) => (
-        <Card key={index}>
+        <Card key={index} onClick={HandleClick}>
           <CardTitle>{card.title}</CardTitle>
           <CardWriter>작성자 {card.nickName}</CardWriter>
           <CardPay>보수 {card.price}</CardPay>
-          <CardStart>{card.workTimes.startWorkTime}</CardStart>
-          <CardEnd>{card.workTimes.endWorkTime}</CardEnd>
+          {card.workTimes && (
+            <>
+              <CardStart>
+                시작시간
+                {new Date(card.workTimes[0].startWorkTime).toLocaleString(
+                  "ko-KR",
+                  {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  }
+                )}
+              </CardStart>
+              <CardEnd>
+                종료시간
+                {new Date(card.workTimes[0].endWorkTime).toLocaleString(
+                  "ko-KR",
+                  {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  }
+                )}
+              </CardEnd>
+            </>
+          )}
         </Card>
       ))}
     </HireArticleContainer>
@@ -141,15 +175,13 @@ const CardPay = styled.div`
 const CardStart = styled.div`
   font-size: 14px;
   word-spacing: 2px;
-  padding-right: 5px;
   padding-left: 10px;
-  padding-bottom: 5px;
 `;
 
 const CardEnd = styled.div`
   font-size: 14px;
   word-spacing: 2px;
-  padding-bottom: 5px;
+  padding-left: 10px;
 `;
 
 export default HireArticle;

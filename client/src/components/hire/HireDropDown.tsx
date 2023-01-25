@@ -79,16 +79,12 @@ const DropdownMenu = () => {
     (state: RootState) => state.DropDown.selectedTag
   );
   //로그인 되어있다면 새글작성버튼 보이게
-  // const [showNewHireButton, setShowNewHireButton] = useState(false);
+  const isLogin = useSelector((state: RootState) => state.LogIn.isLogIn);
+  const [showNewHireButton, setShowNewHireButton] = useState(false);
 
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem("access_token");
-  //   if (accessToken) {
-  //     setShowNewHireButton(true);
-  //   } else {
-  //     setShowNewHireButton(false);
-  //   }
-  // }, []);
+  useEffect(() => {
+    setShowNewHireButton(isLogin);
+  }, [isLogin]);
 
   const handleCategoryClick = (category: string) => {
     dispatch(selectCategory(category));
@@ -156,8 +152,7 @@ const DropdownMenu = () => {
           </DropdownTitle>
         </DropdownContainer>
         <AddHire onClick={newHireClickHandler}>
-          {/* {showNewHireButton && <button> 게시글 작성</button>} */}
-          <button> 게시글 작성</button>
+          {isLogin && <button> 게시글 작성</button>}
         </AddHire>
       </UpperWrapper>
       <LowerWrapper>
@@ -280,10 +275,21 @@ const LinkWrapper = styled.a`
 
 const AddHire = styled.div`
   height: 38px;
-  margin: 16px 15px 0 auto;
-  padding: 9px 50px 8px;
+  margin: 12px 0 0 670px;
   cursor: pointer;
   font-size: 16px;
+  position: absolute;
+  button {
+    margin: 0 0.5rem;
+    height: 2.5rem;
+    font-size: 16px;
+    font-weight: regular;
+    color: #6f38c5;
+    background-color: white;
+    width: 120px;
+    border: solid 1.2px #6f38c5;
+    border-radius: 4px;
+  }
 `;
 
 //태그 파트
@@ -298,21 +304,38 @@ const TagWrapper = styled.div`
   display: flex;
   flex-direction: row;
   width: 500px;
-  margin: 10px 0 0 20px;
+  margin-left: 30px;
   border: none;
   background-color: white;
-  .tag {
-    padding: 3px;
+  button {
+    margin: 0 0.3rem 0 0;
+    height: 1.5rem;
+    font-size: 14px;
+    font-weight: regular;
+    color: #6f38c5;
+    background-color: white;
+    border: solid 1.2px #6f38c5;
+    border-radius: 4px;
   }
 `;
 
 const FilterButton = styled.div`
   height: 38px;
-  margin: 0 20px 0 8px;
   float: right;
   border: none;
   cursor: pointer;
   font-size: 16px;
+  button {
+    margin: 0 0.3rem 0 0;
+    height: 1.5rem;
+    font-size: 14px;
+    font-weight: regular;
+    color: #6f38c5;
+    background-color: white;
+    width: 90px;
+    border: solid 1.2px #6f38c5;
+    border-radius: 4px;
+  }
 `;
 
 export default DropdownMenu;
