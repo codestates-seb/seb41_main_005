@@ -2,8 +2,12 @@ import React, { useState, ChangeEvent } from "react";
 import InputBox from "../components/Input";
 import Button from "../components/Buttons";
 import styled from "styled-components";
-import { WorkSchedule } from "../components/TimeSelect";
-import { categoryOptions, locationOptions } from "../components/CateLocaTag";
+import { WorkSchedule, Deadline } from "../components/TimeSelect";
+import {
+  categoryOptions,
+  locationOptions,
+  tagOptions,
+} from "../components/CateLocaTag";
 import axios from "axios";
 
 interface WorkSchedule {
@@ -18,7 +22,9 @@ const EditHunting = () => {
   const [etc, setEtc] = useState("");
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("");
+  const [tag, setTag] = useState("");
   const [workTime, setWorkTime] = useState<any>([]);
+  const [deadline, setDeadline] = useState("");
 
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setCategory(event.target.value);
@@ -28,6 +34,10 @@ const EditHunting = () => {
   const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setLocation(event.target.value);
     console.log("location:", event.target.value);
+  };
+  const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setTag(event.target.value);
+    console.log("tag:", event.target.value);
   };
 
   const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
@@ -49,12 +59,14 @@ const EditHunting = () => {
   const handleEtcChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEtc(event.target.value);
   };
+  const handleDeadlineChange = (deadline: string) => {
+    setDeadline(deadline);
+  };
 
   const handleSubmit = () => {
     const accessToken = localStorage.getItem("access_token");
 
     if (accessToken) {
-      console.log("토큰?", accessToken);
       axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     }
 
@@ -74,10 +86,12 @@ const EditHunting = () => {
               };
             }
           ),
+          contentTags: [{ tagName: tag }],
           price: parseInt(pay), // pay string을 int로
           cityName: location,
           other: etc,
           isPremium: false,
+          deadLine: deadline,
         }
       )
       .then((response) => {
@@ -103,6 +117,19 @@ const EditHunting = () => {
             ))}
           </select>
         </CategoryWrapper>
+        태그
+        <TagWrapper>
+          <select onChange={handleTagChange}>
+            <option defaultValue="" hidden>
+              태그
+            </option>
+            {tagOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </TagWrapper>
       </TitleContainer>
       <WithTitle>
         희망 업무시간
@@ -110,6 +137,10 @@ const EditHunting = () => {
           workTime={workTime}
           onWorkTimeChange={handleWorkTimeChange}
         />
+      </WithTitle>
+      <WithTitle>
+        지원마감일
+        <Deadline onChange={handleDeadlineChange} />
       </WithTitle>
       <TwoInput>
         <WithTitle>
@@ -174,6 +205,15 @@ const CategoryWrapper = styled.div`
 `;
 const LocationWrapper = styled.div`
   width: 150px;
+  margin: 10px;
+  padding: 10px;
+  select {
+    width: 150px;
+    height: 2.5rem;
+    border-radius: 5px;
+  }
+`;
+const TagWrapper = styled.div`
   margin: 10px;
   padding: 10px;
   select {

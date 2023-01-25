@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import useDetectClose from "../../util/useDetectClose";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../util/redux";
-import { selectCategory, selectLocation } from "../../util/redux/DropDown";
+import {
+  selectCategory,
+  selectLocation,
+  selectTag,
+} from "../../util/redux/DropDown";
 import { useNavigate } from "react-router";
+
+const tags = [
+  "재택근무🏠",
+  "야간🌙",
+  "초보자가능🐣",
+  "최저시급💰",
+  "당일지급💵",
+  "능력활용🧐",
+  "역세권🚇",
+  "식사제공🍴",
+  "경력1년이상💡",
+];
 
 const category = [
   "카테고리",
@@ -59,17 +75,16 @@ const DropdownT = () => {
   const selectedLocation = useSelector(
     (state: RootState) => state.DropDown.selectedLocation
   );
+  const selectedTag = useSelector(
+    (state: RootState) => state.DropDown.selectedTag
+  );
   //로그인 되어있다면 새글작성버튼 보이게
-  // const [showNewHireButton, setShowNewHireButton] = useState(false);
+  const isLogin = useSelector((state: RootState) => state.LogIn.isLogIn);
+  const [showNewHireButton, setShowNewHireButton] = useState(false);
 
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem("access_token");
-  //   if (accessToken) {
-  //     setShowNewHireButton(true);
-  //   } else {
-  //     setShowNewHireButton(false);
-  //   }
-  // }, []);
+  useEffect(() => {
+    setShowNewHireButton(isLogin);
+  }, [isLogin]);
 
   const handleCategoryClick = (category: string) => {
     dispatch(selectCategory(category));
@@ -80,6 +95,9 @@ const DropdownT = () => {
     dispatch(selectLocation(location));
     locationHandler();
   };
+  const handleTagClick = (tag: string) => {
+    dispatch(selectTag(tag));
+  };
 
   const [categoryIsOpen, categoryRef, categoryHandler] = useDetectClose(false);
   const [locationIsOpen, locationRef, locationHandler] = useDetectClose(false);
@@ -89,6 +107,11 @@ const DropdownT = () => {
     navigate("/newhunting");
     console.log("새 글 작성");
   };
+  const TagButton = ({ tag }: { tag: string; onClick: () => void }) => (
+    <span className="tag">
+      <button>{tag}</button>
+    </span>
+  );
 
   return (
     <>
@@ -128,10 +151,29 @@ const DropdownT = () => {
         </DropdownContainer>
 
         <AddHire onClick={newHuntingClickHandler}>
-          {/* {showNewHireButton && <button> 게시글 작성</button>} */}
-          <button>게시글 작성</button>
+          {isLogin && <button> 게시글 작성</button>}
         </AddHire>
       </UpperWrapper>
+      <LowerWrapper>
+        <TagWrapper>
+          <div>
+            {tags.map((tag, index) => (
+              <TagButton
+                key={index}
+                tag={tag}
+                onClick={() => handleTagClick(selectedTag)}
+              />
+            ))}
+          </div>
+        </TagWrapper>
+        <FilterButton>
+          <div>
+            <button>조회순</button>
+            <button>보수높은순</button>
+            <button>최신순</button>
+          </div>
+        </FilterButton>
+      </LowerWrapper>
     </>
   );
 };
@@ -234,6 +276,34 @@ const AddHire = styled.div`
   height: 38px;
   margin: 16px 15px 0 auto;
   padding: 9px 50px 8px;
+  cursor: pointer;
+  font-size: 16px;
+`;
+//태그 파트
+const LowerWrapper = styled.div`
+  width: 100%;
+  height: 100px;
+  padding: 20px 20px 15px 20px;
+  border-bottom: 1px solid #dadbdc;
+`;
+
+const TagWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 500px;
+  margin: 10px 0 0 20px;
+  border: none;
+  background-color: white;
+  .tag {
+    padding: 3px;
+  }
+`;
+
+const FilterButton = styled.div`
+  height: 38px;
+  margin: 0 20px 0 8px;
+  float: right;
+  border: none;
   cursor: pointer;
   font-size: 16px;
 `;
