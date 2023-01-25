@@ -91,7 +91,7 @@ public class ContentService {
         List<Content> contents = contentRepository.findAllByStatus(Content.Status.RECRUITING);
 
         for (Content content : contents) {
-            // null 아니고, 마감 시간(0초)이 현재 시간(1초)보다 이후인가?
+            // null 아니고, 마감 시간(0초)이 현재 시간(2초)보다 이전인가?
             if (content.getDeadLine() != null && content.getDeadLine().isBefore(LocalDateTime.now())) {
                 content.setStatus(Content.Status.EXPIRED);
             }
