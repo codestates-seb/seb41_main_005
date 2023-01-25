@@ -37,18 +37,21 @@ function Main() {
   const [huntingData, setHuntingData] = useState<huntingProps>();
 
   useEffect(() => {
-    const hireData = async () => {
+    const hire = async () => {
       const data = await getDatas("BUY");
       setHireData(data);
     };
 
-    const huntingData = async () => {
+    const hunting = async () => {
       const data = await getDatas("SELL");
       setHuntingData(data);
     };
 
-    hireData();
-    huntingData();
+    hire();
+    hunting();
+
+    console.log(hireData);
+    console.log(huntingData);
   }, []);
 
   return (

@@ -3,16 +3,17 @@ import InputBox from "../components/Input";
 import Button from "../components/Buttons";
 import styled from "styled-components";
 import { WorkSchedule } from "../components/TimeSelect";
-import {
-  LocationContainer,
-  CategoryContainer,
-} from "../components/CateLocaTag";
 import axios from "axios";
+import {
+  categoryOptions,
+  locationOptions,
+  tagOptions,
+} from "../components/CateLocaTag";
 
 interface ExistingData {
   title: string;
   category: string;
-  workTime: Array<{ startDate: Date; startTime: string; endTime: string }>;
+  workTime: WorkSchedule[];
   volume: string;
   pay: string;
   location: string;
@@ -20,10 +21,19 @@ interface ExistingData {
   qualification: string;
   preferential: string;
   etc: string;
+  tag: string;
 }
 
 interface Props {
   existingData?: ExistingData;
+}
+interface WorkSchedule {
+  startWorkTime: string;
+  endWorkTime: string;
+  startDate: Date;
+  startTime: string;
+  endDate: Date;
+  endTime: string;
 }
 
 const EditHire = (props: Props) => {
@@ -50,6 +60,7 @@ const EditHire = (props: Props) => {
   const [workTime, setWorkTime] = useState(
     existingData ? existingData.workTime : ""
   );
+  const [tag, setTag] = useState("");
   const [existingInfo, setExistingInfo] = useState<ExistingData>({
     title: "",
     category: "",
@@ -61,6 +72,7 @@ const EditHire = (props: Props) => {
     qualification: "",
     preferential: "",
     etc: "",
+    tag: "",
   });
 
   useEffect(() => {
@@ -73,6 +85,20 @@ const EditHire = (props: Props) => {
         console.log(error);
       });
   }, []);
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setCategory(event.target.value);
+    console.log("category:", event.target.value);
+  };
+
+  const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setLocation(event.target.value);
+    console.log("location:", event.target.value);
+  };
+
+  const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setTag(event.target.value);
+    console.log("tag:", event.target.value);
+  };
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -100,6 +126,11 @@ const EditHire = (props: Props) => {
 
   const handleEtcChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEtc(event.target.value);
+  };
+
+  const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
+    setWorkTime(workTime);
+    console.log("worktime:", workTime);
   };
 
   const handleSubmit = () => {
@@ -134,11 +165,32 @@ const EditHire = (props: Props) => {
           value={existingInfo.title}
         />
         카테고리
-        <CategoryContainer value={existingInfo.category} />
+        <CategoryWrapper>
+          <select placeholder={"카테고리"} onChange={handleCategoryChange}>
+            {categoryOptions.map(({ value, label }) => (
+              <option key={value} value={existingInfo.category}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </CategoryWrapper>
+        태그
+        <TagWrapper>
+          <select placeholder={"태그"} onChange={handleTagChange}>
+            {tagOptions.map(({ value, label }) => (
+              <option key={value} value={existingInfo.tag}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </TagWrapper>
       </TitleContainer>
       <WithTitle>
         업무시간
-        <WorkSchedule value={existingInfo.workTime} />
+        <WorkSchedule
+          workTime={existingInfo.workTime}
+          onWorkTimeChange={handleWorkTimeChange}
+        />
       </WithTitle>
       <ThreeInput>
         <WithTitle>
@@ -159,7 +211,15 @@ const EditHire = (props: Props) => {
         </WithTitle>
         <WithTitle>
           장소
-          <LocationContainer value={existingInfo.location} />
+          <LocationWrapper>
+            <select placeholder={"지역"} onChange={handleLocationChange}>
+              {locationOptions.map(({ value, label }) => (
+                <option key={value} value={existingInfo.location}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </LocationWrapper>
         </WithTitle>
       </ThreeInput>
       <WithTitle>
@@ -219,5 +279,33 @@ const WithTitle = styled.div`
 const ThreeInput = styled.div`
   display: flex;
   flex-direction: row;
+`;
+const CategoryWrapper = styled.div`
+  margin: 10px;
+  padding: 10px;
+  select {
+    width: 150px;
+    height: 2.5rem;
+    border-radius: 5px;
+  }
+`;
+const LocationWrapper = styled.div`
+  width: 150px;
+  margin: 10px;
+  padding: 10px;
+  select {
+    width: 150px;
+    height: 2.5rem;
+    border-radius: 5px;
+  }
+`;
+const TagWrapper = styled.div`
+  margin: 10px;
+  padding: 10px;
+  select {
+    width: 150px;
+    height: 2.5rem;
+    border-radius: 5px;
+  }
 `;
 export default EditHire;

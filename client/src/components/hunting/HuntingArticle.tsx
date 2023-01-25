@@ -13,8 +13,8 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
     nickName: data.nickName,
     price: data.price,
     workTimes: {
-      startWorkTime: data.workTimes ? data.workTimes.startWorkTime : null,
-      endWorkTime: data.workTimes ? data.workTimes.endWorkTime : null,
+      startWorkTime: data.workTimes?.startWorkTime || null,
+      endWorkTime: data.workTimes?.endWorkTime || null,
     },
     memberId: data.memberId,
     location: data.location,
