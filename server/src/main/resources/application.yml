@@ -80,6 +80,9 @@ logging:
       springframework:
         orm:
           jpa: DEBUG
+
+
+## 환경변수 paramStore setting
 aws:
   paramstore:
     enabled: true
