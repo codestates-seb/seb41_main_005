@@ -261,11 +261,15 @@ const SignUpForm = () => {
     );
     formData.append("image", signUpImg);
     axios
-      .post("http://gigker.iptime.org:8080/members", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/members",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         alert(`환영합니다!! ${signUpNickname}님 \n로그인을 해주세요`);

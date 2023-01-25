@@ -4,6 +4,9 @@ import App from "./App";
 import { Provider } from "react-redux";
 import { configureStore } from "./util/redux";
 import { PersistGate } from "redux-persist/integration/react";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
 
 const { store, persistor } = configureStore();
 
