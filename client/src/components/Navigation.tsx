@@ -8,6 +8,7 @@ import { RootState } from "../util/redux";
 import { MdOutlineEditCalendar } from "react-icons/md";
 import Profile from "./Profile";
 import axios from "axios";
+import { removeCookie } from "../util/cookie";
 
 const Block = styled.div`
   display: block;
@@ -87,6 +88,7 @@ const Navigation = () => {
   const navigate = useNavigate();
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
 
+  // 로그아웃 함수
   const handleLogOut = async () => {
     const result = confirm("정말 로그아웃 하시겠습니까?");
     if (result) {
@@ -95,8 +97,8 @@ const Navigation = () => {
           "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth/logout"
         )
         .then((res) => {
-          console.log(res);
           localStorage.clear();
+          removeCookie("refresh");
           alert(res.data.message);
           navigate(0);
         })

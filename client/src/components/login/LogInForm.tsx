@@ -15,6 +15,7 @@ import {
 } from "../../util/redux/LogIn";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { onLogInSuccess } from "../../util/logInApi";
 
 const LoginBox = styled.form`
   width: 25rem;
@@ -80,17 +81,11 @@ const LogInForm = () => {
         }
       )
       .then((res) => {
-        console.log(res.headers);
-        const AUTH_TOKEN = res.headers.authorization;
-        console.log(AUTH_TOKEN);
-        if (AUTH_TOKEN) {
-          window.localStorage.setItem("Authorization", AUTH_TOKEN);
-          axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
-        }
+        onLogInSuccess(res);
         dispatch(setIsLogIn(true));
         dispatch(setImgUrl(res.data.pictureUrl));
-        alert("어서옵쇼~");
         navigate("/", { replace: true });
+        navigate(0);
       })
       .catch((err) => {
         console.log(err);
