@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {MemberMapper.class, WorkTimeMapper.class})
+        uses = {MemberMapper.class, WorkTimeMapper.class,  ContentApplyMapper.class})
 public interface ContentMapper {
 
     @Mapping(source = "memberId", target = "member.memberId")
