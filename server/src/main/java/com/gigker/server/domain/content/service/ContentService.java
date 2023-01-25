@@ -46,8 +46,8 @@ public class ContentService {
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
 //NOT Null 속성값을 수정하지 않으면 기존 게시물의 속성을 그대로 사용
         Content updateContent = beanUtils.copyNonNullProperties(content, findContent);
-        content.setCategory(category);
-        content.setLocation(location);
+        updateContent.setCategory(content.getCategory());
+        updateContent.setLocation(content.getLocation());
         return contentRepository.save(updateContent);
     }
 
@@ -92,7 +92,7 @@ public class ContentService {
 
         for (Content content : contents) {
             // null 아니고, 마감 시간(0초)이 현재 시간(1초)보다 이후인가?
-            if (content.getDeadLine() != null && content.getDeadLine().isAfter(LocalDateTime.now())) {
+            if (content.getDeadLine() != null && content.getDeadLine().isBefore(LocalDateTime.now())) {
                 content.setStatus(Content.Status.EXPIRED);
             }
         }
