@@ -2,13 +2,18 @@ import React, { useState, ChangeEvent } from "react";
 import InputBox from "../components/Input";
 import Button from "../components/Buttons";
 import styled from "styled-components";
-import { WorkSchedule } from "../components/TimeSelect";
-import {
-  LocationContainer,
-  CategoryContainer,
-  TagContainer,
-} from "../components/CateLocaTag";
+import { WorkSchedule, Deadline } from "../components/TimeSelect";
 import axios from "axios";
+import {
+  categoryOptions,
+  locationOptions,
+  tagOptions,
+} from "../components/CateLocaTag";
+
+interface WorkSchedule {
+  startWorkTime: string;
+  endWorkTime: string;
+}
 
 const NewHire = () => {
   const [title, setTitle] = useState("");
@@ -22,21 +27,21 @@ const NewHire = () => {
   const [category, setCategory] = useState("");
   const [tag, setTag] = useState("");
   const [workTime, setWorkTime] = useState<any>([]);
+  const [deadline, setDeadline] = useState("");
 
-  const handleLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value);
-  };
-
-  const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setCategory(event.target.value);
+    console.log("category:", event.target.value);
   };
 
-  const handleTagChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setLocation(event.target.value);
+    console.log("location:", event.target.value);
+  };
+
+  const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setTag(event.target.value);
-  };
-
-  const handleWorkTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setWorkTime(event.target.value);
+    console.log("tag:", event.target.value);
   };
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -67,27 +72,54 @@ const NewHire = () => {
     setEtc(event.target.value);
   };
 
+  const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
+    setWorkTime(workTime);
+  };
+
+  const handleDeadlineChange = (deadline: string) => {
+    setDeadline(deadline);
+  };
+
   const handleSubmit = () => {
+    const accessToken = localStorage.getItem("access_token");
+
+    if (accessToken) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    }
+
     axios
-      .post("http://gigker.iptime.org:8080/contents", {
-        title: title,
-        recruting_count: volume,
-        work_content: workDetail,
-        qualification: qualification,
-        preference: preferential,
-        other: etc,
-        worktime: workTime,
-        price: pay,
-        location: location,
-        category: category,
-      })
+      .post(
+        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
+        {
+          title: title,
+          contentType: "BUY",
+          recruitingCount: parseInt(volume), // volume string을 int로
+          workContent: workDetail,
+          qualification: qualification,
+          preference: preferential,
+          categoryName: category,
+          workTimes: workTime.map(
+            (schedule: { startWorkTime: any; endWorkTime: any }) => {
+              return {
+                startWorkTime: schedule.startWorkTime,
+                endWorkTime: schedule.endWorkTime,
+              };
+            }
+          ),
+          contentTags: [{ tagName: tag }],
+          price: parseInt(pay), // pay string을 int로
+          cityName: location,
+          other: etc,
+          isPremium: false,
+          deadLine: deadline,
+        }
+      )
       .then((response) => {
         console.log(response);
       })
       .catch((error) => {
         console.log(error);
       });
-    console.log("새글제출");
   };
 
   return (
@@ -96,13 +128,42 @@ const NewHire = () => {
         제목
         <InputBox width="400px" onChange={handleTitleChange} />
         카테고리
-        <CategoryContainer value={category} onChange={handleCategoryChange} />
+        <CategoryWrapper>
+          <select onChange={handleCategoryChange}>
+            <option defaultValue="" hidden>
+              카테고리
+            </option>
+            {categoryOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </CategoryWrapper>
         태그
-        <TagContainer value={tag} onChange={handleTagChange} />
+        <TagWrapper>
+          <select onChange={handleTagChange}>
+            <option defaultValue="" hidden>
+              태그
+            </option>
+            {tagOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </TagWrapper>
       </TitleContainer>
       <WithTitle>
         업무시간
-        <WorkSchedule value={workTime} onChange={handleWorkTimeChange} />
+        <WorkSchedule
+          workTime={workTime}
+          onWorkTimeChange={handleWorkTimeChange}
+        />
+      </WithTitle>
+      <WithTitle>
+        지원마감일
+        <Deadline onChange={handleDeadlineChange} />
       </WithTitle>
       <ThreeInput>
         <WithTitle>
@@ -115,7 +176,18 @@ const NewHire = () => {
         </WithTitle>
         <WithTitle>
           장소
-          <LocationContainer value={location} onChange={handleLocationChange} />
+          <LocationWrapper>
+            <select onChange={handleLocationChange}>
+              <option defaultValue="" hidden>
+                지역
+              </option>
+              {locationOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </LocationWrapper>
         </WithTitle>
       </ThreeInput>
       <WithTitle>
@@ -159,5 +231,34 @@ const WithTitle = styled.div`
 const ThreeInput = styled.div`
   display: flex;
   flex-direction: row;
+`;
+const CategoryWrapper = styled.div`
+  margin: 10px;
+  padding: 10px;
+  select {
+    width: 150px;
+    height: 2.5rem;
+    border-radius: 5px;
+  }
+`;
+const LocationWrapper = styled.div`
+  width: 150px;
+  margin: 10px;
+  padding: 10px;
+  select {
+    width: 150px;
+    height: 2.5rem;
+    border-radius: 5px;
+  }
+`;
+
+const TagWrapper = styled.div`
+  margin: 10px;
+  padding: 10px;
+  select {
+    width: 150px;
+    height: 2.5rem;
+    border-radius: 5px;
+  }
 `;
 export default NewHire;
