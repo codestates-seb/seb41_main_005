@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import Navigation from "./components/Navigation";
 import { ThemeProvider } from "styled-components";
 import GlobalStyle from "./assets/styles/global-styles";
@@ -14,11 +15,17 @@ import HuntingDetail from "./pages/HuntingDetail";
 import LogInPage from "./pages/LogInPage";
 import SignUpPage from "./pages/SignUpPage";
 import ScrollToTop from "./util/scrollRestoration";
+import { handleRefresh } from "./util/logInApi";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import axios from "axios";
 
 function App() {
+  // 새로고침 시 토큰 재발급 함수 실행
+  const HandleRefresh = handleRefresh();
+  useEffect(() => {
+    HandleRefresh;
+  }, []);
   return (
     <BrowserRouter>
       <ScrollToTop />
