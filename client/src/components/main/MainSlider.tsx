@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwipeCore, { Navigation, Pagination, Autoplay } from "swiper";
-// import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 import SliderItem from "./SliderItem";
 import prev from "../../assets/icon_prev_round.svg";
 import next from "../../assets/icon_next_round.svg";
+import { sliderProps } from "../../util/sliderData";
 
 const items = [
   {
@@ -33,7 +34,7 @@ const items = [
   },
 ];
 
-const SwiperContainer = () => {
+const MainSlider = ({ datas }: { datas: sliderProps[] }) => {
   SwipeCore.use([Navigation, Pagination, Autoplay]);
 
   // const prevRef = useRef(null);
@@ -82,18 +83,23 @@ const SwiperContainer = () => {
         slidesPerView={4}
         spaceBetween={20}
         effect={"fade"}
-        loop={true}
+        loop={false}
         speed={300}
         className="swiper-container"
       >
         <div className="swiper-wrapper">
-          {items.map((item, idx) => {
+          {datas.map((item, idx) => {
             return (
               <SwiperSlide key={idx}>
                 <SliderItem
+                  contentId={item.contentId}
                   title={item.title}
                   nickName={item.nickName}
-                  src={item.src}
+                  price={item.price}
+                  workTime={item.workTime}
+                  src={
+                    "https://images.unsplash.com/photo-1498307833015-e7b400441eb8?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2600&q=80"
+                  }
                 />
               </SwiperSlide>
             );
@@ -114,4 +120,4 @@ const SwiperContainer = () => {
   );
 };
 
-export default SwiperContainer;
+export default MainSlider;

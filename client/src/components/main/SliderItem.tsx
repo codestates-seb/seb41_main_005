@@ -1,16 +1,25 @@
 import styled from "styled-components";
 
 const SliderItem = ({
+  contentId,
   title,
   nickName,
+  price,
+  workTime,
   src,
 }: {
+  contentId: number;
   title: string;
   nickName: string;
+  price: number;
+  workTime: string[];
   src: string;
 }) => {
+  const handleClick = () => {
+    console.log(contentId);
+  };
   return (
-    <SliderItemContainer>
+    <SliderItemContainer onClick={handleClick}>
       <SliderImageWrapper>
         <img className="slider-image" src={src} alt="SliderImg" />
       </SliderImageWrapper>
@@ -23,11 +32,15 @@ const SliderItem = ({
           </div>
           <div>
             <span className="sub-title">보수</span>
-            <span>{nickName}</span>
+            <span>
+              {price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
+            </span>
           </div>
           <div>
             <span className="sub-title">업무 시간</span>
-            <span>{nickName}</span>
+            {workTime
+              ? workTime.map((work, idx) => <span key={idx}>{work}</span>)
+              : null}
           </div>
         </Content>
       </SliderItemContent>

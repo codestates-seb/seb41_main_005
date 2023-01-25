@@ -15,6 +15,7 @@ import {
 } from "../../util/redux/LogIn";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { onLogInSuccess } from "../../util/logInApi";
 
 const LoginBox = styled.form`
   width: 25rem;
@@ -74,22 +75,17 @@ const LogInForm = () => {
     axios
       .post(
         "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth/login",
-        // "https://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth",
         {
           username: logInEmail,
           password: logInPassword,
         }
       )
       .then((res) => {
-        // console.log(res.headers.authorization);
-        window.localStorage.setItem(
-          "Authorization",
-          JSON.stringify(res.headers.authorization)
-        );
+        onLogInSuccess(res);
         dispatch(setIsLogIn(true));
         dispatch(setImgUrl(res.data.pictureUrl));
-        alert("어서옵쇼~");
         navigate("/", { replace: true });
+        navigate(0);
       })
       .catch((err) => {
         console.log(err);
@@ -99,10 +95,7 @@ const LogInForm = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await handleLogIn().then(() => {
-      const AUTH_TOKEN = localStorage.getItem("Authorization");
-      axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
-    });
+    await handleLogIn();
   };
 
   return (

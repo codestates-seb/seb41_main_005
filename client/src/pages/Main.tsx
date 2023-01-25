@@ -3,8 +3,8 @@ import styled from "styled-components";
 import Footer from "../components/Footer";
 import MainSlider from "../components/main/MainSlider";
 import { getDatas } from "../api/getDatas";
-import { hireProps } from "../util/hireData";
-import { huntingProps } from "../util/huntingData";
+import { sliderProps, serverData } from "../util/sliderData";
+import { transDateTime } from "../components/main/transDateTime";
 
 const Container = styled.div`
   display: block;
@@ -32,9 +32,21 @@ const StyledArticle = styled.article`
   }
 `;
 
+const mapDataToSliderProps = (data: serverData): sliderProps => {
+  return {
+    title: data.title,
+    nickName: data.nickName,
+    price: data.price,
+    workTime: transDateTime(data.workTimes),
+    location: data.location,
+    memberId: data.memberId,
+    contentId: data.contentId,
+  };
+};
+
 function Main() {
-  const [hireData, setHireData] = useState<hireProps>();
-  const [huntingData, setHuntingData] = useState<huntingProps>();
+  const [hireData, setHireData] = useState<sliderProps[]>([]);
+  const [huntingData, setHuntingData] = useState<sliderProps[]>([]);
 
   useEffect(() => {
     const hire = async () => {
@@ -44,14 +56,11 @@ function Main() {
 
     const hunting = async () => {
       const data = await getDatas("SELL");
-      setHuntingData(data);
+      setHuntingData(data.map(mapDataToSliderProps));
     };
 
     hire();
     hunting();
-
-    console.log(hireData);
-    console.log(huntingData);
   }, []);
 
   return (
@@ -69,9 +78,8 @@ function Main() {
               <p>구인</p>
             </div>
           </header>
-
           <div className="slider">
-            <MainSlider />
+            {hireData ? <MainSlider datas={hireData} /> : null}
           </div>
         </StyledArticle>
         <StyledArticle>
@@ -81,7 +89,7 @@ function Main() {
             </div>
           </header>
           <div className="slider">
-            <MainSlider />
+            {huntingData ? <MainSlider datas={huntingData} /> : null}
           </div>
         </StyledArticle>
       </section>
