@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import Footer from "../components/Footer";
 import MainSlider from "../components/main/MainSlider";
+import { getDatas } from "../api/getDatas";
+import { hireProps } from "../util/hireData";
+import { huntingProps } from "../util/huntingData";
 
 const Container = styled.div`
   display: block;
@@ -30,6 +33,24 @@ const StyledArticle = styled.article`
 `;
 
 function Main() {
+  const [hireData, setHireData] = useState<hireProps>();
+  const [huntingData, setHuntingData] = useState<huntingProps>();
+
+  useEffect(() => {
+    const hireData = async () => {
+      const data = await getDatas("BUY");
+      setHireData(data);
+    };
+
+    const huntingData = async () => {
+      const data = await getDatas("SELL");
+      setHuntingData(data);
+    };
+
+    hireData();
+    huntingData();
+  }, []);
+
   return (
     <Container>
       <section>
