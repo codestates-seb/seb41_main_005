@@ -29,4 +29,15 @@ public class MemberResponseDto {
     //종합 완료 건 수
     private int totalCompleted;
     }
+
+
+    @Getter
+    @Setter
+    public static class PatchDto{
+        private long memberId;
+        private String email;
+        private String nickName;
+        private String pictureUrl;
+        private String about;
+    }
 }
