@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {MemberMapper.class, WorkTimeMapper.class,  ContentApplyMapper.class})
+        uses = {MemberMapper.class, WorkTimeMapper.class, ContentApplyMapper.class})
 public interface ContentMapper {
 
     @Mapping(source = "memberId", target = "member.memberId")
@@ -112,4 +112,6 @@ public interface ContentMapper {
     @Mapping(source = "member.memberId", target = "memberId")
     @Mapping(source = "member.nickName", target = "nickName")
     List<ContentResponseDto.SimpleContentResponse> contentsToSimpleContents(List<Content> content);
+
+    List<ContentResponseDto.ContentResponse> contentsResponseDto(List<Content> contents);
 }

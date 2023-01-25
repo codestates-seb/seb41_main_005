@@ -16,6 +16,5 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
 
     List<Content> findAllByStatusAndContentType(Content.Status status, ContentType type);
 
-
     List<Content> findContentsByCategory(Category category);
 }

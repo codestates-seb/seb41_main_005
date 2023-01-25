@@ -3,9 +3,9 @@ package com.gigker.server.domain.content.service;
 import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.category.service.CategoryService;
 import com.gigker.server.domain.common.ContentType;
+import com.gigker.server.domain.common.CustomBeanUtils;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.repository.ContentRepository;
-import com.gigker.server.domain.common.CustomBeanUtils;
 import com.gigker.server.domain.content.repository.ContentTagRepository;
 import com.gigker.server.domain.location.entity.Location;
 import com.gigker.server.domain.member.entity.Member;
@@ -29,9 +29,6 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final MemberService memberService;
     private final CustomBeanUtils<Content> beanUtils;
-    private final ContentTagRepository contentTagRepository;
-    private final MemberRepository memberRepository;
-    private final CategoryService categoryService;
 
     public Content createContent(Content content, Category category, Location location) {
         Member member = memberService.getCurrentMember();
@@ -49,8 +46,8 @@ public class ContentService {
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
 //NOT Null 속성값을 수정하지 않으면 기존 게시물의 속성을 그대로 사용
         Content updateContent = beanUtils.copyNonNullProperties(content, findContent);
-        content.setCategory(category);
-        content.setLocation(location);
+        updateContent.setCategory(content.getCategory());
+        updateContent.setLocation(content.getLocation());
         return contentRepository.save(updateContent);
     }
 
@@ -94,7 +91,7 @@ public class ContentService {
         List<Content> contents = contentRepository.findAllByStatus(Content.Status.RECRUITING);
 
         for (Content content : contents) {
-            // null 아니고, 마감 시간(0초)이 현재 시간(1초)보다 이후인가?
+            // null 아니고, 마감 시간(0초)이 현재 시간(2초)보다 이전인가?
             if (content.getDeadLine() != null && content.getDeadLine().isBefore(LocalDateTime.now())) {
                 content.setStatus(Content.Status.EXPIRED);
             }
@@ -104,8 +101,6 @@ public class ContentService {
     private Content save(Content content) {
         return contentRepository.save(content);
     }
-
-
 
     public List<Content> findContentsByCategory(Category category) {
         return contentRepository.findContentsByCategory(category);
