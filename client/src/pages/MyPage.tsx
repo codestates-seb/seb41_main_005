@@ -1,12 +1,19 @@
 import React from "react";
 import styled from "styled-components";
+import MyPageDetail from "../components/mypage/MyPageDetail";
 
-const Container = styled.div`
+const MypageContainer = styled.div`
   display: flex;
+  height: 100vh;
+  padding-top: 65px;
 `;
 
 const MyPage = () => {
-  return <Container>MyPage</Container>;
+  return (
+    <MypageContainer>
+      <MyPageDetail />
+    </MypageContainer>
+  );
 };
 
 export default MyPage;
