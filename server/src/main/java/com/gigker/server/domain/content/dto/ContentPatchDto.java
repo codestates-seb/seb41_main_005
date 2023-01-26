@@ -21,10 +21,10 @@ public class ContentPatchDto {
     private String qualification;
     private String preference;
     private String other;
-    private String category;
+    private String categoryName;
     private List<ContentTag> contentTags;
     private List<WorkTime> workTimes;
-    private String location;
+    private String cityName;
     private int price;
     private LocalDateTime deadLine;
     private Boolean isPremium;

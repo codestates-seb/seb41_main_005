@@ -3,7 +3,7 @@ package com.gigker.server.domain.member.controller;
 import com.gigker.server.domain.member.dto.MemberPatchDto;
 import com.gigker.server.domain.member.dto.MemberPostDto;
 
-import com.gigker.server.domain.member.dto.MemberProfileResponseDto;
+import com.gigker.server.domain.member.dto.MemberResponseDto;
 import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.mapper.MemberMapper;
 import com.gigker.server.domain.member.mapper.ProfileMapper;
@@ -53,14 +53,14 @@ public class MemberController {
 	}
 
 	//회원수정
-	@PatchMapping(value ="/{member-id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity updateMember(@PathVariable("member-id") @Positive long memberId,
-									   @Valid @RequestPart(value = "key") MemberPatchDto memberPatchDto,
+	@PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity updateMember(@Valid @RequestPart(value = "key") MemberPatchDto memberPatchDto,
 									   @RequestParam(value = "image")MultipartFile image) throws IOException
 	{
-		memberPatchDto.setMemberId(memberId);
-		memberService.updateMember(memberMapper.memberPatchToMember(memberPatchDto),image);
-		return new ResponseEntity<>(HttpStatus.OK);
+		Member member = memberService.updateMember(memberMapper.memberPatchToMember(memberPatchDto),image);
+		MemberResponseDto.PatchDto response = memberMapper.memberToPatchResponse(member);
+
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
 
@@ -69,7 +69,7 @@ public class MemberController {
 	public ResponseEntity getMember(@PathVariable("member-id") long memberId)
 	{
 		Member member = memberService.findMemberById(memberId);
-		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member);
+		MemberResponseDto.Profile response = memberMapper.memberToProfileResponse(member);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
@@ -78,7 +78,7 @@ public class MemberController {
 	public ResponseEntity getMemberProfile()
 	{
 		Member member = memberService.findMemberByProfile();
-		MemberProfileResponseDto response = memberMapper.memberToMemberResponse(member);
+		MemberResponseDto.Profile response = memberMapper.memberToProfileResponse(member);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
@@ -95,10 +95,10 @@ public class MemberController {
 	}
 
 	//회원탈퇴 (회원 상태 변경)
-	@DeleteMapping("/{member-id}")
-	public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId)
+	@DeleteMapping()
+	public ResponseEntity deleteMember()
 	{
-		memberService.deleteMember(memberId);
+		memberService.deleteMember();
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

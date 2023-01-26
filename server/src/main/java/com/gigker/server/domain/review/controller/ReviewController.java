@@ -1,8 +1,11 @@
 package com.gigker.server.domain.review.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,12 +15,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gigker.server.domain.content.entity.Content;
+import com.gigker.server.domain.content.service.ContentService;
+import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.review.dto.ReviewDto;
 import com.gigker.server.domain.review.entity.Review;
 import com.gigker.server.domain.review.mapper.ReviewMapper;
 import com.gigker.server.domain.review.service.ReviewService;
+import com.gigker.server.global.dto.MultiResponseDto;
+import com.gigker.server.global.dto.SingleResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReviewController {
 	private final ReviewService reviewService;
 	private final ReviewMapper reviewMapper;
+	private final ContentService contentService;
 
 	// 리뷰 작성
 	@PostMapping
@@ -36,9 +46,10 @@ public class ReviewController {
 		@RequestBody @Valid ReviewDto.ReviewPost post) {
 
 		Review review = reviewMapper.postToReview(post);
-		reviewService.writeReview(review);
+		Review createdReview = reviewService.writeReview(review);
+		ReviewDto.ReviewResponse response = reviewMapper.reviewToResponse(createdReview);
 
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	// 2차 리뷰 작성
@@ -57,15 +68,25 @@ public class ReviewController {
 	public ResponseEntity deleteReview(
 		@PathVariable("review-id") @Positive Long reviewId) {
 
+		reviewService.deleteReview(reviewId);
+
 		return ResponseEntity.noContent().build();
 	}
 
 	// 글 작성자의 전체 리뷰 조회
-	@GetMapping("/members/{member-id}")
+	@GetMapping("/contents/{content-id}")
 	public ResponseEntity getReviews(
-		@PathVariable("member-id") @Positive Long memberId) {
+		@PathVariable("content-id") @Positive Long contentId,
+		@RequestParam @Positive int page) {
 
-		return ResponseEntity.ok().body(null);
+		Content content = contentService.findContentByContentId(contentId);
+		Member member = content.getMember();
+		// 페이지당 출력 수는 15로 고정
+		Page<Review> pageReviews = reviewService.findAllReviewsByRecipient(content, member, page - 1, 15);
+		List<ReviewDto.ReviewResponse> reviews = reviewMapper.reviewsToResponses(pageReviews.getContent());
+		ReviewDto.SimpleMemberResponse simpleMember = reviewMapper.contentToSimpleMember(content);
+
+		return ResponseEntity.ok().body(new MultiResponseDto<>(simpleMember, reviews, pageReviews));
 	}
 
 	// 특정 리뷰 조회
@@ -73,6 +94,9 @@ public class ReviewController {
 	public ResponseEntity getReview(
 		@PathVariable("review-id") @Positive Long reviewId) {
 
-		return ResponseEntity.ok().body(null);
+		Review review = reviewService.findReview(reviewId);
+		ReviewDto.ReviewResponse response = reviewMapper.reviewToResponse(review);
+
+		return ResponseEntity.ok().body(new SingleResponseDto<>(response));
 	}
 }

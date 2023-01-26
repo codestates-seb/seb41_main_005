@@ -1,4 +1,4 @@
-package com.gigker.server.global.s3.config;
+package com.gigker.server.global.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

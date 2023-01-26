@@ -4,7 +4,8 @@ import InputBox from "../Input";
 import Button from "../Buttons";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../util/store";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../../util/redux";
 import {
   setEmail,
   setNickname,
@@ -12,6 +13,8 @@ import {
   setPasswordConfirm,
   setIntroduction,
   setImage,
+} from "../../util/redux/SignUp";
+import {
   setEmailMessage,
   setIsEmail,
   setNickNameMessage,
@@ -23,7 +26,7 @@ import {
   setIntroductionMessage,
   setIsIntroduction,
   setIsUpload,
-} from "../../util/types";
+} from "../../util/redux/Validation";
 
 interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
 
@@ -116,43 +119,52 @@ const StyledSpan = styled.span`
 
 const SignUpForm = () => {
   const dispatch = useDispatch();
-  const signUpEmail = useSelector((state: RootState) => state.signUpEmail);
+  const navigate = useNavigate();
+  const signUpEmail = useSelector(
+    (state: RootState) => state.SignUp.signUpEmail
+  );
   const signUpNickname = useSelector(
-    (state: RootState) => state.signUpNickname
+    (state: RootState) => state.SignUp.signUpNickname
   );
   const signUpPassword = useSelector(
-    (state: RootState) => state.signUpPassword
+    (state: RootState) => state.SignUp.signUpPassword
   );
   const signUpPasswordConfirm = useSelector(
-    (state: RootState) => state.signUpPasswordConfirm
+    (state: RootState) => state.SignUp.signUpPasswordConfirm
   );
   const signUpIntroduction = useSelector(
-    (state: RootState) => state.signUpIntroduction
+    (state: RootState) => state.SignUp.signUpIntroduction
   );
-  const signUpImg = useSelector((state: RootState) => state.signUpImg);
-  const emailMessage = useSelector((state: RootState) => state.emailMessage);
-  const isEmail = useSelector((state: RootState) => state.isEmail);
+  const signUpImg = useSelector((state: RootState) => state.SignUp.signUpImg);
+  const emailMessage = useSelector(
+    (state: RootState) => state.Validation.emailMessage
+  );
+  const isEmail = useSelector((state: RootState) => state.Validation.isEmail);
   const nickNameMessage = useSelector(
-    (state: RootState) => state.nickNameMessage
+    (state: RootState) => state.Validation.nickNameMessage
   );
-  const isNickName = useSelector((state: RootState) => state.isNickName);
+  const isNickName = useSelector(
+    (state: RootState) => state.Validation.isNickName
+  );
   const passwordMessage = useSelector(
-    (state: RootState) => state.passwordMessage
+    (state: RootState) => state.Validation.passwordMessage
   );
-  const isPassword = useSelector((state: RootState) => state.isPassword);
+  const isPassword = useSelector(
+    (state: RootState) => state.Validation.isPassword
+  );
   const passwordConfirmMessage = useSelector(
-    (state: RootState) => state.passwordConfirmMessage
+    (state: RootState) => state.Validation.passwordConfirmMessage
   );
   const isPasswordConfirm = useSelector(
-    (state: RootState) => state.isPasswordConfirm
+    (state: RootState) => state.Validation.isPasswordConfirm
   );
   const introductionMessage = useSelector(
-    (state: RootState) => state.introductionMessage
+    (state: RootState) => state.Validation.introductionMessage
   );
   const isIntroduction = useSelector(
-    (state: RootState) => state.isIntroduction
+    (state: RootState) => state.Validation.isIntroduction
   );
-  const isUpload = useSelector((state: RootState) => state.isUpload);
+  const isUpload = useSelector((state: RootState) => state.Validation.isUpload);
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const emailRegex =
@@ -249,20 +261,29 @@ const SignUpForm = () => {
     );
     formData.append("image", signUpImg);
     axios
-      .post("http://gigker.iptime.org:8080/members", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/members",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
+        alert(`환영합니다!! ${signUpNickname}님 \n로그인을 해주세요`);
+        navigate("/login", { replace: true });
+        navigate(0);
       })
       .catch((err) => {
         console.log(err);
+        alert(`유효하지 않거나 이미 등록된 회원입니다`);
+        navigate(0);
       });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleSignUp();
   };

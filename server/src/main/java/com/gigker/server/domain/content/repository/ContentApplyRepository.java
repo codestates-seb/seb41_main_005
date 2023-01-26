@@ -17,4 +17,7 @@ public interface ContentApplyRepository extends JpaRepository<ContentApply, Long
 	List<ContentApply> findAllByContent(Content content);
 
 	Page<ContentApply> findAllByContent(Content content, Pageable pageable);
+
+	// ContentApply 상태에 따라서 조회
+	List<ContentApply> findAllByApplyStatus(ContentApply.ApplyStatus applyStatus);
 }
