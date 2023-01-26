@@ -2,11 +2,13 @@ import React from "react"; // eslint-disable-line no-unused-vars
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import Button from "./Buttons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../util/redux";
 import { MdOutlineEditCalendar } from "react-icons/md";
 import Profile from "./Profile";
+import axios from "axios";
+import { removeCookie } from "../util/cookie";
 
 const Block = styled.div`
   display: block;
@@ -83,7 +85,29 @@ const LogInContainer = styled.div`
 `;
 
 const Navigation = () => {
+  const navigate = useNavigate();
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
+
+  // 로그아웃 함수
+  const handleLogOut = async () => {
+    const result = confirm("정말 로그아웃 하시겠습니까?");
+    if (result) {
+      axios
+        .post(
+          "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth/logout"
+        )
+        .then((res) => {
+          localStorage.clear();
+          removeCookie("refresh");
+          alert(res.data.message);
+          navigate(0);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("로그아웃에 실패했습니다");
+        });
+    }
+  };
 
   return (
     <Block>
@@ -113,7 +137,7 @@ const Navigation = () => {
                   <MdOutlineEditCalendar className={"schedule"} size={42} />
                 </SvgContainer>
               </StyledLink>
-              <Button color={"#6F38C5"} width={"5rem"}>
+              <Button color={"#6F38C5"} width={"5rem"} onClick={handleLogOut}>
                 로그아웃
               </Button>
             </>

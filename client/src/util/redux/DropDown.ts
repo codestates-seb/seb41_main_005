@@ -2,8 +2,8 @@
 type DropDownActions =
   | { type: "SELECT_CATEGORY"; payload: string }
   | { type: "SELECT_LOCATION"; payload: string }
-  | { type: "SELECT_TAG"; payload: string };
-
+  | { type: "SELECT_TAG"; payload: string }
+  | { type: "RESET_TAG" };
 // 상태 타입
 type DropDownState = {
   selectedCategory: string;
@@ -34,6 +34,10 @@ export const selectTag = (tag: string) => ({
   payload: tag,
 });
 
+export const resetTag = () => ({
+  type: "RESET_TAG",
+});
+
 // 리듀서
 export const DropDown = (
   state = initialState,
@@ -46,6 +50,8 @@ export const DropDown = (
       return { ...state, selectedLocation: action.payload };
     case "SELECT_TAG":
       return { ...state, selectedTag: action.payload };
+    case "RESET_TAG":
+      return { ...state, selectedTag: "" };
     default:
       return state;
   }

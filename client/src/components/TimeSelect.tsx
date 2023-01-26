@@ -7,8 +7,8 @@ import ko from "date-fns/locale/ko";
 import Button from "./Buttons";
 interface Props {
   workTime: Array<{
-    startWorkTime: any;
-    endWorkTime: any;
+    startWorkTime: string;
+    endWorkTime: string;
     startDate: Date;
     startTime: string;
     endDate: Date;
@@ -16,8 +16,8 @@ interface Props {
   }>;
   onWorkTimeChange?: (
     workTime: Array<{
-      startWorkTime: any;
-      endWorkTime: any;
+      startWorkTime: string;
+      endWorkTime: string;
       startDate: Date;
       startTime: string;
       endDate: Date;
@@ -47,15 +47,13 @@ const WorkSchedule: React.FC<Props> = ({ workTime, onWorkTimeChange }) => {
     setEndDate(date);
   };
   const handleAddSchedule = () => {
-    const startWorkTime = new Date(
-      startDate.toISOString().slice(0, 10) + "T" + startTime + ":00"
-    );
-    const endWorkTime = new Date(
-      endDate.toISOString().slice(0, 10) + "T" + endTime + ":00"
-    );
+    const startWorkTime = `${startDate
+      .toISOString()
+      .slice(0, 10)}T${startTime}:00`;
+    const endWorkTime = `${endDate.toISOString().slice(0, 10)}T${endTime}:00`;
     const newSchedule = {
-      startWorkTime: startWorkTime.toISOString(),
-      endWorkTime: endWorkTime.toISOString(),
+      startWorkTime: startWorkTime,
+      endWorkTime: endWorkTime,
       startDate,
       startTime,
       endDate,
@@ -69,7 +67,6 @@ const WorkSchedule: React.FC<Props> = ({ workTime, onWorkTimeChange }) => {
       onWorkTimeChange([...workTime, newSchedule]);
     }
   };
-  // console.log("worktime:", workSchedule);
 
   // 시간 드롭다운
   const timeOptions = [];
@@ -86,14 +83,13 @@ const WorkSchedule: React.FC<Props> = ({ workTime, onWorkTimeChange }) => {
     <TimeContainer>
       <SelectWrapper>
         <div>
-          시작날짜
+          시작
           <StyledDatePicker
             selected={startDate}
             onChange={handleStartDateChange}
             dateFormat="yyyy-MM-dd"
             locale={ko}
           />
-          시작시간
           <StyledSelect
             placeholder={"시간"}
             options={timeOptions}
@@ -101,21 +97,24 @@ const WorkSchedule: React.FC<Props> = ({ workTime, onWorkTimeChange }) => {
           />
         </div>
         <div>
-          종료날짜
+          종료
           <StyledDatePicker
             selected={endDate}
             onChange={handleEndDateChange}
             dateFormat="yyyy-MM-dd"
             locale={ko}
           />
-          종료시간
           <StyledSelect
             placeholder={"시간"}
             options={timeOptions}
             onChange={handleEndTimeChange}
           />
         </div>
-        <Button onClick={handleAddSchedule}>추가</Button>
+        <ButtonWrapper>
+          <Button className="worktime-submit" onClick={handleAddSchedule}>
+            추가
+          </Button>
+        </ButtonWrapper>
       </SelectWrapper>
       <ListWrapper>
         {workSchedule.map((schedule, index) => (
@@ -135,9 +134,73 @@ const WorkSchedule: React.FC<Props> = ({ workTime, onWorkTimeChange }) => {
     </TimeContainer>
   );
 };
+
+interface DueDate {
+  onChange: (deadline: string) => void;
+}
+
+const Deadline: React.FC<DueDate> = ({ onChange }) => {
+  const [deadlineDate, setDeadlineDate] = useState(new Date());
+  const [deadlineTime, setDeadlineTime] = useState("");
+  const [deadlineSum, setdeadlineSum] = useState("");
+
+  const timeOptions = [];
+  for (let hour = 0; hour < 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      const value = `${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}`;
+      const label = `${hour}:${("0" + minute).slice(-2)}
+      ${hour < 12 ? "AM" : "PM"}`;
+      timeOptions.push({ value, label });
+    }
+  }
+
+  const handledeadlineTimeChange = (selectedOption: any) => {
+    setDeadlineTime(selectedOption.value);
+  };
+  const handledeadlineDateChange = (date: Date) => {
+    setDeadlineDate(date);
+  };
+  const handleDeadline = () => {
+    const deadline = `${deadlineDate
+      .toISOString()
+      .slice(0, 10)}T${deadlineTime}:00`;
+    setdeadlineSum(deadline);
+    console.log(deadline);
+    onChange(deadline);
+  };
+
+  return (
+    <DeadlineWrapper>
+      <StyledDatePicker
+        selected={deadlineDate}
+        onChange={handledeadlineDateChange}
+        dateFormat="yyyy-MM-dd"
+        locale={ko}
+      />
+      <StyledSelect
+        placeholder={"시간"}
+        options={timeOptions}
+        onChange={handledeadlineTimeChange}
+      />
+      <ButtonWrapper>
+        <Button
+          className="deadline-submit"
+          onClick={() => {
+            handleDeadline();
+          }}
+        >
+          등록
+        </Button>
+      </ButtonWrapper>
+      <SumWrapper>{deadlineSum}</SumWrapper>
+    </DeadlineWrapper>
+  );
+};
+
 const StyledDatePicker = styled(DatePicker)`
-  width: 150px;
+  width: 120px;
   height: 2.5rem;
+  margin-top: 10px;
   border: solid 1px ${(props) => props.theme.color.sub2};
   border-radius: 8px;
   :focus {
@@ -148,7 +211,8 @@ const StyledDatePicker = styled(DatePicker)`
   }
 `;
 const StyledSelect = styled(Select)`
-  width: 150px;
+  width: 120px;
+  font-size: 14px;
 `;
 
 const TimeContainer = styled.div`
@@ -162,11 +226,33 @@ const SelectWrapper = styled.div`
   display: flex;
   flex-direction: row;
   margin: 10px;
-  padding: 10px;
 `;
 
 const ListWrapper = styled.div`
-  display: flex;
+  margin-left: -10px;
+  margin-top: 30px;
 `;
 
-export { WorkSchedule };
+const SumWrapper = styled.div`
+  margin-top: 10px;
+`;
+
+const ButtonWrapper = styled.div`
+  .worktime-submit {
+    width: 50px;
+    margin-top: 65px;
+    margin-left: -10px;
+  }
+  .deadline-submit {
+    width: 50px;
+    float: right;
+    margin-top: -40px;
+    margin-right: -60px;
+  }
+`;
+
+const DeadlineWrapper = styled.div`
+  margin: 10px;
+`;
+
+export { WorkSchedule, Deadline };

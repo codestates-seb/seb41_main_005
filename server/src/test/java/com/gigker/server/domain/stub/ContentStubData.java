@@ -23,7 +23,7 @@ public class ContentStubData {
 		content.setWorkContent("일할 사람");
 		content.setWorkTimes(null);
 		content.setCategory(null);
-//		content.setLocation("444123");
+		//content.setLocation("444123");
 		content.setPrice(100000);
 		content.setStatus(Content.Status.RECRUITING);
 		content.setIsPremium(false);
@@ -41,7 +41,7 @@ public class ContentStubData {
 		content.setWorkContent("일할 사람");
 		content.setWorkTimes(null);
 		content.setCategory(null);
-//		content.setLocation("444123");
+		//content.setLocation("444123");
 		content.setPrice(100000);
 		content.setStatus(Content.Status.MATCHED);
 		content.setIsPremium(false);
