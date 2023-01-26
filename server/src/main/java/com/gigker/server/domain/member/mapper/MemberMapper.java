@@ -32,5 +32,7 @@ public interface MemberMapper {
     @Mapping(target = "totalCompleted", expression = "java(member.getTotalComplete())")
     MemberResponseDto.Profile memberToProfileResponse(Member member);
 
+    MemberResponseDto.PatchDto memberToPatchResponse(Member member);
+
     List<MemberResponseDto.Profile> memberToMemberResponses(List<Member> members);
 }

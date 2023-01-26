@@ -83,14 +83,13 @@ const WorkSchedule: React.FC<Props> = ({ workTime, onWorkTimeChange }) => {
     <TimeContainer>
       <SelectWrapper>
         <div>
-          시작날짜
+          시작
           <StyledDatePicker
             selected={startDate}
             onChange={handleStartDateChange}
             dateFormat="yyyy-MM-dd"
             locale={ko}
           />
-          시작시간
           <StyledSelect
             placeholder={"시간"}
             options={timeOptions}
@@ -98,21 +97,24 @@ const WorkSchedule: React.FC<Props> = ({ workTime, onWorkTimeChange }) => {
           />
         </div>
         <div>
-          종료날짜
+          종료
           <StyledDatePicker
             selected={endDate}
             onChange={handleEndDateChange}
             dateFormat="yyyy-MM-dd"
             locale={ko}
           />
-          종료시간
           <StyledSelect
             placeholder={"시간"}
             options={timeOptions}
             onChange={handleEndTimeChange}
           />
         </div>
-        <Button onClick={handleAddSchedule}>추가</Button>
+        <ButtonWrapper>
+          <Button className="worktime-submit" onClick={handleAddSchedule}>
+            추가
+          </Button>
+        </ButtonWrapper>
       </SelectWrapper>
       <ListWrapper>
         {workSchedule.map((schedule, index) => (
@@ -168,7 +170,7 @@ const Deadline: React.FC<DueDate> = ({ onChange }) => {
   };
 
   return (
-    <div>
+    <DeadlineWrapper>
       <StyledDatePicker
         selected={deadlineDate}
         onChange={handledeadlineDateChange}
@@ -180,21 +182,25 @@ const Deadline: React.FC<DueDate> = ({ onChange }) => {
         options={timeOptions}
         onChange={handledeadlineTimeChange}
       />
-      <Button
-        onClick={() => {
-          handleDeadline();
-        }}
-      >
-        등록
-      </Button>
-      <ListWrapper>{deadlineSum}</ListWrapper>
-    </div>
+      <ButtonWrapper>
+        <Button
+          className="deadline-submit"
+          onClick={() => {
+            handleDeadline();
+          }}
+        >
+          등록
+        </Button>
+      </ButtonWrapper>
+      <SumWrapper>{deadlineSum}</SumWrapper>
+    </DeadlineWrapper>
   );
 };
 
 const StyledDatePicker = styled(DatePicker)`
-  width: 150px;
+  width: 120px;
   height: 2.5rem;
+  margin-top: 10px;
   border: solid 1px ${(props) => props.theme.color.sub2};
   border-radius: 8px;
   :focus {
@@ -205,7 +211,8 @@ const StyledDatePicker = styled(DatePicker)`
   }
 `;
 const StyledSelect = styled(Select)`
-  width: 150px;
+  width: 120px;
+  font-size: 14px;
 `;
 
 const TimeContainer = styled.div`
@@ -219,11 +226,33 @@ const SelectWrapper = styled.div`
   display: flex;
   flex-direction: row;
   margin: 10px;
-  padding: 10px;
 `;
 
 const ListWrapper = styled.div`
-  display: flex;
+  margin-left: -10px;
+  margin-top: 30px;
+`;
+
+const SumWrapper = styled.div`
+  margin-top: 10px;
+`;
+
+const ButtonWrapper = styled.div`
+  .worktime-submit {
+    width: 50px;
+    margin-top: 65px;
+    margin-left: -10px;
+  }
+  .deadline-submit {
+    width: 50px;
+    float: right;
+    margin-top: -40px;
+    margin-right: -60px;
+  }
+`;
+
+const DeadlineWrapper = styled.div`
+  margin: 10px;
 `;
 
 export { WorkSchedule, Deadline };

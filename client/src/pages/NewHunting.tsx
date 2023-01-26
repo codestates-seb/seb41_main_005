@@ -1,9 +1,14 @@
 import React, { useState, ChangeEvent } from "react";
 import InputBox from "../components/Input";
 import Button from "../components/Buttons";
+import TextArea from "../components/TextArea";
 import styled from "styled-components";
-import { WorkSchedule } from "../components/TimeSelect";
-import { categoryOptions, locationOptions } from "../components/CateLocaTag";
+import { WorkSchedule, Deadline } from "../components/TimeSelect";
+import {
+  categoryOptions,
+  locationOptions,
+  tagOptions,
+} from "../components/CateLocaTag";
 import axios from "axios";
 
 interface WorkSchedule {
@@ -18,7 +23,9 @@ const EditHunting = () => {
   const [etc, setEtc] = useState("");
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("");
+  const [tag, setTag] = useState("");
   const [workTime, setWorkTime] = useState<any>([]);
+  const [deadline, setDeadline] = useState("");
 
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setCategory(event.target.value);
@@ -29,6 +36,10 @@ const EditHunting = () => {
     setLocation(event.target.value);
     console.log("location:", event.target.value);
   };
+  const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setTag(event.target.value);
+    console.log("tag:", event.target.value);
+  };
 
   const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
     setWorkTime(workTime);
@@ -38,7 +49,7 @@ const EditHunting = () => {
     setTitle(event.target.value);
   };
 
-  const handleWorkDetailChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleWorkDetailChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setWorkDetail(event.target.value);
   };
 
@@ -46,15 +57,17 @@ const EditHunting = () => {
     setPay(event.target.value);
   };
 
-  const handleEtcChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleEtcChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setEtc(event.target.value);
+  };
+  const handleDeadlineChange = (deadline: string) => {
+    setDeadline(deadline);
   };
 
   const handleSubmit = () => {
     const accessToken = localStorage.getItem("access_token");
 
     if (accessToken) {
-      console.log("토큰?", accessToken);
       axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     }
 
@@ -74,10 +87,12 @@ const EditHunting = () => {
               };
             }
           ),
+          contentTags: [{ tagName: tag }],
           price: parseInt(pay), // pay string을 int로
           cityName: location,
           other: etc,
           isPremium: false,
+          deadLine: deadline,
         }
       )
       .then((response) => {
@@ -89,10 +104,14 @@ const EditHunting = () => {
   };
 
   return (
-    <EditHireContainer>
+    <EditHuntingContainer>
       <TitleContainer>
         제목
-        <InputBox width="400px" onChange={handleTitleChange} />
+        <InputBox width="350px" onChange={handleTitleChange} />
+        지원마감일
+        <Deadline onChange={handleDeadlineChange} />
+      </TitleContainer>
+      <SelectWrapper>
         카테고리
         <CategoryWrapper>
           <select placeholder={"카테고리"} onChange={handleCategoryChange}>
@@ -103,18 +122,31 @@ const EditHunting = () => {
             ))}
           </select>
         </CategoryWrapper>
-      </TitleContainer>
-      <WithTitle>
+        태그
+        <TagWrapper>
+          <select onChange={handleTagChange}>
+            <option defaultValue="" hidden>
+              태그
+            </option>
+            {tagOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </TagWrapper>
+      </SelectWrapper>
+      <PossibleTime>
         희망 업무시간
         <WorkSchedule
           workTime={workTime}
           onWorkTimeChange={handleWorkTimeChange}
         />
-      </WithTitle>
+      </PossibleTime>
       <TwoInput>
         <WithTitle>
           희망보수
-          <InputBox width="165px" onChange={handlePayChange} />
+          <InputBox width="300px" onChange={handlePayChange} />
         </WithTitle>
         <WithTitle>
           희망장소
@@ -131,29 +163,35 @@ const EditHunting = () => {
       </TwoInput>
       <WithTitle>
         업무내용
-        <InputBox width="600px" onChange={handleWorkDetailChange} />
+        <TextArea onChange={handleWorkDetailChange} />
       </WithTitle>
       <WithTitle>
         기타 (선택)
-        <InputBox width="600px" onChange={handleEtcChange} />
+        <TextArea onChange={handleEtcChange} />
       </WithTitle>
-      <Button onClick={handleSubmit}>제출하기</Button>
-    </EditHireContainer>
+      <SubmitWrapper>
+        <Button className="newhunting-submit" onClick={handleSubmit}>
+          제출하기
+        </Button>
+      </SubmitWrapper>
+    </EditHuntingContainer>
   );
 };
 
-const EditHireContainer = styled.div`
+const EditHuntingContainer = styled.div`
   padding: 100px 50px 50px 50px;
   display: flex;
   flex-direction: column;
-  $ {InputBox} { 
-    align-items: center;
-  }
 `;
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
+const PossibleTime = styled.div`
+  margin-top: 10px;
+  margin-left: 5px;
+`;
+
 const WithTitle = styled.div`
   display: flex;
   flex-direction: column;
@@ -162,6 +200,12 @@ const WithTitle = styled.div`
 const TwoInput = styled.div`
   display: flex;
   flex-direction: row;
+  margin-left: 50px;
+`;
+const SelectWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-left: 70px;
 `;
 const CategoryWrapper = styled.div`
   margin: 10px;
@@ -174,12 +218,26 @@ const CategoryWrapper = styled.div`
 `;
 const LocationWrapper = styled.div`
   width: 150px;
+  padding: 10px;
+  select {
+    width: 150px;
+    height: 2.5rem;
+    border-radius: 5px;
+  }
+`;
+const TagWrapper = styled.div`
   margin: 10px;
   padding: 10px;
   select {
     width: 150px;
     height: 2.5rem;
     border-radius: 5px;
+  }
+`;
+const SubmitWrapper = styled.div`
+  .newhunting-submit {
+    margin-left: 330px;
+    width: 300px;
   }
 `;
 export default EditHunting;

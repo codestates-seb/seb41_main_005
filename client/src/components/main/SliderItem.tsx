@@ -1,6 +1,8 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const SliderItem = ({
+  contentType,
   contentId,
   title,
   nickName,
@@ -8,6 +10,7 @@ const SliderItem = ({
   workTime,
   src,
 }: {
+  contentType: string;
   contentId: number;
   title: string;
   nickName: string;
@@ -15,9 +18,14 @@ const SliderItem = ({
   workTime: string[];
   src: string;
 }) => {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    console.log(contentId);
+    contentType === "BUY"
+      ? navigate(`/hireDetail/${contentId}`)
+      : navigate(`/huntingDetail/${contentId}`);
   };
+
   return (
     <SliderItemContainer onClick={handleClick}>
       <SliderImageWrapper>

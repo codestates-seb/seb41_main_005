@@ -3,13 +3,13 @@ export interface CardProps {
   title: string;
   nickName: string;
   price: number;
-  workTimes: {
-    startWorkTime: string | null;
-    endWorkTime: string | null;
-  };
+  workTimes: Array<{
+    startWorkTime: string;
+    endWorkTime: string;
+  }>;
   memberId: number;
-  location: string | null;
-  categories: string | null;
+  location: string;
+  categories: string;
   tag: string;
   contentId: number;
 }
@@ -19,13 +19,13 @@ export interface ServerData {
   title: string;
   nickName: string;
   price: number;
-  workTimes: {
-    startWorkTime: string | null;
-    endWorkTime: string | null;
-  };
+  workTimes: Array<{
+    startWorkTime: string;
+    endWorkTime: string;
+  }>;
   memberId: number;
-  location: string | null;
-  category: string | null;
+  location: string;
+  category: string;
   tag: string;
   contentId: number;
 }

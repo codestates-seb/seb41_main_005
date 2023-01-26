@@ -57,8 +57,10 @@ public class MemberController {
 	public ResponseEntity updateMember(@Valid @RequestPart(value = "key") MemberPatchDto memberPatchDto,
 									   @RequestParam(value = "image")MultipartFile image) throws IOException
 	{
-		memberService.updateMember(memberMapper.memberPatchToMember(memberPatchDto),image);
-		return new ResponseEntity<>(HttpStatus.OK);
+		Member member = memberService.updateMember(memberMapper.memberPatchToMember(memberPatchDto),image);
+		MemberResponseDto.PatchDto response = memberMapper.memberToPatchResponse(member);
+
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
 

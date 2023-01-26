@@ -2,18 +2,38 @@ export interface hireDetailProps {
   contentId: number;
   memberId: number;
   contentType: string;
-  contentTags: string[];
-  nickName: string;
-  workTimes: string[];
-  location: string;
-  price: string;
-  status: string;
-  review_count: number;
   title: string;
-  tags: string[];
-  recruitingCount: number;
+  nickName: string;
+  cityName: string;
+  contentTags: any[];
+  price: number;
+  workTime: string[];
+  location: string;
+  categoryName: string;
   workContent: string;
-  qualification: string;
-  preference: string;
+  recruitingCount: number;
   other: string;
+  preference: string;
+  qualification: string;
+  status: string;
+}
+
+export interface serverData {
+  contentId: number;
+  memberId: number;
+  contentType: string;
+  title: string;
+  nickName: string;
+  cityName: string;
+  contentTags: any[];
+  price: number;
+  workTimes: any[];
+  location: string;
+  categoryName: string;
+  workContent: string;
+  recruitingCount: number;
+  other: string;
+  preference: string;
+  qualification: string;
+  status: string;
 }

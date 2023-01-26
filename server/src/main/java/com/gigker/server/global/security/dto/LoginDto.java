@@ -18,5 +18,6 @@ public class LoginDto {
         private String email;
         private String nickName;
         private String pictureUrl;
+        private String about;
     }
 }

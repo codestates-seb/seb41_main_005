@@ -92,6 +92,7 @@ const MainSlider = ({ datas }: { datas: sliderProps[] }) => {
             return (
               <SwiperSlide key={idx}>
                 <SliderItem
+                  contentType={item.contentType}
                   contentId={item.contentId}
                   title={item.title}
                   nickName={item.nickName}

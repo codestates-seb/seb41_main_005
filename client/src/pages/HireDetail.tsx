@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import CalloutBox from "../components/detail/CalloutBox";
 import UserInfo from "../components/detail/UserInfo";
 import Warning from "../components/detail/Warning";
 import { getDetailData } from "../api/getDetail";
-import { hireDetailProps } from "../util/hireDetailData";
+import { hireDetailProps, serverData } from "../util/hireDetailData";
+import { transDateTime } from "../components/main/transDateTime";
 
 const Container = styled.div`
   display: block;
@@ -78,7 +78,27 @@ const Container = styled.div`
     }
   }
 `;
-
+const mapDataToHireDetailProps = (data: serverData): hireDetailProps => {
+  return {
+    memberId: data.memberId,
+    contentId: data.contentId,
+    contentType: data.contentType,
+    title: data.title,
+    nickName: data.nickName,
+    cityName: data.cityName,
+    price: data.price,
+    workTime: transDateTime(data.workTimes),
+    location: data.location,
+    contentTags: data.contentTags,
+    categoryName: data.categoryName,
+    workContent: data.workContent,
+    recruitingCount: data.recruitingCount,
+    other: data.other,
+    preference: data.preference,
+    qualification: data.qualification,
+    status: data.status,
+  };
+};
 function HireDetail() {
   // const data = {
   //   contentId: 1,
@@ -102,14 +122,12 @@ function HireDetail() {
   const [isLogin, setIsLogin] = useState(true);
   const [data, setData] = useState<hireDetailProps>();
   const navigate = useNavigate();
-
-  const contentId = 2;
-  const memberId = 3;
+  const contentId = useParams().content_id;
 
   useEffect(() => {
     const detailData = async () => {
-      const data = await getDetailData(contentId);
-      setData(data);
+      const data = await getDetailData(Number(contentId));
+      setData(data.map(mapDataToHireDetailProps));
     };
     detailData();
   }, []);
@@ -121,11 +139,11 @@ function HireDetail() {
   const HandleApplyButton = () => {
     axios({
       method: "post",
-      url: `http://gigker.iptime.org:8080/contents/${contentId}/apply`,
-      data: {
-        memberId: memberId,
-        contentId: contentId,
-      },
+      url: `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
+      // data: {
+      //   memberId: memberId,
+      //   contentId: contentId,
+      // },
       // headers: {
       //   Authorization: `Bearer ${token}`,
       // },

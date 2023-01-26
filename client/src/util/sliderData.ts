@@ -1,4 +1,5 @@
 export interface sliderProps {
+  contentType: string;
   contentId: number;
   memberId: number;
   nickName: string;
@@ -18,4 +19,5 @@ export interface serverData {
   category: string | null;
   tag: string;
   contentId: number;
+  contentType: string;
 }

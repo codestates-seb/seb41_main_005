@@ -7,10 +7,12 @@ import {
   selectCategory,
   selectLocation,
   selectTag,
+  resetTag,
 } from "../../util/redux/DropDown";
 import { useNavigate } from "react-router";
 
 const tags = [
+  "ALL",
   "재택근무🏠",
   "야간🌙",
   "초보자가능🐣",
@@ -21,7 +23,6 @@ const tags = [
   "식사제공🍴",
   "경력1년이상💡",
 ];
-
 const category = [
   "카테고리",
   "외식/음료",
@@ -69,6 +70,10 @@ const location = [
 
 const DropdownMenu = () => {
   const dispatch = useDispatch();
+  //태그버튼 클릭시
+  const [clickedTag, setClickedTag] = useState("");
+  const [previousClickedTag, setPreviousClickedTag] = useState("");
+
   const selectedCategory = useSelector(
     (state: RootState) => state.DropDown.selectedCategory
   );
@@ -79,16 +84,12 @@ const DropdownMenu = () => {
     (state: RootState) => state.DropDown.selectedTag
   );
   //로그인 되어있다면 새글작성버튼 보이게
-  // const [showNewHireButton, setShowNewHireButton] = useState(false);
+  const isLogin = useSelector((state: RootState) => state.LogIn.isLogIn);
+  const [showNewHireButton, setShowNewHireButton] = useState(false);
 
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem("access_token");
-  //   if (accessToken) {
-  //     setShowNewHireButton(true);
-  //   } else {
-  //     setShowNewHireButton(false);
-  //   }
-  // }, []);
+  useEffect(() => {
+    setShowNewHireButton(isLogin);
+  }, [isLogin]);
 
   const handleCategoryClick = (category: string) => {
     dispatch(selectCategory(category));
@@ -101,8 +102,17 @@ const DropdownMenu = () => {
   };
 
   const handleTagClick = (tag: string) => {
-    dispatch(selectTag(tag));
+    if (tag === "ALL") {
+      setClickedTag("ALL");
+      dispatch(resetTag());
+      setPreviousClickedTag("ALL");
+    } else if (tag !== previousClickedTag) {
+      setClickedTag(tag);
+      setPreviousClickedTag(tag);
+      dispatch(selectTag(tag));
+    }
   };
+  // dispatch(selectTag(tag));
 
   const [categoryIsOpen, categoryRef, categoryHandler] = useDetectClose(false);
   const [locationIsOpen, locationRef, locationHandler] = useDetectClose(false);
@@ -115,7 +125,12 @@ const DropdownMenu = () => {
 
   const TagButton = ({ tag }: { tag: string; onClick: () => void }) => (
     <span className="tag">
-      <button>{tag}</button>
+      <button
+        className={tag === clickedTag ? "clicked" : ""}
+        onClick={() => handleTagClick(tag)}
+      >
+        {tag}
+      </button>
     </span>
   );
 
@@ -156,8 +171,7 @@ const DropdownMenu = () => {
           </DropdownTitle>
         </DropdownContainer>
         <AddHire onClick={newHireClickHandler}>
-          {/* {showNewHireButton && <button> 게시글 작성</button>} */}
-          <button> 게시글 작성</button>
+          {isLogin && <button> 게시글 작성</button>}
         </AddHire>
       </UpperWrapper>
       <LowerWrapper>
@@ -280,10 +294,21 @@ const LinkWrapper = styled.a`
 
 const AddHire = styled.div`
   height: 38px;
-  margin: 16px 15px 0 auto;
-  padding: 9px 50px 8px;
+  margin: 12px 0 0 670px;
   cursor: pointer;
   font-size: 16px;
+  position: absolute;
+  button {
+    margin: 0 0.5rem;
+    height: 2.5rem;
+    font-size: 16px;
+    font-weight: regular;
+    color: #6f38c5;
+    background-color: white;
+    width: 120px;
+    border: solid 1.2px #6f38c5;
+    border-radius: 4px;
+  }
 `;
 
 //태그 파트
@@ -298,21 +323,42 @@ const TagWrapper = styled.div`
   display: flex;
   flex-direction: row;
   width: 500px;
-  margin: 10px 0 0 20px;
+  margin-left: 30px;
   border: none;
   background-color: white;
-  .tag {
-    padding: 3px;
+  button {
+    margin: 0 0.3rem 0 0;
+    height: 1.5rem;
+    font-size: 14px;
+    font-weight: regular;
+    color: #6f38c5;
+    background-color: white;
+    border: solid 1.2px #6f38c5;
+    border-radius: 4px;
+  }
+  .clicked {
+    background-color: #6f38c5;
+    color: white;
   }
 `;
 
 const FilterButton = styled.div`
   height: 38px;
-  margin: 0 20px 0 8px;
   float: right;
   border: none;
   cursor: pointer;
   font-size: 16px;
+  button {
+    margin: 0 0.3rem 0 0;
+    height: 1.5rem;
+    font-size: 14px;
+    font-weight: regular;
+    color: #6f38c5;
+    background-color: white;
+    width: 90px;
+    border: solid 1.2px #6f38c5;
+    border-radius: 4px;
+  }
 `;
 
 export default DropdownMenu;

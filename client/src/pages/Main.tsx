@@ -5,6 +5,7 @@ import MainSlider from "../components/main/MainSlider";
 import { getDatas } from "../api/getDatas";
 import { sliderProps, serverData } from "../util/sliderData";
 import { transDateTime } from "../components/main/transDateTime";
+import richIMG from "../assets/richIMG.jpg";
 
 const Container = styled.div`
   display: block;
@@ -28,12 +29,34 @@ const StyledArticle = styled.article`
   }
   .about {
     height: 300px;
+    margin: 40px 20px 0px 0px;
     padding: 10px;
+    text-align: right;
+    line-height: 30px;
+    div {
+      text-shadow: 2px 2px 2px white;
+      h2 {
+        margin-top: 10px;
+        font-size: 28px;
+        font-weight: medium;
+      }
+      p {
+        margin-bottom: 48px;
+        font-size: 20px;
+        font-weight: demilight;
+      }
+    }
+  }
+  .bg {
+    background-size: 680px 360px;
+    background-image: url(${richIMG});
+    background-repeat: no-repeat;
   }
 `;
 
 const mapDataToSliderProps = (data: serverData): sliderProps => {
   return {
+    contentType: data.contentType,
     title: data.title,
     nickName: data.nickName,
     price: data.price,
@@ -51,7 +74,7 @@ function Main() {
   useEffect(() => {
     const hire = async () => {
       const data = await getDatas("BUY");
-      setHireData(data);
+      setHireData(data.map(mapDataToSliderProps));
     };
 
     const hunting = async () => {
@@ -67,9 +90,15 @@ function Main() {
     <Container>
       <section>
         <StyledArticle>
-          <header>소개</header>
-          <div className="about">
-            <p>어쩌구 소개 about gigker</p>
+          <div className="about bg">
+            <div>
+              <h2>N잡의 시대, 주말에 돈 벌어볼까?</h2>
+              <p>g!gker에서 원하는 일을 찾아보세요.</p>
+            </div>
+            <div>
+              <h2>급하게 일손이 필요하시다면?</h2>
+              <p>g!gker에서 구인도 구직도 쉽고 빠르게!</p>
+            </div>
           </div>
         </StyledArticle>
         <StyledArticle>

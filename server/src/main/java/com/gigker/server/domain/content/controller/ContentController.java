@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -69,7 +68,7 @@ public class ContentController {
     public ResponseEntity getContents(@RequestParam("contentType") ContentType contentType) {
         List<Content> contents = contentService.findContentsByContentType(contentType);
         return new ResponseEntity<>(
-                (new SingleResponseDto<>(contentMapper.contentsToSimpleContents(contents))),
+                (new SingleResponseDto<>(contentMapper.contentsResponseDto(contents))),
                 HttpStatus.OK);
     }
 
