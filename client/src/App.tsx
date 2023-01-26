@@ -37,15 +37,15 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/hire" element={<Hire />} />
           <Route path="/hunting" element={<Hunting />} />
-          <Route path="/edithire" element={<EditHire />} />
           <Route path="/newhire" element={<NewHire />} />
           <Route path="/newhunting" element={<NewHunting />} />
-          <Route path="/edithunting" element={<EditHunting />} />
           <Route path="/hiredetail/:content_id" element={<HireDetail />} />
           <Route
             path="/huntingdetail/:content_id"
             element={<HuntingDetail />}
           />
+          <Route path="/edithire/:content_id" element={<EditHire />} />
+          <Route path="/edithunting/:content_id" element={<EditHunting />} />
           <Route path="/login" element={<LogInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/mypage" element={<MyPage />} />

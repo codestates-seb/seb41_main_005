@@ -122,7 +122,7 @@ function HireDetail() {
   }, [contentId, memberId]);
 
   const handleEditButton = () => {
-    navigate("/edithire");
+    navigate(`/edithire/${contentId}`);
   };
 
   const handleApplyButton = () => {
@@ -157,7 +157,7 @@ function HireDetail() {
                       ))
                     : (datas.contentTags = [])}
                 </ul>
-                <button>수정버튼</button>
+                <button onClick={handleEditButton}>수정버튼</button>
               </div>
             </section>
             <section className="description">
