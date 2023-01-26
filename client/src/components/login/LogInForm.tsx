@@ -12,6 +12,9 @@ import {
   setLogInPassword,
   setIsLogIn,
   setImgUrl,
+  setLogInNickname,
+  setLogInIntroduction,
+  setLogInMID,
 } from "../../util/redux/LogIn";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -84,6 +87,10 @@ const LogInForm = () => {
         onLogInSuccess(res);
         dispatch(setIsLogIn(true));
         dispatch(setImgUrl(res.data.pictureUrl));
+        dispatch(setLogInNickname(res.data.nickName));
+        dispatch(setLogInIntroduction(res.data.about));
+        dispatch(setLogInMID(res.data.memberId));
+        alert(`어서오세요 ${res.data.nickName}님 :)`);
         navigate("/", { replace: true });
         navigate(0);
       })

@@ -7,10 +7,12 @@ import {
   selectCategory,
   selectLocation,
   selectTag,
+  resetTag,
 } from "../../util/redux/DropDown";
 import { useNavigate } from "react-router";
 
 const tags = [
+  "ALL",
   "재택근무🏠",
   "야간🌙",
   "초보자가능🐣",
@@ -69,6 +71,10 @@ const location = [
 
 const DropdownT = () => {
   const dispatch = useDispatch();
+  //태그버튼 클릭시
+  const [clickedTag, setClickedTag] = useState("");
+  const [previousClickedTag, setPreviousClickedTag] = useState("");
+
   const selectedCategory = useSelector(
     (state: RootState) => state.DropDown.selectedCategory
   );
@@ -96,7 +102,15 @@ const DropdownT = () => {
     locationHandler();
   };
   const handleTagClick = (tag: string) => {
-    dispatch(selectTag(tag));
+    if (tag === "ALL") {
+      setClickedTag("ALL");
+      dispatch(resetTag());
+      setPreviousClickedTag("ALL");
+    } else if (tag !== previousClickedTag) {
+      setClickedTag(tag);
+      setPreviousClickedTag(tag);
+      dispatch(selectTag(tag));
+    }
   };
 
   const [categoryIsOpen, categoryRef, categoryHandler] = useDetectClose(false);
@@ -107,9 +121,15 @@ const DropdownT = () => {
     navigate("/newhunting");
     console.log("새 글 작성");
   };
+
   const TagButton = ({ tag }: { tag: string; onClick: () => void }) => (
     <span className="tag">
-      <button>{tag}</button>
+      <button
+        className={tag === clickedTag ? "clicked" : ""}
+        onClick={() => handleTagClick(tag)}
+      >
+        {tag}
+      </button>
     </span>
   );
 
@@ -315,6 +335,10 @@ const TagWrapper = styled.div`
     background-color: white;
     border: solid 1.2px #6f38c5;
     border-radius: 4px;
+  }
+  .clicked {
+    background-color: #6f38c5;
+    color: white;
   }
 `;
 

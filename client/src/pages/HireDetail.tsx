@@ -6,8 +6,10 @@ import CalloutBox from "../components/detail/CalloutBox";
 import UserInfo from "../components/detail/UserInfo";
 import Warning from "../components/detail/Warning";
 import { getDetailData } from "../api/getDetail";
-import { hireDetailProps, serverData } from "../util/hireDetailData";
-import { transDateTime } from "../components/main/transDateTime";
+import { getMemberData } from "../api/getMember";
+import { hireDetailProps } from "../util/hireDetailData";
+import { useSelector } from "react-redux";
+import { RootState } from "../util/redux";
 
 const Container = styled.div`
   display: block;
@@ -78,128 +80,111 @@ const Container = styled.div`
     }
   }
 `;
-const mapDataToHireDetailProps = (data: serverData): hireDetailProps => {
-  return {
-    memberId: data.memberId,
-    contentId: data.contentId,
-    contentType: data.contentType,
-    title: data.title,
-    nickName: data.nickName,
-    cityName: data.cityName,
-    price: data.price,
-    workTime: transDateTime(data.workTimes),
-    location: data.location,
-    contentTags: data.contentTags,
-    categoryName: data.categoryName,
-    workContent: data.workContent,
-    recruitingCount: data.recruitingCount,
-    other: data.other,
-    preference: data.preference,
-    qualification: data.qualification,
-    status: data.status,
-  };
-};
-function HireDetail() {
-  // const data = {
-  //   contentId: 1,
-  //   type: "buy",
-  //   nickname: "느낌오조",
-  //   worktime: ["1월 22일 11:00 ~ 18:00"],
-  //   location: "강남구",
-  //   price: "100,000",
-  //   status: "좋아요 3 | 싫어요 0",
-  //   review_count: 10,
-  //   title: "설날 배송 알바 구합니다",
-  //   tags: ["#초보자가능", "#방학알바"],
-  //   recruiting_count: 0,
-  //   work_content: "설날 서울, 경기권 배송 업무",
-  //   qualification: "1종 보통 면허 소지자",
-  //   preference: "다마스, 라보, 승합차, 1톤 탑차, 냉동 탑차 소유자",
-  //   other:
-  //     "자세한 궁금한 사항은 전화 연락 바랍니다. 평일이나 주말에도 일이 많으니 관심있으신 분들은 지원해주세요.",
-  // };
 
-  const [isLogin, setIsLogin] = useState(true);
-  const [data, setData] = useState<hireDetailProps>();
+function HireDetail() {
+  const [datas, setDatas] = useState<hireDetailProps>();
+  const [memberData, setMemberData] = useState();
+
   const navigate = useNavigate();
   const contentId = useParams().content_id;
+  const memberId = datas?.memberId;
+  const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
+  const applicantId = useSelector((state: RootState) => state.LogIn.logInMID);
 
   useEffect(() => {
-    const detailData = async () => {
+    const detail = async () => {
       const data = await getDetailData(Number(contentId));
-      setData(data.map(mapDataToHireDetailProps));
+      setDatas(data);
     };
-    detailData();
-  }, []);
+    const member = async () => {
+      const data = await getMemberData(memberId);
+      setMemberData(data);
+    };
+    detail();
+    member();
+  }, [contentId, memberId]);
 
-  const HandleEditButton = () => {
-    isLogin ? navigate("/edithire") : console.log("login 필수");
+  const handleEditButton = () => {
+    navigate("/edithire");
   };
 
-  const HandleApplyButton = () => {
-    axios({
-      method: "post",
-      url: `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
-      // data: {
-      //   memberId: memberId,
-      //   contentId: contentId,
-      // },
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
-    }).then((res) => console.log(res.data));
+  const handleWriteButton = () => {
+    if (isLogIn) {
+      navigate("/newhire");
+    } else {
+      alert("로그인 후 이용하세요.");
+      navigate("/login");
+    }
+  };
+
+  const handleApplyButton = () => {
+    if (memberId !== applicantId) {
+      axios
+        .post(
+          `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
+          { applicantId }
+        )
+        .then((res) => console.log(res.data));
+    } else {
+      alert("본인이 작성한 게시글에는 지원할 수 없습니다.");
+    }
   };
 
   return (
     <Container>
-      {data && (
+      {datas && (
         <div className="wrapper">
           <div className="left">
             <section className="header">
               <div className="title">
-                <p>{data.title}</p>
-                <button onClick={HandleEditButton}>게시글 작성</button>
+                <p>{datas.title}</p>
+                {memberId === applicantId ? (
+                  <button onClick={handleEditButton}>수정하기</button>
+                ) : (
+                  <button onClick={handleWriteButton}>게시글 작성</button>
+                )}
               </div>
               <div className="tags">
                 <ul>
-                  {data.contentTags
-                    ? data.contentTags.map((tag, idx) => (
-                        <li key={idx}>{tag}</li>
+                  {datas.contentTags
+                    ? datas.contentTags.map((tag, idx) => (
+                        <li key={idx}>{tag.tagName}</li>
                       ))
-                    : (data.contentTags = [])}
+                    : (datas.contentTags = [])}
                 </ul>
+                <button>수정버튼</button>
               </div>
             </section>
             <section className="description">
               <div>
                 <span>모집 인원</span>
-                <p>{data.recruitingCount}명</p>
+                <p>{datas.recruitingCount}명</p>
               </div>
               <div>
                 <span>업무 내용</span>
-                <p>{data.workContent}</p>
+                <p>{datas.workContent}</p>
               </div>
               <div>
                 <span>자격 요건</span>
-                <p>{data.qualification}</p>
+                <p>{datas.qualification}</p>
               </div>
               <div>
                 <span>우대 사항</span>
-                <p>{data.preference}</p>
+                <p>{datas.preference}</p>
               </div>
               <div>
                 <span>기타</span>
-                <p>{data.other}</p>
+                <p>{datas.other}</p>
               </div>
             </section>
-            <UserInfo data={data} />
-            <Warning nickName={data.nickName} />
+            <UserInfo data={memberData} />
+            <Warning nickName={datas.nickName} />
           </div>
           <div className="right">
             <CalloutBox
-              data={data}
-              isLogin={isLogin}
-              handlebutton={HandleApplyButton}
+              data={datas}
+              isLogin={isLogIn}
+              handlebutton={handleApplyButton}
             />
           </div>
         </div>

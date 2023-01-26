@@ -74,12 +74,12 @@ function Main() {
   useEffect(() => {
     const hire = async () => {
       const data = await getDatas("BUY");
-      setHireData(data.map(mapDataToSliderProps));
+      setHireData(data.slice(-8).map(mapDataToSliderProps));
     };
 
     const hunting = async () => {
       const data = await getDatas("SELL");
-      setHuntingData(data.map(mapDataToSliderProps));
+      setHuntingData(data.slice(-8).map(mapDataToSliderProps));
     };
 
     hire();

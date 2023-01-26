@@ -13,9 +13,9 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
     price: data.price,
     workTimes: data.workTimes,
     memberId: data.memberId,
-    location: data.location,
-    categories: data.category,
-    tag: data.tag,
+    location: data.cityName,
+    categories: data.categoryName,
+    tag: data.contentTags[0].tagName,
     contentId: data.contentId,
   };
 };
@@ -36,7 +36,6 @@ const HireArticle: React.FC = (card) => {
           }
         );
         if (response.data.data) {
-          console.log(response.data.data);
           setCards(response.data.data.map(mapDataToCardProps));
         } else {
           console.log("Data is undefined or null, cannot map to CardProps.");
@@ -48,8 +47,8 @@ const HireArticle: React.FC = (card) => {
     getData("BUY");
   }, []);
 
-  const HandleClick = () => {
-    navigate("/hiredetail");
+  const handleClick = (contentId: number) => {
+    navigate(`/hireDetail/${contentId}`);
   };
 
   const selectedCategory = useSelector(
@@ -72,13 +71,13 @@ const HireArticle: React.FC = (card) => {
               card.categories === selectedCategory) &&
             (selectedLocation === "지역" ||
               card.location === selectedLocation) &&
-            (selectedTag === "" || card.tag === selectedTag)
+            (!selectedTag || card.tag === selectedTag)
         );
 
   return (
     <HireArticleContainer>
       {filteredCards.map((card, index) => (
-        <Card key={index} onClick={HandleClick}>
+        <Card key={index} onClick={() => handleClick(card.contentId)}>
           <CardTitle>{card.title}</CardTitle>
           <CardWriter>작성자 {card.nickName}</CardWriter>
           <CardPay>보수 {card.price}</CardPay>

@@ -100,6 +100,7 @@ const Navigation = () => {
           localStorage.clear();
           removeCookie("refresh");
           alert(res.data.message);
+          navigate("/login", { replace: true });
           navigate(0);
         })
         .catch((err) => {
@@ -129,7 +130,7 @@ const Navigation = () => {
         <LogInContainer>
           {isLogIn ? (
             <>
-              <StyledLink to={"/"}>
+              <StyledLink to={"/mypage"}>
                 <Profile width={"40px"} height={"40px"} />
               </StyledLink>
               <StyledLink to={"/login"}>
