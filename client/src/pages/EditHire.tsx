@@ -15,7 +15,14 @@ import {
 interface ExistingData {
   title: string;
   category: string;
-  workTime: WorkSchedule[];
+  workTime: Array<{
+    startWorkTime: string;
+    endWorkTime: string;
+    startDate: Date;
+    startTime: string;
+    endDate: Date;
+    endTime: string;
+  }>;
   volume: string;
   pay: string;
   location: string;
@@ -57,7 +64,7 @@ const EditHire = (props: Props) => {
   const [category, setCategory] = useState(
     existingData ? existingData.category : ""
   );
-  const [workTime, setWorkTime] = useState([
+  const [workTime, setWorkTime] = useState<any>([
     existingData ? existingData.workTime : "",
   ]);
   const [tag, setTag] = useState(existingData ? existingData.tag : "");
