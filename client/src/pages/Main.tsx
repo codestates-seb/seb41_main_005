@@ -10,6 +10,7 @@ import richIMG from "../assets/richIMG.jpg";
 const Container = styled.div`
   display: block;
   max-width: 1060px;
+  margin: auto;
   padding-top: 70px;
   .section {
     justify-content: center;
@@ -18,7 +19,7 @@ const Container = styled.div`
 `;
 
 const StyledArticle = styled.article`
-  border-bottom: solid 1px #a5a5a5;
+  // border-bottom: solid 1px #a5a5a5;
   display: block;
   position: relative;
   background-image: none;
@@ -48,7 +49,7 @@ const StyledArticle = styled.article`
     }
   }
   .bg {
-    background-size: 680px 360px;
+    background-size: 650px 360px;
     background-image: url(${richIMG});
     background-repeat: no-repeat;
   }
