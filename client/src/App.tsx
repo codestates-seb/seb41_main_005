@@ -14,6 +14,7 @@ import HireDetail from "./pages/HireDetail";
 import HuntingDetail from "./pages/HuntingDetail";
 import LogInPage from "./pages/LogInPage";
 import SignUpPage from "./pages/SignUpPage";
+import MyPage from "./pages/MyPage";
 import ScrollToTop from "./util/scrollRestoration";
 import { handleRefresh } from "./util/logInApi";
 
@@ -40,10 +41,14 @@ function App() {
           <Route path="/newhire" element={<NewHire />} />
           <Route path="/newhunting" element={<NewHunting />} />
           <Route path="/edithunting" element={<EditHunting />} />
-          <Route path="/hiredetail" element={<HireDetail />} />
-          <Route path="/huntingdetail" element={<HuntingDetail />} />
+          <Route path="/hiredetail/:content_id" element={<HireDetail />} />
+          <Route
+            path="/huntingdetail/:content_id"
+            element={<HuntingDetail />}
+          />
           <Route path="/login" element={<LogInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>
