@@ -8,6 +8,8 @@ import Warning from "../components/detail/Warning";
 import { getDetailData } from "../api/getDetail";
 import { getMemberData } from "../api/getMember";
 import { hireDetailProps } from "../util/hireDetailData";
+import { useSelector } from "react-redux";
+import { RootState } from "../util/redux";
 
 const Container = styled.div`
   display: block;
@@ -78,35 +80,16 @@ const Container = styled.div`
     }
   }
 `;
-// const mapDataToHireDetailProps = (data: serverData): hireDetailProps => {
-//   return {
-//     memberId: data.memberId,
-//     contentId: data.contentId,
-//     contentType: data.contentType,
-//     title: data.title,
-//     nickName: data.nickName,
-//     cityName: data.cityName,
-//     price: data.price,
-//     workTime: transDateTime(data.workTimes),
-//     location: data.location,
-//     contentTags: data.contentTags,
-//     categoryName: data.categoryName,
-//     workContent: data.workContent,
-//     recruitingCount: data.recruitingCount,
-//     other: data.other,
-//     preference: data.preference,
-//     qualification: data.qualification,
-//     status: data.status,
-//   };
-// };
+
 function HireDetail() {
-  const [isLogin, setIsLogin] = useState(true);
   const [datas, setDatas] = useState<hireDetailProps>();
   const [memberData, setMemberData] = useState();
 
   const navigate = useNavigate();
   const contentId = useParams().content_id;
   const memberId = datas?.memberId;
+  const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
+  const applicantId = useSelector((state: RootState) => state.LogIn.logInMID);
 
   useEffect(() => {
     const detail = async () => {
@@ -125,18 +108,26 @@ function HireDetail() {
     navigate("/edithire");
   };
 
+  const handleWriteButton = () => {
+    if (isLogIn) {
+      navigate("/newhire");
+    } else {
+      alert("로그인 후 이용하세요.");
+      navigate("/login");
+    }
+  };
+
   const handleApplyButton = () => {
-    axios({
-      method: "post",
-      url: `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
-      // data: {
-      //   memberId: memberId,
-      //   contentId: contentId,
-      // },
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
-    }).then((res) => console.log(res.data));
+    if (memberId !== applicantId) {
+      axios
+        .post(
+          `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
+          { applicantId }
+        )
+        .then((res) => console.log(res.data));
+    } else {
+      alert("본인이 작성한 게시글에는 지원할 수 없습니다.");
+    }
   };
 
   return (
@@ -147,7 +138,11 @@ function HireDetail() {
             <section className="header">
               <div className="title">
                 <p>{datas.title}</p>
-                <button onClick={handleEditButton}>게시글 작성</button>
+                {memberId === applicantId ? (
+                  <button onClick={handleEditButton}>수정하기</button>
+                ) : (
+                  <button onClick={handleWriteButton}>게시글 작성</button>
+                )}
               </div>
               <div className="tags">
                 <ul>
@@ -188,7 +183,7 @@ function HireDetail() {
           <div className="right">
             <CalloutBox
               data={datas}
-              isLogin={isLogin}
+              isLogin={isLogIn}
               handlebutton={handleApplyButton}
             />
           </div>

@@ -36,7 +36,6 @@ const HireArticle: React.FC = (card) => {
           }
         );
         if (response.data.data) {
-          console.log(response.data.data);
           setCards(response.data.data.map(mapDataToCardProps));
         } else {
           console.log("Data is undefined or null, cannot map to CardProps.");

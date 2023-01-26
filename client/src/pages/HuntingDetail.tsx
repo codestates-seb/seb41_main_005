@@ -8,6 +8,8 @@ import Warning from "../components/detail/Warning";
 import { getDetailData } from "../api/getDetail";
 import { getMemberData } from "../api/getMember";
 import { huntingDetailProps } from "../util/huntingDetailData";
+import { useSelector } from "react-redux";
+import { RootState } from "../util/redux";
 
 const Container = styled.div`
   display: block;
@@ -80,13 +82,14 @@ const Container = styled.div`
 `;
 
 function HuntingDetail() {
-  const [isLogin, setIsLogin] = useState(true);
   const [datas, setDatas] = useState<huntingDetailProps>();
   const [memberData, setMemberData] = useState();
 
-  const navigate = useNavigate();
   const contentId = useParams().content_id;
   const memberId = datas?.memberId;
+  const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
+  const applicantId = useSelector((state: RootState) => state.LogIn.logInMID);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const detail = async () => {
@@ -105,14 +108,26 @@ function HuntingDetail() {
     navigate("/edithunting");
   };
 
+  const handleWriteButton = () => {
+    if (isLogIn) {
+      navigate("/newhunting");
+    } else {
+      alert("로그인 후 이용하세요.");
+      navigate("/login");
+    }
+  };
+
   const handleApplyButton = () => {
-    axios({
-      url: `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
-      data: {
-        memberId: memberId,
-        contentId: contentId,
-      },
-    }).then((res) => console.log(res.data));
+    if (memberId !== applicantId) {
+      axios
+        .post(
+          `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
+          { applicantId }
+        )
+        .then((res) => console.log(res.data));
+    } else {
+      alert("본인이 작성한 게시글에는 지원할 수 없습니다.");
+    }
   };
 
   return (
@@ -123,7 +138,11 @@ function HuntingDetail() {
             <section className="header">
               <div className="title">
                 <p>{datas.title}</p>
-                <button onClick={handleEditButton}>게시글 작성</button>
+                {memberId === applicantId ? (
+                  <button onClick={handleEditButton}>수정하기</button>
+                ) : (
+                  <button onClick={handleWriteButton}>게시글 작성</button>
+                )}
               </div>
               <div className="tags">
                 <ul>
@@ -151,7 +170,7 @@ function HuntingDetail() {
           <div className="right">
             <CalloutBox
               data={datas}
-              isLogin={isLogin}
+              isLogin={isLogIn}
               handlebutton={handleApplyButton}
             />
           </div>
