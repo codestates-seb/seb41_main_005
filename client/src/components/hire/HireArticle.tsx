@@ -13,9 +13,9 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
     price: data.price,
     workTimes: data.workTimes,
     memberId: data.memberId,
-    location: data.location,
-    categories: data.category,
-    tag: data.tag,
+    location: data.cityName,
+    categories: data.categoryName,
+    tag: data.contentTags[0].tagName,
     contentId: data.contentId,
   };
 };
@@ -72,7 +72,7 @@ const HireArticle: React.FC = (card) => {
               card.categories === selectedCategory) &&
             (selectedLocation === "지역" ||
               card.location === selectedLocation) &&
-            (selectedTag === "" || card.tag === selectedTag)
+            (!selectedTag || card.tag === selectedTag)
         );
 
   return (

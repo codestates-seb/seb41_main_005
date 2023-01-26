@@ -24,8 +24,10 @@ export interface ServerData {
     endWorkTime: string;
   }>;
   memberId: number;
-  location: string;
-  category: string;
-  tag: string;
+  cityName: string;
+  categoryName: string;
+  contentTags: Array<{
+    tagName: string;
+  }>;
   contentId: number;
 }
