@@ -100,6 +100,7 @@ const Navigation = () => {
           localStorage.clear();
           removeCookie("refresh");
           alert(res.data.message);
+          navigate("/login", { replace: true });
           navigate(0);
         })
         .catch((err) => {
