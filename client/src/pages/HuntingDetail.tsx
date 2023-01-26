@@ -138,6 +138,7 @@ function HuntingDetail() {
             <section className="header">
               <div className="title">
                 <p>{datas.title}</p>
+
                 {memberId === applicantId ? (
                   <button onClick={handleEditButton}>수정하기</button>
                 ) : (
