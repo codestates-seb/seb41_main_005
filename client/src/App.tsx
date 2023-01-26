@@ -15,6 +15,7 @@ import HuntingDetail from "./pages/HuntingDetail";
 import LogInPage from "./pages/LogInPage";
 import SignUpPage from "./pages/SignUpPage";
 import MyPage from "./pages/MyPage";
+import Schedule from "./pages/Schedule";
 import ScrollToTop from "./util/scrollRestoration";
 import { handleRefresh } from "./util/logInApi";
 
@@ -49,6 +50,7 @@ function App() {
           <Route path="/login" element={<LogInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/schedule" element={<Schedule />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>

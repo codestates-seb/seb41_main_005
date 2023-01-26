@@ -133,7 +133,7 @@ const Navigation = () => {
               <StyledLink to={"/mypage"}>
                 <Profile width={"40px"} height={"40px"} />
               </StyledLink>
-              <StyledLink to={"/login"}>
+              <StyledLink to={"/schedule"}>
                 <SvgContainer>
                   <MdOutlineEditCalendar className={"schedule"} size={42} />
                 </SvgContainer>
