@@ -5,10 +5,11 @@ export interface hireDetailProps {
   title: string;
   nickName: string;
   cityName: string;
-  contentTags: any[];
+  contentTags: Array<{
+    tagName: string;
+  }>;
   price: number;
   workTime: string[];
-  location: string;
   categoryName: string;
   workContent: string;
   recruitingCount: number;
@@ -25,10 +26,14 @@ export interface serverData {
   title: string;
   nickName: string;
   cityName: string;
-  contentTags: any[];
+  contentTags: Array<{
+    tagName: string;
+  }>;
   price: number;
-  workTimes: any[];
-  location: string;
+  workTimes: Array<{
+    startWorkTime: string;
+    endWorkTime: string;
+  }>;
   categoryName: string;
   workContent: string;
   recruitingCount: number;

@@ -48,8 +48,8 @@ const HireArticle: React.FC = (card) => {
     getData("BUY");
   }, []);
 
-  const HandleClick = () => {
-    navigate("/hiredetail");
+  const handleClick = (contentId: number) => {
+    navigate(`/hireDetail/${contentId}`);
   };
 
   const selectedCategory = useSelector(
@@ -78,7 +78,7 @@ const HireArticle: React.FC = (card) => {
   return (
     <HireArticleContainer>
       {filteredCards.map((card, index) => (
-        <Card key={index} onClick={HandleClick}>
+        <Card key={index} onClick={() => handleClick(card.contentId)}>
           <CardTitle>{card.title}</CardTitle>
           <CardWriter>작성자 {card.nickName}</CardWriter>
           <CardPay>보수 {card.price}</CardPay>

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import CalloutBox from "../components/detail/CalloutBox";
 import UserInfo from "../components/detail/UserInfo";
 import Warning from "../components/detail/Warning";
 import { getDetailData } from "../api/getDetail";
+import { getMemberData } from "../api/getMember";
 import { huntingDetailProps } from "../util/huntingDetailData";
 
 const Container = styled.div`
@@ -80,43 +80,34 @@ const Container = styled.div`
 `;
 
 function HuntingDetail() {
-  // const data = {
-  //   type: "sell",
-  //   nickname: "느낌오조",
-  //   worktime: ["1월 22일 11:00 ~ 18:00"],
-  //   location: "강남구",
-  //   price: "100,000",
-  //   status: "좋아요 3 | 싫어요 0",
-  //   review_count: 10,
-  //   title: "설날 배송 알바 구합니다",
-  //   tags: ["#초보자가능", "#방학알바"],
-  //   work_content: "설날 서울, 경기권 배송 업무",
-  //   other:
-  //     "자세한 궁금한 사항은 전화 연락 바랍니다. 평일이나 주말에도 일이 많으니 관심있으신 분들은 지원해주세요.",
-  // };
-
   const [isLogin, setIsLogin] = useState(true);
-  const [data, setData] = useState<huntingDetailProps>();
-  const navigate = useNavigate();
+  const [datas, setDatas] = useState<huntingDetailProps>();
+  const [memberData, setMemberData] = useState();
 
-  const contentId = 5;
-  const memberId = 5;
+  const navigate = useNavigate();
+  const contentId = useParams().content_id;
+  const memberId = datas?.memberId;
 
   useEffect(() => {
-    const detailData = async () => {
-      const data = await getDetailData(contentId);
-      setData(data);
+    const detail = async () => {
+      const data = await getDetailData(Number(contentId));
+      setDatas(data);
     };
-    detailData();
-  }, []);
+    const member = async () => {
+      const data = await getMemberData(memberId);
+      setMemberData(data);
+    };
+    detail();
+    member();
+  }, [contentId, memberId]);
 
-  const HandleEditButton = () => {
-    isLogin ? navigate("/edithunting") : console.log("login 필수");
+  const handleEditButton = () => {
+    navigate("/edithunting");
   };
 
-  const HandleApplyButton = () => {
+  const handleApplyButton = () => {
     axios({
-      url: `http://gigker.iptime.org:8080/contents/${contentId}/apply`,
+      url: `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
       data: {
         memberId: memberId,
         contentId: contentId,
@@ -126,40 +117,42 @@ function HuntingDetail() {
 
   return (
     <Container>
-      {data && (
+      {datas && (
         <div className="wrapper">
           <div className="left">
             <section className="header">
               <div className="title">
-                <p>{data.title}</p>
-                <button onClick={HandleEditButton}>게시글 작성</button>
+                <p>{datas.title}</p>
+                <button onClick={handleEditButton}>게시글 작성</button>
               </div>
               <div className="tags">
                 <ul>
-                  {data.tags
-                    ? data.tags.map((tag, idx) => <li key={idx}>{tag}</li>)
-                    : (data.tags = [])}
+                  {datas.contentTags
+                    ? datas.contentTags.map((tag, idx) => (
+                        <li key={idx}>{tag.tagName}</li>
+                      ))
+                    : (datas.contentTags = [])}
                 </ul>
               </div>
             </section>
             <section className="description">
               <div>
                 <span>업무 내용</span>
-                <p>{data.workContent}</p>
+                <p>{datas.workContent}</p>
               </div>
               <div>
                 <span>기타</span>
-                <p>{data.other}</p>
+                <p>{datas.other}</p>
               </div>
             </section>
-            <UserInfo data={data} />
-            <Warning nickName={data.nickName} />
+            <UserInfo data={memberData} />
+            <Warning nickName={datas.nickName} />
           </div>
           <div className="right">
             <CalloutBox
-              data={data}
+              data={datas}
               isLogin={isLogin}
-              handlebutton={HandleApplyButton}
+              handlebutton={handleApplyButton}
             />
           </div>
         </div>

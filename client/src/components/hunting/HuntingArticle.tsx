@@ -22,6 +22,11 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
 
 const HuntingArticle: React.FC = () => {
   const [cards, setCards] = useState<CardProps[]>([]);
+  const navigate = useNavigate();
+
+  const handleClick = (contentId: number) => {
+    navigate(`/huntingDetail/${contentId}`);
+  };
 
   useEffect(() => {
     const getData = async (contentType: string) => {
@@ -46,11 +51,6 @@ const HuntingArticle: React.FC = () => {
     getData("SELL");
   }, []);
 
-  const navigate = useNavigate();
-  const handleClick = () => {
-    navigate("/huntingdetail");
-  };
-
   const selectedCategory = useSelector(
     (state: RootState) => state.DropDown.selectedCategory
   );
@@ -73,10 +73,11 @@ const HuntingArticle: React.FC = () => {
               card.location === selectedLocation) &&
             (!selectedTag || card.tag === selectedTag)
         );
+
   return (
     <HuntingArticleContainer>
       {filteredCards.map((card, index) => (
-        <Card key={index} onClick={handleClick}>
+        <Card key={index} onClick={() => handleClick(card.contentId)}>
           <CardTitle>{card.title}</CardTitle>
           <CardWriter>작성자 {card.nickName}</CardWriter>
           <CardPay>보수 {card.price}</CardPay>
