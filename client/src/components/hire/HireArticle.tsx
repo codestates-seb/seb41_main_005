@@ -22,6 +22,7 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
 
 const HireArticle: React.FC = (card) => {
   const [cards, setCards] = useState<CardProps[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async (contentType: string) => {
@@ -35,6 +36,7 @@ const HireArticle: React.FC = (card) => {
           }
         );
         if (response.data.data) {
+          console.log(response.data.data);
           setCards(response.data.data.map(mapDataToCardProps));
         } else {
           console.log("Data is undefined or null, cannot map to CardProps.");
@@ -46,7 +48,6 @@ const HireArticle: React.FC = (card) => {
     getData("BUY");
   }, []);
 
-  const navigate = useNavigate();
   const HandleClick = () => {
     navigate("/hiredetail");
   };
@@ -129,6 +130,12 @@ const HireArticleContainer = styled.div`
   margin-left: 60px;
   margin-right: 60px;
 `;
+
+// const StyledLink = styled(Link)`
+//   text-decoration: none;
+//   color: black;
+//   cursor: pointer;
+// `;
 
 const Card = styled.div`
   width: 250px;
