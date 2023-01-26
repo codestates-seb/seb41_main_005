@@ -40,8 +40,11 @@ function App() {
           <Route path="/newhire" element={<NewHire />} />
           <Route path="/newhunting" element={<NewHunting />} />
           <Route path="/edithunting" element={<EditHunting />} />
-          <Route path="/hiredetail" element={<HireDetail />} />
-          <Route path="/huntingdetail" element={<HuntingDetail />} />
+          <Route path="/hiredetail/:content_id" element={<HireDetail />} />
+          <Route
+            path="/huntingdetail/:content_id"
+            element={<HuntingDetail />}
+          />
           <Route path="/login" element={<LogInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
         </Routes>

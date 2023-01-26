@@ -45,7 +45,7 @@ export default function UserInfo({ data }: { data: any }) {
         <div className="block">
           <div>
             <span className="title">닉네임</span>
-            <span>{data.nickname}</span>
+            <span>{data.nickName}</span>
           </div>
           <div>
             <span className="title">평판</span>
