@@ -5,7 +5,8 @@ type LogInActions =
   | { type: "IS_LOGIN"; payload: boolean }
   | { type: "IMG_URL"; payload: string }
   | { type: "LOGIN_NICKNAME"; payload: string }
-  | { type: "LOGIN_INTRODUCTION"; payload: string };
+  | { type: "LOGIN_INTRODUCTION"; payload: string }
+  | { type: "LOGIN_MID"; payload: number };
 
 // 상태 타입
 type LogInState = {
@@ -15,6 +16,7 @@ type LogInState = {
   imgUrl: string;
   logInNickname: string;
   logInIntroduction: string;
+  logInMID: number;
 };
 
 // 초기값
@@ -25,6 +27,7 @@ const initialState: LogInState = {
   imgUrl: "",
   logInNickname: "",
   logInIntroduction: "",
+  logInMID: -1,
 };
 
 //액션 생성 함수 선언
@@ -58,6 +61,11 @@ export const setLogInIntroduction = (intro: string) => ({
   payload: intro,
 });
 
+export const setLogInMID = (mid: number) => ({
+  type: "LOGIN_MID",
+  payload: mid,
+});
+
 // 리듀서
 export const LogIn = (
   state = initialState,
@@ -76,6 +84,8 @@ export const LogIn = (
       return { ...state, logInNickname: action.payload };
     case "LOGIN_INTRODUCTION":
       return { ...state, logInIntroduction: action.payload };
+    case "LOGIN_MID":
+      return { ...state, logInMID: action.payload };
     default:
       return state;
   }
