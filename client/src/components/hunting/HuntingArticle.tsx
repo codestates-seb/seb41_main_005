@@ -17,8 +17,6 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
     location: data.cityName,
     categories: data.categoryName,
     tag: data.contentTags[0].tagName,
-    contentId: data.contentId,
-
   };
 };
 
