@@ -1,8 +1,10 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
 import InputBox from "../components/Input";
 import Button from "../components/Buttons";
+import TextArea from "../components/TextArea";
 import styled from "styled-components";
-import { WorkSchedule } from "../components/TimeSelect";
+import { useParams } from "react-router-dom";
+import { WorkSchedule, Deadline } from "../components/TimeSelect";
 import axios from "axios";
 import {
   categoryOptions,
@@ -13,7 +15,14 @@ import {
 interface ExistingData {
   title: string;
   category: string;
-  workTime: WorkSchedule[];
+  workTime: Array<{
+    startWorkTime: string;
+    endWorkTime: string;
+    startDate: Date;
+    startTime: string;
+    endDate: Date;
+    endTime: string;
+  }>;
   volume: string;
   pay: string;
   location: string;
@@ -22,6 +31,7 @@ interface ExistingData {
   preferential: string;
   etc: string;
   tag: string;
+  deadline: string;
 }
 
 interface Props {
@@ -30,14 +40,11 @@ interface Props {
 interface WorkSchedule {
   startWorkTime: string;
   endWorkTime: string;
-  startDate: Date;
-  startTime: string;
-  endDate: Date;
-  endTime: string;
 }
 
 const EditHire = (props: Props) => {
   const { existingData } = props;
+  const { id } = useParams();
   const [title, setTitle] = useState(existingData ? existingData.title : "");
   const [workDetail, setWorkDetail] = useState(
     existingData ? existingData.workDetail : ""
@@ -57,10 +64,13 @@ const EditHire = (props: Props) => {
   const [category, setCategory] = useState(
     existingData ? existingData.category : ""
   );
-  const [workTime, setWorkTime] = useState(
-    existingData ? existingData.workTime : ""
+  const [workTime, setWorkTime] = useState<any>([
+    existingData ? existingData.workTime : "",
+  ]);
+  const [tag, setTag] = useState(existingData ? existingData.tag : "");
+  const [deadline, setDeadline] = useState(
+    existingData ? existingData.deadline : ""
   );
-  const [tag, setTag] = useState("");
   const [existingInfo, setExistingInfo] = useState<ExistingData>({
     title: "",
     category: "",
@@ -73,11 +83,14 @@ const EditHire = (props: Props) => {
     preferential: "",
     etc: "",
     tag: "",
+    deadline: "",
   });
 
   useEffect(() => {
     axios
-      .get("/contents/:id")
+      .get(
+        `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${id}`
+      )
       .then((response) => {
         setExistingInfo(response.data);
       })
@@ -104,7 +117,7 @@ const EditHire = (props: Props) => {
     setTitle(event.target.value);
   };
 
-  const handleWorkDetailChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleWorkDetailChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setWorkDetail(event.target.value);
   };
 
@@ -116,37 +129,57 @@ const EditHire = (props: Props) => {
     setPay(event.target.value);
   };
 
-  const handleQualificationChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleQualificationChange = (
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setQualification(event.target.value);
   };
 
-  const handlePreferentialChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handlePreferentialChange = (
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setPreferential(event.target.value);
   };
 
-  const handleEtcChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleEtcChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setEtc(event.target.value);
   };
 
   const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
     setWorkTime(workTime);
-    console.log("worktime:", workTime);
+  };
+  const handleDeadlineChange = (deadline: string) => {
+    setDeadline(deadline);
   };
 
   const handleSubmit = () => {
     axios
-      .post("/contents", {
-        title: title,
-        recruting_count: volume,
-        work_content: workDetail,
-        qualification: qualification,
-        preference: preferential,
-        other: etc,
-        worktime: workTime,
-        price: pay,
-        location: location,
-        category: category,
-      })
+      .patch(
+        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
+        {
+          title: title,
+          contentType: "BUY",
+          recruitingCount: parseInt(volume), // volume string을 int로
+          workContent: workDetail,
+          qualification: qualification,
+          preference: preferential,
+          categoryName: category,
+          workTimes: workTime.map(
+            (schedule: { startWorkTime: any; endWorkTime: any }) => {
+              return {
+                startWorkTime: schedule.startWorkTime,
+                endWorkTime: schedule.endWorkTime,
+              };
+            }
+          ),
+          contentTags: [{ tagName: tag }],
+          price: parseInt(pay), // pay string을 int로
+          cityName: location,
+          other: etc,
+          isPremium: false,
+          deadLine: deadline,
+        }
+      )
       .then((response) => {
         console.log(response);
       })
@@ -164,27 +197,29 @@ const EditHire = (props: Props) => {
           onChange={handleTitleChange}
           value={existingInfo.title}
         />
-        카테고리
-        <CategoryWrapper>
-          <select placeholder={"카테고리"} onChange={handleCategoryChange}>
-            {categoryOptions.map(({ value, label }) => (
-              <option key={value} value={existingInfo.category}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </CategoryWrapper>
-        태그
-        <TagWrapper>
-          <select placeholder={"태그"} onChange={handleTagChange}>
-            {tagOptions.map(({ value, label }) => (
-              <option key={value} value={existingInfo.tag}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </TagWrapper>
+        지원마감일
+        <Deadline onChange={handleDeadlineChange} />
       </TitleContainer>
+      카테고리
+      <CategoryWrapper>
+        <select placeholder={"카테고리"} onChange={handleCategoryChange}>
+          {categoryOptions.map(({ value, label }) => (
+            <option key={value} value={existingInfo.category}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </CategoryWrapper>
+      태그
+      <TagWrapper>
+        <select placeholder={"태그"} onChange={handleTagChange}>
+          {tagOptions.map(({ value, label }) => (
+            <option key={value} value={existingInfo.tag}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </TagWrapper>
       <WithTitle>
         업무시간
         <WorkSchedule
@@ -224,35 +259,28 @@ const EditHire = (props: Props) => {
       </ThreeInput>
       <WithTitle>
         업무내용
-        <InputBox
-          width="600px"
+        <TextArea
           onChange={handleWorkDetailChange}
           value={existingInfo.workDetail}
         />
       </WithTitle>
       <WithTitle>
         자격요건
-        <InputBox
-          width="600px"
+        <TextArea
           onChange={handleQualificationChange}
           value={existingInfo.qualification}
         />
       </WithTitle>
       <WithTitle>
         우대사항 (선택)
-        <InputBox
-          width="600px"
+        <TextArea
           onChange={handlePreferentialChange}
           value={existingInfo.preferential}
         />
       </WithTitle>
       <WithTitle>
         기타 (선택)
-        <InputBox
-          width="600px"
-          onChange={handleEtcChange}
-          value={existingInfo.etc}
-        />
+        <TextArea onChange={handleEtcChange} value={existingInfo.etc} />
       </WithTitle>
       <Button onClick={handleSubmit}>제출하기</Button>
     </EditHireContainer>
