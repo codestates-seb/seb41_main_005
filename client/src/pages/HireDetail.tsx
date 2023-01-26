@@ -119,10 +119,10 @@ function HireDetail() {
     };
     detail();
     member();
-  }, [contentId]);
+  }, [contentId, memberId]);
 
   const handleEditButton = () => {
-    isLogin ? navigate("/edithire") : console.log("login 필수");
+    navigate("/edithire");
   };
 
   const handleApplyButton = () => {
@@ -157,6 +157,7 @@ function HireDetail() {
                       ))
                     : (datas.contentTags = [])}
                 </ul>
+                <button>수정버튼</button>
               </div>
             </section>
             <section className="description">

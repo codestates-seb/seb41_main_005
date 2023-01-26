@@ -99,10 +99,10 @@ function HuntingDetail() {
     };
     detail();
     member();
-  }, [contentId]);
+  }, [contentId, memberId]);
 
   const handleEditButton = () => {
-    isLogin ? navigate("/edithunting") : console.log("login 필수");
+    navigate("/edithunting");
   };
 
   const handleApplyButton = () => {
