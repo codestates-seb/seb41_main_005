@@ -14,11 +14,13 @@ import { RootState } from "../util/redux";
 const Container = styled.div`
   display: block;
   max-width: 1060px;
+  margin: auto;
   .wrapper {
     padding-top: 80px;
     line-height: 20px;
     position: relative;
     .left {
+      display: inline-block;
       vertical-align: top;
       width: 700px;
       .header {
@@ -75,7 +77,7 @@ const Container = styled.div`
     }
     .right {
       position: fixed;
-      right: 260px;
+      right: 300px;
       top: 80px;
     }
   }
@@ -117,6 +119,10 @@ function HireDetail() {
     }
   };
 
+  const handleDetailButton = () => {
+    navigate(`/review`);
+  };
+
   const handleApplyButton = () => {
     if (memberId !== applicantId) {
       axios
@@ -152,7 +158,6 @@ function HireDetail() {
                       ))
                     : (datas.contentTags = [])}
                 </ul>
-                <button onClick={handleEditButton}>수정버튼</button>
               </div>
             </section>
             <section className="description">
@@ -177,7 +182,7 @@ function HireDetail() {
                 <p>{datas.other}</p>
               </div>
             </section>
-            <UserInfo data={memberData} />
+            <UserInfo data={memberData} handlebutton={handleDetailButton} />
             <Warning nickName={datas.nickName} />
           </div>
           <div className="right">
