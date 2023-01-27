@@ -19,21 +19,21 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
-	private final ContentApplyRepository applyRepository;
-	private final MemberService memberService;
+    private final ContentApplyRepository applyRepository;
+    private final MemberService memberService;
 
-	@Transactional(readOnly = true)
-	public List<ContentApply> findAllSchedule(Long memberId) {
-		// JWT 토큰을 통한 회원 조회
-		Member member = memberService.getCurrentMember();
+    @Transactional(readOnly = true)
+    public List<ContentApply> findAllSchedule(Long memberId) {
+        // JWT 토큰을 통한 회원 조회
+        Member member = memberService.getCurrentMember();
 
-		if (!Objects.equals(member.getMemberId(), memberId)) {
-			throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
-		}
+        if (!Objects.equals(member.getMemberId(), memberId)) {
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
+        }
 
-		// 내가 신청한 스케쥴 목록 확인
-		List<ContentApply> schedule = applyRepository.findAllByMatchedApplicant(member);
+        // 내가 신청한 스케쥴 목록 확인
+        List<ContentApply> schedule = applyRepository.findAllByMatchedApplicant(member);
 
-		return schedule;
-	}
+        return schedule;
+    }
 }

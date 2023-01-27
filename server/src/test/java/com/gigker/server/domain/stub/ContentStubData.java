@@ -10,7 +10,6 @@ import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentTag;
 import com.gigker.server.domain.location.entity.Location;
-
 public class ContentStubData {
 
 	public static Content getContent() {
@@ -45,6 +44,7 @@ public class ContentStubData {
 		content.setPrice(100000);
 		content.setStatus(Content.Status.MATCHED);
 		content.setIsPremium(false);
+
 
 		return content;
 	}
@@ -117,10 +117,10 @@ public class ContentStubData {
 
 	private static Location stubLocation() {
 		return Location.builder()
-			.locationId(1L)
-			.stateName("서울")
-			.cityName("강서구")
-			.locationNumber("11111")
-			.build();
+				.locationId(1L)
+				.stateName("서울")
+				.cityName("강서구")
+				.locationNumber("11111")
+				.build();
 	}
 }

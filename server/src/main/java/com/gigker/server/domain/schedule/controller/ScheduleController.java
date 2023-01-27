@@ -22,15 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping("/members/{member-id}/schedule")
 public class ScheduleController {
-	private final ScheduleService scheduleService;
-	private final ScheduleMapper scheduleMapper;
+    private final ScheduleService scheduleService;
+    private final ScheduleMapper scheduleMapper;
 
-	@GetMapping
-	public ResponseEntity getSchedule(@PathVariable("member-id") Long memberId) {
+    @GetMapping
+    public ResponseEntity getSchedule(@PathVariable("member-id") Long memberId) {
 
-		List<ContentApply> schedules = scheduleService.findAllSchedule(memberId);
-		List<ScheduleResponseDto> responses = scheduleMapper.appliesToResponses(schedules);
+        List<ContentApply> schedules = scheduleService.findAllSchedule(memberId);
+        List<ScheduleResponseDto> responses = scheduleMapper.appliesToResponses(schedules);
 
-		return ResponseEntity.ok().body(new SingleResponseDto<>(responses));
-	}
+        return ResponseEntity.ok().body(new SingleResponseDto<>(responses));
+    }
 }

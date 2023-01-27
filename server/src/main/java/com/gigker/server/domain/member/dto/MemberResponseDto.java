@@ -27,7 +27,10 @@ public class MemberResponseDto {
     private int totalDislikeCount;
 
     //종합 완료 건 수
-    private int totalCompleted;
+    private int totalCompletedCount;
+
+    //종합 리뷰 수
+    private  int totalReviewCount;
     }
 
 

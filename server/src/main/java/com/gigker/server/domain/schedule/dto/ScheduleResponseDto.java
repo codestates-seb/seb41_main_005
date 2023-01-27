@@ -13,10 +13,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ScheduleResponseDto {
-	private Long contentId;
-	private String title;
-	private ContentType contentType;
-	private Integer recruitingCount;
-	private List<WorkTimeResponseDto> workTimes;
-	private int price;
+    private Long contentId;
+    private String title;
+    private ContentType contentType;
+    private Integer recruitingCount;
+    private List<WorkTimeResponseDto> workTimes;
+    private int price;
 }

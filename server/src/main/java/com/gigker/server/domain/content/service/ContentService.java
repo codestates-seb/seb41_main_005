@@ -46,8 +46,12 @@ public class ContentService {
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
 //NOT Null 속성값을 수정하지 않으면 기존 게시물의 속성을 그대로 사용
         Content updateContent = beanUtils.copyNonNullProperties(content, findContent);
-        updateContent.setCategory(content.getCategory());
-        updateContent.setLocation(content.getLocation());
+        if(content.getLocation() == null) {
+            updateContent.setLocation(findContent.getLocation());
+        }
+        if(content.getCategory() == null) {
+            updateContent.setCategory(findContent.getCategory());
+        }
         return contentRepository.save(updateContent);
     }
 
