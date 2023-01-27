@@ -10,7 +10,6 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     font-family: 'Noto Sans KR', sans-serif;
-    height: 100rem;
   }
   button {
     cursor: pointer;
