@@ -96,8 +96,9 @@ public class Member extends BaseEntity {
 
 	public int getTotalDisLikeCount() {return profile.getBuyDislikeCount() + profile.getSellDislikeCount();}
 
-	public int getTotalComplete(){return profile.getCompletedBuyCount() + profile.getCompletedSellCount();}
+	public int getTotalCompleteCount(){return profile.getCompletedBuyCount() + profile.getCompletedSellCount();}
 
+	public int getTotalReviewCount(){return profile.getBuyReviewCount() + profile.getSellReviewCount();}
 
 	public int getBuyLikeCount() {
 		int count = (int)reviews.stream()

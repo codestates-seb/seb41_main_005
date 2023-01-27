@@ -1,9 +1,9 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import InputBox from "../components/Input";
 import Button from "../components/Buttons";
 import TextArea from "../components/TextArea";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
 import { WorkSchedule, Deadline } from "../components/TimeSelect";
 import { getDetailData } from "../api/getDetail";
 import axios from "axios";
@@ -44,15 +44,14 @@ interface Props {
 
 const EditHire = (props: Props) => {
   const { existingData } = props;
+  const navigate = useNavigate();
   const contentId = useParams().content_id;
   const [title, setTitle] = useState(existingData ? existingData.title : "");
   const [workDetail, setWorkDetail] = useState(
     existingData ? existingData.workContent : ""
   );
-  const [volume, setVolume] = useState(
-    existingData ? existingData.recruitingCount : ""
-  );
-  const [pay, setPay] = useState(existingData ? existingData.price : "");
+  const [volume, setVolume] = useState(existingData?.recruitingCount || 0);
+  const [pay, setPay] = useState(existingData?.price || 0);
   const [qualification, setQualification] = useState(
     existingData ? existingData.qualification : ""
   );
@@ -74,20 +73,20 @@ const EditHire = (props: Props) => {
   const [existingInfo, setExistingInfo] = useState<ExistingData>(
     Object.assign(
       {
-        title: "",
-        categoryName: "",
-        workTimes: [],
-        recruitingCount: 0,
-        price: 0,
-        cityName: "",
-        workContent: "",
-        qualification: "",
-        preference: "",
-        other: "",
-        contentTags: [],
-        deadLine: "",
+        title: existingData?.title || "",
+        categoryName: existingData?.categoryName || "",
+        workTimes: existingData?.workTimes || [],
+        recruitingCount: existingData?.recruitingCount || 0,
+        price: existingData?.price || 0,
+        cityName: existingData?.cityName || "",
+        workContent: existingData?.workContent || "",
+        qualification: existingData?.qualification || "",
+        preference: existingData?.preference || "",
+        other: existingData?.other || "",
+        contentTags: existingData?.contentTags || [],
+        deadLine: existingData?.deadLine || "",
       },
-      existingData
+      existingData ?? {}
     )
   );
 
@@ -112,34 +111,47 @@ const EditHire = (props: Props) => {
   };
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setExistingInfo({ ...existingInfo, title: event.target.value });
     setTitle(event.target.value);
   };
 
   const handleWorkDetailChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setExistingInfo({ ...existingInfo, workContent: event.target.value });
     setWorkDetail(event.target.value);
   };
 
   const handleVolumeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setVolume(event.target.value);
+    setExistingInfo({
+      ...existingInfo,
+      recruitingCount: parseInt(event.target.value),
+    });
+    setVolume(parseInt(event.target.value));
   };
 
   const handlePayChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPay(event.target.value);
+    setExistingInfo({
+      ...existingInfo,
+      price: parseFloat(event.target.value),
+    });
+    setPay(parseFloat(event.target.value));
   };
 
   const handleQualificationChange = (
     event: ChangeEvent<HTMLTextAreaElement>
   ) => {
+    setExistingInfo({ ...existingInfo, qualification: event.target.value });
     setQualification(event.target.value);
   };
 
   const handlePreferentialChange = (
     event: ChangeEvent<HTMLTextAreaElement>
   ) => {
+    setExistingInfo({ ...existingInfo, preference: event.target.value });
     setPreferential(event.target.value);
   };
 
   const handleEtcChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setExistingInfo({ ...existingInfo, other: event.target.value });
     setEtc(event.target.value);
   };
 
@@ -156,32 +168,35 @@ const EditHire = (props: Props) => {
     if (accessToken) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     }
+    const updatedData = {
+      ...existingInfo,
+      title: title,
+      contentType: "BUY",
+      recruitingCount: volume,
+      workContent: workDetail,
+      qualification: qualification,
+      preference: preferential,
+      categoryName: category,
+      workTimes: workTime.map(
+        (schedule: { startWorkTime: any; endWorkTime: any }) => {
+          return {
+            startWorkTime: schedule.startWorkTime,
+            endWorkTime: schedule.endWorkTime,
+          };
+        }
+      ),
+      contentTags: [{ tagName: tag }],
+      price: pay,
+      cityName: location,
+      other: etc,
+      isPremium: false,
+      deadLine: deadline,
+    };
+
     axios
       .patch(
         `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
-        {
-          title: title,
-          contentType: "BUY",
-          recruitingCount: volume,
-          workContent: workDetail,
-          qualification: qualification,
-          preference: preferential,
-          categoryName: category,
-          workTimes: workTime.map(
-            (schedule: { startWorkTime: any; endWorkTime: any }) => {
-              return {
-                startWorkTime: schedule.startWorkTime,
-                endWorkTime: schedule.endWorkTime,
-              };
-            }
-          ),
-          contentTags: [{ tagName: tag }],
-          price: pay,
-          cityName: location,
-          other: etc,
-          isPremium: false,
-          deadLine: deadline,
-        }
+        existingInfo
       )
       .then((response) => {
         console.log(response);
@@ -189,6 +204,7 @@ const EditHire = (props: Props) => {
       .catch((error) => {
         console.log(error);
       });
+    navigate(`/hireDetail/${contentId}`);
   };
   const handleDelete = () => {
     axios
@@ -201,6 +217,7 @@ const EditHire = (props: Props) => {
       .catch((error) => {
         console.log(error);
       });
+    navigate("/hire");
   };
 
   return (
@@ -217,15 +234,13 @@ const EditHire = (props: Props) => {
       </TitleContainer>
       카테고리
       <CategoryWrapper>
-        <select placeholder={"카테고리"} onChange={handleCategoryChange}>
+        <select
+          value={existingInfo.categoryName}
+          placeholder={"카테고리"}
+          onChange={handleCategoryChange}
+        >
           {categoryOptions.map(({ value, label }) => (
-            <option
-              key={value}
-              value={value}
-              selected={value === existingInfo.categoryName}
-            >
-              {label}
-            </option>
+            <option key={value}>{label}</option>
           ))}
         </select>
       </CategoryWrapper>
@@ -264,11 +279,13 @@ const EditHire = (props: Props) => {
         <WithTitle>
           장소
           <LocationWrapper>
-            <select placeholder={"지역"} onChange={handleLocationChange}>
+            <select
+              placeholder={"지역"}
+              value={existingInfo.cityName}
+              onChange={handleLocationChange}
+            >
               {locationOptions.map(({ value, label }) => (
-                <option key={value} selected={value === existingInfo.cityName}>
-                  {label}
-                </option>
+                <option key={value}>{label}</option>
               ))}
             </select>
           </LocationWrapper>
@@ -302,8 +319,14 @@ const EditHire = (props: Props) => {
           defaultValue={existingInfo.other}
         />
       </WithTitle>
-      <Button onClick={handleSubmit}>제출하기</Button>
-      <Button onClick={handleDelete}>삭제하기</Button>
+      <SubmitWrapper>
+        <Button className="edithunting-submit" onClick={handleDelete}>
+          삭제하기
+        </Button>
+        <Button className="edithunting-submit" onClick={handleSubmit}>
+          수정하기
+        </Button>
+      </SubmitWrapper>
     </EditHireContainer>
   );
 };
@@ -355,6 +378,12 @@ const TagWrapper = styled.div`
     width: 150px;
     height: 2.5rem;
     border-radius: 5px;
+  }
+`;
+const SubmitWrapper = styled.div`
+  .edithunting-submit {
+    margin: 30px;
+    width: 200px;
   }
 `;
 export default EditHire;

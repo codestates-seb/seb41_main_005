@@ -29,7 +29,8 @@ public interface MemberMapper {
 
     @Mapping(target = "totalLikeCount", expression = "java(member.getTotalLikeCount())")
     @Mapping(target = "totalDislikeCount", expression = "java(member.getTotalDisLikeCount())")
-    @Mapping(target = "totalCompleted", expression = "java(member.getTotalComplete())")
+    @Mapping(target = "totalCompletedCount", expression = "java(member.getTotalCompleteCount())")
+    @Mapping(target = "totalReviewCount", expression = "java(member.getTotalReviewCount())")
     MemberResponseDto.Profile memberToProfileResponse(Member member);
 
     MemberResponseDto.PatchDto memberToPatchResponse(Member member);
