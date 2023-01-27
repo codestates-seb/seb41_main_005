@@ -26,9 +26,9 @@ public class ContentApplyResponseDto {
 		private String nickName;
 		private String pictureUrl;
 		private String about;
-		private int likeCount;
-		private int dislikeCount;
-		private int reviewCount;
+		private Long likeCount;
+		private Long dislikeCount;
+		private Long reviewCount;
 		private ContentApply.ApplyStatus applyStatus;
 	}
 }
