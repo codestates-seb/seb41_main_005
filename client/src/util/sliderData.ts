@@ -1,10 +1,10 @@
 export interface sliderProps {
+  categoryName: string;
   contentType: string;
   contentId: number;
   memberId: number;
   nickName: string;
   workTime: string[];
-  location: string;
   price: number;
   title: string;
 }
@@ -15,8 +15,7 @@ export interface serverData {
   price: number;
   workTimes: any[];
   memberId: number;
-  location: string;
-  category: string | null;
+  categoryName: string;
   tag: string;
   contentId: number;
   contentType: string;

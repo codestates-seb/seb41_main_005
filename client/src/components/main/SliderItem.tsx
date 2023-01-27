@@ -1,5 +1,11 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { images } from "../../assets/sliderImages";
+
+const matchImage = (
+  categoryName: string,
+  images: Array<{ category: string; src: string }>
+) => images.filter((el) => el.category === categoryName).map((el) => el.src)[0];
 
 const SliderItem = ({
   contentType,
@@ -8,7 +14,7 @@ const SliderItem = ({
   nickName,
   price,
   workTime,
-  src,
+  categoryName,
 }: {
   contentType: string;
   contentId: number;
@@ -16,7 +22,7 @@ const SliderItem = ({
   nickName: string;
   price: number;
   workTime: string[];
-  src: string;
+  categoryName: string;
 }) => {
   const navigate = useNavigate();
 
@@ -29,7 +35,11 @@ const SliderItem = ({
   return (
     <SliderItemContainer onClick={handleClick}>
       <SliderImageWrapper>
-        <img className="slider-image" src={src} alt="SliderImg" />
+        <img
+          className="slider-image"
+          src={matchImage(categoryName, images)}
+          alt="SliderImg"
+        />
       </SliderImageWrapper>
       <SliderItemContent>
         <Title>{title}</Title>

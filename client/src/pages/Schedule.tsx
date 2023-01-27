@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 const CalendarContainer = styled.div`
   display: flex;
   height: auto;
+  margin: auto;
   padding-top: 65px;
 `;
 

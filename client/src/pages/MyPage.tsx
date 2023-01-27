@@ -4,6 +4,8 @@ import MyPageDetail from "../components/mypage/MyPageDetail";
 
 const MypageContainer = styled.div`
   display: flex;
+  margin: auto;
+  max-width: 1000px;
   height: 100vh;
   padding-top: 65px;
 `;
