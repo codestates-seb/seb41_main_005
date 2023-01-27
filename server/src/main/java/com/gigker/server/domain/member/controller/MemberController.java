@@ -1,5 +1,6 @@
 package com.gigker.server.domain.member.controller;
 
+import com.gigker.server.domain.content.service.ContentApplyService;
 import com.gigker.server.domain.member.dto.MemberPatchDto;
 import com.gigker.server.domain.member.dto.MemberPostDto;
 
@@ -8,6 +9,7 @@ import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.mapper.MemberMapper;
 import com.gigker.server.domain.member.mapper.ProfileMapper;
 import com.gigker.server.domain.member.service.MemberService;
+import com.gigker.server.domain.review.service.ReviewService;
 import com.gigker.server.global.dto.MultiResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,12 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Validated
 @RestController
 @RequestMapping("/members")
@@ -30,14 +37,8 @@ public class MemberController {
 	private final MemberService memberService;
 	private final MemberMapper memberMapper;
 	private final ProfileMapper profileMapper;
-
-	public MemberController(MemberService memberService, MemberMapper memberMapper, ProfileMapper profileMapper)
-	{
-		this.memberService = memberService;
-		this.memberMapper = memberMapper;
-		this.profileMapper = profileMapper;
-	}
-
+	private final ContentApplyService applyService;
+	private final ReviewService reviewService;
 
 	//회원가입
 	//이미지 받기위한 URI 타입 MULTIPART_FORM 설정
@@ -69,7 +70,9 @@ public class MemberController {
 	public ResponseEntity getMember(@PathVariable("member-id") long memberId)
 	{
 		Member member = memberService.findMemberById(memberId);
-		MemberResponseDto.Profile response = memberMapper.memberToProfileResponse(member);
+		Map<String, Long> count = reviewService.countProfiles(member);
+		Long completeCount = applyService.countTotalComplete(member);
+		MemberResponseDto.Profile response = memberMapper.memberToProfileResponse(member, count, completeCount);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
@@ -78,7 +81,9 @@ public class MemberController {
 	public ResponseEntity getMemberProfile()
 	{
 		Member member = memberService.findMemberByProfile();
-		MemberResponseDto.Profile response = memberMapper.memberToProfileResponse(member);
+		Map<String, Long> count = reviewService.countProfiles(member);
+		Long completeCount = applyService.countTotalComplete(member);
+		MemberResponseDto.Profile response = memberMapper.memberToProfileResponse(member, count, completeCount);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
@@ -89,8 +94,16 @@ public class MemberController {
 	{
 		Page<Member> pageMembers = memberService.findMembers(page-1,size);
 		List<Member> members = pageMembers.getContent();
+
+		List<Map<String, Long>> counts = members.stream()
+			.map(reviewService::countProfiles)
+			.collect(Collectors.toList());
+		List<Long> completeCounts = members.stream()
+			.map(applyService::countTotalComplete)
+			.collect(Collectors.toList());
+
 		return new ResponseEntity<>(
-				new MultiResponseDto<>(memberMapper.memberToMemberResponses(members),
+				new MultiResponseDto<>(memberMapper.memberToMemberResponses(members, counts, completeCounts),
 				pageMembers),HttpStatus.OK);
 	}
 
