@@ -22,7 +22,8 @@ import { onLogInSuccess } from "../../util/logInApi";
 
 const LoginBox = styled.form`
   width: 25rem;
-  height: 35rem;
+  height: auto;
+  margin: 100px 0;
   border: 1px solid ${(props) => props.theme.color.back};
   box-shadow: 2px 2px 10px -5px;
   display: flex;
@@ -138,7 +139,7 @@ const LogInForm = () => {
           로그인
         </Button>
       </ButtonSection>
-      <SocialLogin>
+      {/* <SocialLogin>
         <a href={"/"}>
           <FcGoogle size={50} />
         </a>
@@ -148,7 +149,7 @@ const LogInForm = () => {
         <a href={"/"}>
           <RiKakaoTalkFill size={50} color={"#F7E600"} />
         </a>
-      </SocialLogin>
+      </SocialLogin> */}
       <InputSection>
         <Link to={"/signup"}>회원가입</Link>
       </InputSection>
