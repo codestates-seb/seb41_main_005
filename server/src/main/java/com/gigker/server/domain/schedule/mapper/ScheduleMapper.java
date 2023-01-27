@@ -13,11 +13,13 @@ import com.gigker.server.domain.schedule.dto.ScheduleResponseDto;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
 	uses = WorkTimeMapper.class)
 public interface ScheduleMapper {
-	@Mapping(source = "apply.content.contentId", target = "contentId")
-	@Mapping(source = "apply.content.title", target = "title")
-	@Mapping(source = "apply.content.contentType", target = "contentType")
-	@Mapping(source = "apply.content.recruitingCount", target = "recruitingCount")
-	@Mapping(source = "apply.content.price", target = "price")
-	@Mapping(source = "apply.content.workTimes", target = "workTimes")
-	List<ScheduleResponseDto> applyToResponse(List<ContentApply> applies);
+	@Mapping(source = "content.contentId", target = "contentId")
+	@Mapping(source = "content.title", target = "title")
+	@Mapping(source = "content.contentType", target = "contentType")
+	@Mapping(source = "content.recruitingCount", target = "recruitingCount")
+	@Mapping(source = "content.price", target = "price")
+	@Mapping(source = "content.workTimes", target = "workTimes")
+	ScheduleResponseDto applyToResponse(ContentApply apply);
+
+	List<ScheduleResponseDto> appliesToResponses(List<ContentApply> applies);
 }

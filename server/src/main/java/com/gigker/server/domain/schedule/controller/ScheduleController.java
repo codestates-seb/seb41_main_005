@@ -12,6 +12,7 @@ import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.schedule.dto.ScheduleResponseDto;
 import com.gigker.server.domain.schedule.mapper.ScheduleMapper;
 import com.gigker.server.domain.schedule.service.ScheduleService;
+import com.gigker.server.global.dto.SingleResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,8 @@ public class ScheduleController {
 	public ResponseEntity getSchedule(@PathVariable("member-id") Long memberId) {
 
 		List<ContentApply> schedules = scheduleService.findAllSchedule(memberId);
-		List<ScheduleResponseDto> responses = scheduleMapper.applyToResponse(schedules);
+		List<ScheduleResponseDto> responses = scheduleMapper.appliesToResponses(schedules);
 
-		return ResponseEntity.ok().body(responses);
+		return ResponseEntity.ok().body(new SingleResponseDto<>(responses));
 	}
 }
