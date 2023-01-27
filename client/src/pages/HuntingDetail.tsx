@@ -105,7 +105,7 @@ function HuntingDetail() {
   }, [contentId, memberId]);
 
   const handleEditButton = () => {
-    navigate("/edithunting");
+    navigate(`/edithunting/${contentId}`);
   };
 
   const handleWriteButton = () => {
