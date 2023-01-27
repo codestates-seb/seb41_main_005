@@ -185,13 +185,6 @@ const DropdownT = () => {
             ))}
           </div>
         </TagWrapper>
-        <FilterButton>
-          <div>
-            <button>조회순</button>
-            <button>보수높은순</button>
-            <button>최신순</button>
-          </div>
-        </FilterButton>
       </LowerWrapper>
     </>
   );
@@ -338,25 +331,6 @@ const TagWrapper = styled.div`
   .clicked {
     background-color: #6f38c5;
     color: white;
-  }
-`;
-
-const FilterButton = styled.div`
-  height: 38px;
-  float: right;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  button {
-    margin: 0 0.3rem 0 0;
-    height: 1.5rem;
-    font-size: 14px;
-    font-weight: regular;
-    color: #6f38c5;
-    background-color: white;
-    width: 90px;
-    border: solid 1.2px #6f38c5;
-    border-radius: 4px;
   }
 `;
 
