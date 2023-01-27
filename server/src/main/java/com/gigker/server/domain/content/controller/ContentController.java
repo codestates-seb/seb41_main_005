@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class ContentController {
 
         String categoryName = String.valueOf(contentPostDto.getCategoryName()); // Mapping
         Category findCategory = categoryService.findExistCategory(categoryName); // DB에 존재하는 카테고리인지 확인
+
         String cityName = String.valueOf(contentPostDto.getCityName());
         Location location = locationService.findExistLocation(cityName);
         Content content = contentMapper.contentPostDtoToContent(contentPostDto);
@@ -44,12 +46,22 @@ public class ContentController {
     public ResponseEntity patchContentDtoToContent(@Valid @RequestBody ContentPatchDto contentPatchDto,
                                                    @PathVariable("content_id") Long contentId) {
         contentPatchDto.setContentId(contentId);
-        String categoryName = String.valueOf(contentPatchDto.getCategoryName()); // Mapping
-        Category findCategory = categoryService.findExistCategory(categoryName); // DB에 존재하는 카테고리인지 확인
+
+        String originalCategoryName = contentService.findContentByContentId(contentId).getCategory().getCategoryName();
+        if (contentPatchDto.getCategoryName() == null){
+            contentPatchDto.setCategoryName(originalCategoryName);
+        }
+        String originalCityName = contentService.findContentByContentId(contentId).getLocation().getCityName();
+        if (contentPatchDto.getCityName() == null){
+            contentPatchDto.setCityName(originalCityName);
+        }
+
+        Category findCategory = categoryService.findExistCategory(contentPatchDto.getCategoryName()); // DB에 존재하는 카테고리인지 확인
+        //        String categoryName = String.valueOf(contentPatchDto.getCategoryName()); // Mapping
         String cityName = String.valueOf(contentPatchDto.getCityName());
         Location location = locationService.findExistLocation(cityName);
         Content content = contentMapper.contentPatchDtoToContent(contentPatchDto);
-        Content updateContent = contentService.updateContent(content, findCategory, location); // DB 업데이트
+        contentService.updateContent(content, findCategory, location); // DB 업데이트
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
