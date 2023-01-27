@@ -1,5 +1,7 @@
 package com.gigker.server.domain.review.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -93,19 +95,27 @@ public class ReviewService {
 	}
 
 	// ContentType 에 따른 받은 리뷰 조회
-	public Page<Review> findAllReviewsByRecipient(Content content, Member member, int page, int size) {
-		ContentType type = content.getContentType();
+	public Page<Review> findAllReviewsByRecipient(Member member, ContentType type, int page, int size) {
 
-		return reviewRepository.findAllByRecipientAndContentType(member, type,
+		return reviewRepository.findAllReviewByRecipientAndContentType(member, type,
 			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
 	}
 
 	// ContentType 에 따른 작성한 리뷰 조회
-	public Page<Review> findAllReviewsByWriter(Content content, Member member, int page, int size) {
-		ContentType type = content.getContentType();
+	public Page<Review> findAllReviewsByWriter(Member member, ContentType type, int page, int size) {
 
-		return reviewRepository.findAllByWriterAndContentType(member, type,
+		return reviewRepository.findAllReviewByWriterAndContentType(member, type,
 			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
+	}
+
+	// 리뷰, 좋아요, 싫어요 갯수 조회
+	public Map<String, Long> countProfile(Member member, ContentType type) {
+		Map<String, Long> map = new HashMap<>();
+		map.put("likeCount", reviewRepository.countLike(member, type));
+		map.put("dislikeCount", reviewRepository.countDislike(member, type));
+		map.put("reviewCount", reviewRepository.countReviewByRecipientAndContentType(member, type));
+
+		return map;
 	}
 
 	// == Create ==
@@ -126,7 +136,7 @@ public class ReviewService {
 
 	// 이미 리뷰를 작성했는지 확인
 	private void verifyReviewExist(Member writer, Content content) {
-		Optional<Review> optionalReview = reviewRepository.findByWriterAndContent(writer, content);
+		Optional<Review> optionalReview = reviewRepository.findReviewByWriterAndContent(writer, content);
 
 		if (optionalReview.isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.EXISTS_REVIEW);
