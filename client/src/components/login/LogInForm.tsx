@@ -92,7 +92,6 @@ const LogInForm = () => {
         dispatch(setLogInMID(res.data.memberId));
         alert(`어서오세요 ${res.data.nickName}님 :)`);
         navigate("/", { replace: true });
-        navigate(0);
       })
       .catch((err) => {
         console.log(err);

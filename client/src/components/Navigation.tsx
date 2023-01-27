@@ -3,12 +3,13 @@ import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import Button from "./Buttons";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../util/redux";
 import { MdOutlineEditCalendar } from "react-icons/md";
 import Profile from "./Profile";
 import axios from "axios";
 import { removeCookie } from "../util/cookie";
+import { setIsLogIn } from "../util/redux/LogIn";
 
 const Block = styled.div`
   display: block;
@@ -85,6 +86,7 @@ const LogInContainer = styled.div`
 `;
 
 const Navigation = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
 
@@ -97,11 +99,11 @@ const Navigation = () => {
           "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth/logout"
         )
         .then((res) => {
+          dispatch(setIsLogIn(false));
           localStorage.clear();
           removeCookie("refresh");
           alert(res.data.message);
           navigate("/login", { replace: true });
-          navigate(0);
         })
         .catch((err) => {
           console.log(err);
