@@ -88,12 +88,6 @@ const NewHire = () => {
   };
 
   const handleSubmit = () => {
-    const accessToken = localStorage.getItem("access_token");
-
-    if (accessToken) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    }
-
     axios
       .post(
         "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
