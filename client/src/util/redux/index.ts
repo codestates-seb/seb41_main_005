@@ -3,6 +3,7 @@ import { Validation } from "./Validation";
 import { SignUp } from "./SignUp";
 import { combineReducers, createStore } from "redux";
 import { DropDown } from "./DropDown";
+import { CalendarEvents } from "./CalendarEvents";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
@@ -11,6 +12,7 @@ export const rootReducer = combineReducers({
   SignUp,
   Validation,
   LogIn,
+  CalendarEvents,
 });
 
 const persistConfig = {

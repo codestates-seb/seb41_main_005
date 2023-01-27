@@ -10,7 +10,6 @@ export const getDatas = async (contentType: string) => {
         },
       }
     );
-    console.log(response.data.data);
     return response.data.data;
   } catch (err) {
     console.log("Error: ", err);

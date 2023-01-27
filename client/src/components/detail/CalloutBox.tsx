@@ -1,5 +1,6 @@
 import Button from "../Buttons";
 import styled from "styled-components";
+import { transDateTime } from "../main/transDateTime";
 
 const Container = styled.aside`
   width: 340px;
@@ -33,19 +34,21 @@ export default function CalloutBox({
         <span className="title">
           {data.type === "buy" ? "업무 시간" : "희망 시간"}
         </span>
-        <span>{data.workTimes}</span>
+        <span>{transDateTime(data.workTimes)}</span>
       </div>
       <div>
         <span className="title">
           {data.type === "buy" ? "장소" : "희망 장소"}
         </span>
-        <span>{data.location}</span>
+        <span>{data.cityName}</span>
       </div>
       <div>
         <span className="title">
           {data.type === "buy" ? "보수" : "희망 보수"}
         </span>
-        <span>{data.price}원</span>
+        <span>
+          {data.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
+        </span>
       </div>
       {isLogin ? (
         <Button

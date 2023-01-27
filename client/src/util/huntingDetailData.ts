@@ -2,15 +2,16 @@ export interface huntingDetailProps {
   contentId: number;
   memberId: number;
   contentType: string;
-  contentTags: string[];
+  cityName: string;
+  recruitingCount: number;
+  contentTags: Array<{
+    tagName: string;
+  }>;
   nickName: string;
-  workTimes: string[];
-  location: string;
+  workTime: string[];
   price: string;
   status: string;
-  review_count: number;
   title: string;
-  tags: string[];
   workContent: string;
   other: string;
 }

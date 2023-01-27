@@ -45,6 +45,7 @@ public class ContentService {
         content.setCategory(category);
         content.setLocation(location);
         Content updateContent = beanUtils.copyNonNullProperties(content, findContent);
+        
         return contentRepository.save(updateContent);
     }
 

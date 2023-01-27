@@ -1,5 +1,4 @@
 import Button from "../Buttons";
-import cat from "../../assets/cat.jpg";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -41,7 +40,7 @@ export default function UserInfo({ data }: { data: any }) {
   return (
     <Container>
       <div className="profile">
-        <img src={cat} alt="" />
+        <img src={data.pictureUrl} alt="profile-img" />
         <div className="block">
           <div>
             <span className="title">닉네임</span>
@@ -49,9 +48,11 @@ export default function UserInfo({ data }: { data: any }) {
           </div>
           <div>
             <span className="title">평판</span>
-            <span className="reputation">{data.status}</span>
+            <span className="reputation">
+              좋아요 {data.totalLikeCount} | 싫어요 {data.totalDislikeCount}
+            </span>
             <span className="title">리뷰</span>
-            <span>{data.review_count}</span>
+            <span>{data.totalReviewCount}</span>
           </div>
         </div>
       </div>

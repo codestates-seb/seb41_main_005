@@ -112,7 +112,6 @@ const DropdownMenu = () => {
       dispatch(selectTag(tag));
     }
   };
-  // dispatch(selectTag(tag));
 
   const [categoryIsOpen, categoryRef, categoryHandler] = useDetectClose(false);
   const [locationIsOpen, locationRef, locationHandler] = useDetectClose(false);
