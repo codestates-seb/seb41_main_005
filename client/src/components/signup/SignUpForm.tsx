@@ -355,7 +355,7 @@ const SignUpForm = () => {
         )}
       </InputSection>
       <IntroduceSection>
-        <label htmlFor={"introdution"}>자기소개</label>
+        <label htmlFor={"introduction"}>자기소개</label>
         <StyledTextArea
           id={"introduction"}
           name={"introduction"}
