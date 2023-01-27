@@ -5,6 +5,7 @@ import TextArea from "../components/TextArea";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { WorkSchedule, Deadline } from "../components/TimeSelect";
+import { getDetailData } from "../api/getDetail";
 import axios from "axios";
 import {
   categoryOptions,
@@ -14,103 +15,100 @@ import {
 
 interface ExistingData {
   title: string;
-  category: string;
-  workTime: Array<{
+  cityName: string;
+  contentTags: Array<{
+    tagName: string;
+  }>;
+  price: number;
+  workTimes: Array<{
     startWorkTime: string;
     endWorkTime: string;
-    startDate: Date;
-    startTime: string;
-    endDate: Date;
-    endTime: string;
   }>;
-  volume: string;
-  pay: string;
-  location: string;
-  workDetail: string;
+  categoryName: string;
+  workContent: string;
+  recruitingCount: number;
+  other: string;
+  preference: string;
   qualification: string;
-  preferential: string;
-  etc: string;
-  tag: string;
-  deadline: string;
+  deadLine: string;
 }
 
-interface Props {
-  existingData?: ExistingData;
-}
 interface WorkSchedule {
   startWorkTime: string;
   endWorkTime: string;
 }
 
+interface Props {
+  existingData?: ExistingData;
+}
+
 const EditHire = (props: Props) => {
   const { existingData } = props;
-  const { id } = useParams();
+  const contentId = useParams().content_id;
   const [title, setTitle] = useState(existingData ? existingData.title : "");
   const [workDetail, setWorkDetail] = useState(
-    existingData ? existingData.workDetail : ""
+    existingData ? existingData.workContent : ""
   );
-  const [volume, setVolume] = useState(existingData ? existingData.volume : "");
-  const [pay, setPay] = useState(existingData ? existingData.pay : "");
+  const [volume, setVolume] = useState(
+    existingData ? existingData.recruitingCount : ""
+  );
+  const [pay, setPay] = useState(existingData ? existingData.price : "");
   const [qualification, setQualification] = useState(
     existingData ? existingData.qualification : ""
   );
   const [preferential, setPreferential] = useState(
-    existingData ? existingData.preferential : ""
+    existingData ? existingData.preference : ""
   );
-  const [etc, setEtc] = useState(existingData ? existingData.etc : "");
+  const [etc, setEtc] = useState(existingData ? existingData.other : "");
   const [location, setLocation] = useState(
-    existingData ? existingData.location : ""
+    existingData ? existingData.cityName : ""
   );
   const [category, setCategory] = useState(
-    existingData ? existingData.category : ""
+    existingData ? existingData.categoryName : ""
   );
-  const [workTime, setWorkTime] = useState<any>([
-    existingData ? existingData.workTime : "",
-  ]);
-  const [tag, setTag] = useState(existingData ? existingData.tag : "");
+  const [workTime, setWorkTime] = useState<any>([]);
+  const [tag, setTag] = useState("");
   const [deadline, setDeadline] = useState(
-    existingData ? existingData.deadline : ""
+    existingData ? existingData.deadLine : ""
   );
-  const [existingInfo, setExistingInfo] = useState<ExistingData>({
-    title: "",
-    category: "",
-    workTime: [],
-    volume: "",
-    pay: "",
-    location: "",
-    workDetail: "",
-    qualification: "",
-    preferential: "",
-    etc: "",
-    tag: "",
-    deadline: "",
-  });
+  const [existingInfo, setExistingInfo] = useState<ExistingData>(
+    Object.assign(
+      {
+        title: "",
+        categoryName: "",
+        workTimes: [],
+        recruitingCount: 0,
+        price: 0,
+        cityName: "",
+        workContent: "",
+        qualification: "",
+        preference: "",
+        other: "",
+        contentTags: [],
+        deadLine: "",
+      },
+      existingData
+    )
+  );
 
   useEffect(() => {
-    axios
-      .get(
-        `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${id}`
-      )
-      .then((response) => {
-        setExistingInfo(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    const detail = async () => {
+      const data = await getDetailData(Number(contentId));
+      setExistingInfo(data);
+    };
+    detail();
+  }, [contentId]);
+
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setCategory(event.target.value);
-    console.log("category:", event.target.value);
   };
 
   const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setLocation(event.target.value);
-    console.log("location:", event.target.value);
   };
 
   const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setTag(event.target.value);
-    console.log("tag:", event.target.value);
   };
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -153,13 +151,18 @@ const EditHire = (props: Props) => {
   };
 
   const handleSubmit = () => {
+    const accessToken = localStorage.getItem("access_token");
+
+    if (accessToken) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    }
     axios
       .patch(
-        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
+        `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
         {
           title: title,
           contentType: "BUY",
-          recruitingCount: parseInt(volume), // volume string을 int로
+          recruitingCount: volume,
           workContent: workDetail,
           qualification: qualification,
           preference: preferential,
@@ -173,12 +176,24 @@ const EditHire = (props: Props) => {
             }
           ),
           contentTags: [{ tagName: tag }],
-          price: parseInt(pay), // pay string을 int로
+          price: pay,
           cityName: location,
           other: etc,
           isPremium: false,
           deadLine: deadline,
         }
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const handleDelete = () => {
+    axios
+      .delete(
+        `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
       )
       .then((response) => {
         console.log(response);
@@ -195,7 +210,7 @@ const EditHire = (props: Props) => {
         <InputBox
           width="400px"
           onChange={handleTitleChange}
-          value={existingInfo.title}
+          defaultValue={existingInfo.title}
         />
         지원마감일
         <Deadline onChange={handleDeadlineChange} />
@@ -204,7 +219,11 @@ const EditHire = (props: Props) => {
       <CategoryWrapper>
         <select placeholder={"카테고리"} onChange={handleCategoryChange}>
           {categoryOptions.map(({ value, label }) => (
-            <option key={value} value={existingInfo.category}>
+            <option
+              key={value}
+              value={value}
+              selected={value === existingInfo.categoryName}
+            >
               {label}
             </option>
           ))}
@@ -214,16 +233,14 @@ const EditHire = (props: Props) => {
       <TagWrapper>
         <select placeholder={"태그"} onChange={handleTagChange}>
           {tagOptions.map(({ value, label }) => (
-            <option key={value} value={existingInfo.tag}>
-              {label}
-            </option>
+            <option key={value}>{label}</option>
           ))}
         </select>
       </TagWrapper>
       <WithTitle>
         업무시간
         <WorkSchedule
-          workTime={existingInfo.workTime}
+          workTime={workTime}
           onWorkTimeChange={handleWorkTimeChange}
         />
       </WithTitle>
@@ -233,7 +250,7 @@ const EditHire = (props: Props) => {
           <InputBox
             width="165px"
             onChange={handleVolumeChange}
-            value={existingInfo.volume}
+            value={existingInfo.recruitingCount}
           />
         </WithTitle>
         <WithTitle>
@@ -241,7 +258,7 @@ const EditHire = (props: Props) => {
           <InputBox
             width="165px"
             onChange={handlePayChange}
-            value={existingInfo.pay}
+            value={existingInfo.price}
           />
         </WithTitle>
         <WithTitle>
@@ -249,7 +266,7 @@ const EditHire = (props: Props) => {
           <LocationWrapper>
             <select placeholder={"지역"} onChange={handleLocationChange}>
               {locationOptions.map(({ value, label }) => (
-                <option key={value} value={existingInfo.location}>
+                <option key={value} selected={value === existingInfo.cityName}>
                   {label}
                 </option>
               ))}
@@ -261,28 +278,32 @@ const EditHire = (props: Props) => {
         업무내용
         <TextArea
           onChange={handleWorkDetailChange}
-          value={existingInfo.workDetail}
+          defaultValue={existingInfo.workContent}
         />
       </WithTitle>
       <WithTitle>
         자격요건
         <TextArea
           onChange={handleQualificationChange}
-          value={existingInfo.qualification}
+          defaultValue={existingInfo.qualification}
         />
       </WithTitle>
       <WithTitle>
         우대사항 (선택)
         <TextArea
           onChange={handlePreferentialChange}
-          value={existingInfo.preferential}
+          defaultValue={existingInfo.preference}
         />
       </WithTitle>
       <WithTitle>
         기타 (선택)
-        <TextArea onChange={handleEtcChange} value={existingInfo.etc} />
+        <TextArea
+          onChange={handleEtcChange}
+          defaultValue={existingInfo.other}
+        />
       </WithTitle>
       <Button onClick={handleSubmit}>제출하기</Button>
+      <Button onClick={handleDelete}>삭제하기</Button>
     </EditHireContainer>
   );
 };
