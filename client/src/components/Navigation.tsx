@@ -16,11 +16,12 @@ const Block = styled.div`
 `;
 
 const NavBar = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 65px;
   display: flex;
   justify-content: space-between;
   box-shadow: 0 2px 10px -5px;
+  padding: 0 120px;
   position: fixed;
   background-color: #ffffff;
   z-index: 900;
