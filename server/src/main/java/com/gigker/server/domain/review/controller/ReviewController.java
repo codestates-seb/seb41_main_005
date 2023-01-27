@@ -1,6 +1,7 @@
 package com.gigker.server.domain.review.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.service.ContentService;
 import com.gigker.server.domain.member.entity.Member;
@@ -80,11 +82,14 @@ public class ReviewController {
 		@RequestParam @Positive int page) {
 
 		Content content = contentService.findContentByContentId(contentId);
+		ContentType type = content.getContentType();
 		Member member = content.getMember();
 		// 페이지당 출력 수는 15로 고정
-		Page<Review> pageReviews = reviewService.findAllReviewsByRecipient(content, member, page - 1, 15);
+		Page<Review> pageReviews = reviewService.findAllReviewsByRecipient(member, type, page - 1, 15);
 		List<ReviewDto.ReviewResponse> reviews = reviewMapper.reviewsToResponses(pageReviews.getContent());
-		ReviewDto.SimpleMemberResponse simpleMember = reviewMapper.contentToSimpleMember(content);
+
+		Map<String, Long> counts = reviewService.countProfile(member, type);
+		ReviewDto.SimpleMemberResponse simpleMember = reviewMapper.contentToSimpleMember(member, counts);
 
 		return ResponseEntity.ok().body(new MultiResponseDto<>(simpleMember, reviews, pageReviews));
 	}

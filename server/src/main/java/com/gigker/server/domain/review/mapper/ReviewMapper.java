@@ -1,6 +1,7 @@
 package com.gigker.server.domain.review.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,6 +9,7 @@ import org.mapstruct.ReportingPolicy;
 
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.mapper.ContentApplyMapper;
+import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.mapper.MemberMapper;
 import com.gigker.server.domain.review.dto.ReviewDto;
 import com.gigker.server.domain.review.entity.Review;
@@ -30,8 +32,8 @@ public interface ReviewMapper {
 	@Mapping(target = "memberId", source = "member.memberId")
 	@Mapping(target = "nickName", source = "member.nickName")
 	@Mapping(target = "pictureUrl", source = "member.pictureUrl")
-	@Mapping(target = "likeCount", expression = "java(content.getLikeCount())")
-	@Mapping(target = "dislikeCount", expression = "java(content.getDislikeCount())")
-	@Mapping(target = "reviewCount", expression = "java(content.getReviewCount())")
-	ReviewDto.SimpleMemberResponse contentToSimpleMember(Content content);
+	@Mapping(target = "likeCount", expression = "java(counts.get(\"likeCount\"))")
+	@Mapping(target = "dislikeCount", expression = "java(counts.get(\"dislikeCount\"))")
+	@Mapping(target = "reviewCount", expression = "java(counts.get(\"reviewCount\"))")
+	ReviewDto.SimpleMemberResponse contentToSimpleMember(Member member, Map<String, Long> counts);
 }
