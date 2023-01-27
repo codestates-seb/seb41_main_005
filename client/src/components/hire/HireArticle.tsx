@@ -5,6 +5,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../util/redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ReactPaginate from "react-paginate";
+import { ReactComponent as LeftArrow } from "../../assets/leftarrow.svg";
+import { ReactComponent as RightArrow } from "../../assets/rightarrow.svg";
 
 const mapDataToCardProps = (data: ServerData): CardProps => {
   return {
@@ -22,6 +25,8 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
 
 const HireArticle: React.FC = (card) => {
   const [cards, setCards] = useState<CardProps[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,53 +80,106 @@ const HireArticle: React.FC = (card) => {
         );
 
   return (
-    <HireArticleContainer>
-      {filteredCards.map((card, index) => (
-        <Card key={index} onClick={() => handleClick(card.contentId)}>
-          <CardTitle>{card.title}</CardTitle>
-          <CardWriter>
-            <span className="sub-title">작성자</span> {card.nickName}
-          </CardWriter>
-          <CardPay>
-            <span className="sub-title">보수</span> {card.price}
-          </CardPay>
-          {card.workTimes && (
-            <>
-              <CardStart>
-                <span className="sub-title">시작시간</span>
-                {new Date(card.workTimes[0].startWorkTime).toLocaleString(
-                  "ko-KR",
-                  {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                  }
-                )}
-              </CardStart>
-              <CardEnd>
-                <span className="sub-title">종료시간</span>
-                {new Date(card.workTimes[0].endWorkTime).toLocaleString(
-                  "ko-KR",
-                  {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                  }
-                )}
-              </CardEnd>
-            </>
-          )}
-        </Card>
-      ))}
-    </HireArticleContainer>
+    <div>
+      <HireArticleContainer>
+        {filteredCards
+          .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+          .map((card, index) => (
+            <Card key={index} onClick={() => handleClick(card.contentId)}>
+              <CardTitle>{card.title}</CardTitle>
+              <CardWriter>
+                <span className="sub-title">작성자</span> {card.nickName}
+              </CardWriter>
+              <CardPay>
+                <span className="sub-title">보수</span> {card.price}
+              </CardPay>
+              {card.workTimes && (
+                <>
+                  <CardStart>
+                    <span className="sub-title">시작시간</span>
+                    {new Date(card.workTimes[0].startWorkTime).toLocaleString(
+                      "ko-KR",
+                      {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      }
+                    )}
+                  </CardStart>
+                  <CardEnd>
+                    <span className="sub-title">종료시간</span>
+                    {new Date(card.workTimes[0].endWorkTime).toLocaleString(
+                      "ko-KR",
+                      {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      }
+                    )}
+                  </CardEnd>
+                </>
+              )}
+            </Card>
+          ))}
+      </HireArticleContainer>
+      <PaginateContainer>
+        <ReactPaginate
+          previousLabel={<LeftArrow />}
+          nextLabel={<RightArrow />}
+          breakLabel={"..."}
+          breakClassName={"break-me"}
+          pageCount={Math.ceil(filteredCards.length / itemsPerPage)}
+          marginPagesDisplayed={0}
+          pageRangeDisplayed={5}
+          onPageChange={(page) => setCurrentPage(page.selected + 1)}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+        />
+      </PaginateContainer>
+    </div>
   );
 };
+
+const PaginateContainer = styled.div`
+  .page-item {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #a9a9a9;
+    display: flex;
+    justify-content: center;
+    padding: 4px;
+    margin: 0 2px 2px 0;
+    font-size: 18px;
+    cursor: pointer;
+    &: hover {
+      background-color: #6667ab;
+      transition: all 0.5s;
+    }
+  }
+  .break-me {
+    color: #6667ab;
+  }
+  .active {
+    color: #fcc72c;
+    background-color: #6667ab;
+    display: flex;
+    justify-content: center;
+  }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: #251749;
+  }
+`;
 
 const HireArticleContainer = styled.div`
   margin-top: 30px;
