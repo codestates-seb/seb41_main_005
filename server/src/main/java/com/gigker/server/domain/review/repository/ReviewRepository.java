@@ -49,7 +49,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	// ===== RECEIVED LIKES =====
 
 	// 특정 회원의 종합 좋아요 싫어요
-	Long countByLikeTypeAndRecipient(LikeType likeType, Member recipient);
+	Long countByRecipientAndLikeType(Member recipient, LikeType likeType);
 
 	// 타입별 LikeCount 조회
 	@Query("select count (rv) from Review rv " +
