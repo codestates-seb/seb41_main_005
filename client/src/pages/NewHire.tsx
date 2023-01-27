@@ -34,17 +34,14 @@ const NewHire = () => {
 
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setCategory(event.target.value);
-    console.log("category:", event.target.value);
   };
 
   const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setLocation(event.target.value);
-    console.log("location:", event.target.value);
   };
 
   const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setTag(event.target.value);
-    console.log("tag:", event.target.value);
   };
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -86,15 +83,36 @@ const NewHire = () => {
   const handleDeadlineChange = (deadline: string) => {
     setDeadline(deadline);
   };
+  const validateForm = () => {
+    if (
+      !title ||
+      !workDetail ||
+      !volume ||
+      !pay ||
+      !qualification ||
+      !location ||
+      !category ||
+      !tag ||
+      !workTime ||
+      !deadline
+    ) {
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = () => {
+    if (!validateForm()) {
+      alert("(선택)을 제외한 모든 창에 입력해주세요.");
+      return;
+    }
     axios
       .post(
         "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
         {
           title: title,
           contentType: "BUY",
-          recruitingCount: parseInt(volume), // volume string을 int로
+          recruitingCount: parseInt(volume),
           workContent: workDetail,
           qualification: qualification,
           preference: preferential,
@@ -108,7 +126,7 @@ const NewHire = () => {
             }
           ),
           contentTags: [{ tagName: tag }],
-          price: parseInt(pay), // pay string을 int로
+          price: parseInt(pay),
           cityName: location,
           other: etc,
           isPremium: false,
@@ -117,11 +135,11 @@ const NewHire = () => {
       )
       .then((response) => {
         console.log(response);
+        navigate("/hire");
       })
       .catch((error) => {
         console.log(error);
       });
-    navigate("/hire");
   };
 
   return (

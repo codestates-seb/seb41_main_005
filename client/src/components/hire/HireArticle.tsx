@@ -79,12 +79,16 @@ const HireArticle: React.FC = (card) => {
       {filteredCards.map((card, index) => (
         <Card key={index} onClick={() => handleClick(card.contentId)}>
           <CardTitle>{card.title}</CardTitle>
-          <CardWriter>작성자 {card.nickName}</CardWriter>
-          <CardPay>보수 {card.price}</CardPay>
+          <CardWriter>
+            <span className="sub-title">작성자</span> {card.nickName}
+          </CardWriter>
+          <CardPay>
+            <span className="sub-title">보수</span> {card.price}
+          </CardPay>
           {card.workTimes && (
             <>
               <CardStart>
-                시작시간
+                <span className="sub-title">시작시간</span>
                 {new Date(card.workTimes[0].startWorkTime).toLocaleString(
                   "ko-KR",
                   {
@@ -98,7 +102,7 @@ const HireArticle: React.FC = (card) => {
                 )}
               </CardStart>
               <CardEnd>
-                종료시간
+                <span className="sub-title">종료시간</span>
                 {new Date(card.workTimes[0].endWorkTime).toLocaleString(
                   "ko-KR",
                   {
@@ -137,15 +141,17 @@ const HireArticleContainer = styled.div`
 // `;
 
 const Card = styled.div`
-  width: 250px;
-  height: 120px;
+  width: 230px;
+  height: 150px;
   border: 1px solid #ccc;
-  margin: 5px;
+  margin: 10px;
+  padding-bottom: 10px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   flex-wrap: wrap;
   text-overflow: ellipsis;
+  cursor: pointer;
 `;
 
 const CardTitle = styled.div`
@@ -169,6 +175,10 @@ const CardWriter = styled.div`
   text-align: left;
   word-spacing: 2px;
   padding-left: 10px;
+  .sub-title {
+    color: #6667ab;
+    padding-right: 5px;
+  }
 `;
 
 const CardPay = styled.div`
@@ -176,18 +186,30 @@ const CardPay = styled.div`
   text-align: left;
   word-spacing: 2px;
   padding-left: 10px;
+  .sub-title {
+    color: #6667ab;
+    padding-right: 5px;
+  }
 `;
 
 const CardStart = styled.div`
   font-size: 14px;
   word-spacing: 2px;
   padding-left: 10px;
+  .sub-title {
+    color: #6667ab;
+    padding-right: 5px;
+  }
 `;
 
 const CardEnd = styled.div`
   font-size: 14px;
   word-spacing: 2px;
   padding-left: 10px;
+  .sub-title {
+    color: #6667ab;
+    padding-right: 5px;
+  }
 `;
 
 export default HireArticle;
