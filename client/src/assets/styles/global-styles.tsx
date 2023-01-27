@@ -10,8 +10,10 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     font-family: 'Noto Sans KR', sans-serif;
+    overflow-y: scroll;
+    line-height: 1.4;
   }
-  button {
+  a {
     cursor: pointer;
   }
   
