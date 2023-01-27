@@ -165,7 +165,6 @@ const Deadline: React.FC<DueDate> = ({ onChange }) => {
       .toISOString()
       .slice(0, 10)}T${deadlineTime}:00`;
     setdeadlineSum(deadline);
-    console.log(deadline);
     onChange(deadline);
   };
 

@@ -119,7 +119,6 @@ const DropdownT = () => {
   const navigate = useNavigate();
   const newHuntingClickHandler = () => {
     navigate("/newhunting");
-    console.log("새 글 작성");
   };
 
   const TagButton = ({ tag }: { tag: string; onClick: () => void }) => (

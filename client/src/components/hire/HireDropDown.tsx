@@ -119,7 +119,6 @@ const DropdownMenu = () => {
   const navigate = useNavigate();
   const newHireClickHandler = () => {
     navigate("/newhire");
-    console.log("새 글 작성");
   };
 
   const TagButton = ({ tag }: { tag: string; onClick: () => void }) => (

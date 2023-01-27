@@ -128,8 +128,20 @@ const EditHunting = (props: Props) => {
   const handleDeadlineChange = (deadline: string) => {
     setDeadline(deadline);
   };
+  const validateForm = () => {
+    if (!location || !category || !tag || !workTime || !deadline) {
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = () => {
+    if (!validateForm()) {
+      alert(
+        "지원마감일, 카테고리, 태그, 업무시간, 지역 창을 반드시 입력해주세요."
+      );
+      return;
+    }
     const updatedData = {
       ...existingInfo,
       title: title,
@@ -159,11 +171,11 @@ const EditHunting = (props: Props) => {
       )
       .then((response) => {
         console.log(response);
+        navigate(`/huntingDetail/${contentId}`);
       })
       .catch((error) => {
         console.log(error);
       });
-    navigate(`/huntingDetail/${contentId}`);
   };
   const handleDelete = () => {
     axios
