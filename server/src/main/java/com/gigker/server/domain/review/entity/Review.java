@@ -32,8 +32,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(indexes = {
-	@Index(name = "idx_review_recipient", columnList = "recipient"),
-	@Index(name = "idx_review_writer", columnList = "writer")})
+	@Index(name = "idx_review_recipient", columnList = "recipient_id"),
+	@Index(name = "idx_review_writer", columnList = "apply_id")})
 public class Review extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

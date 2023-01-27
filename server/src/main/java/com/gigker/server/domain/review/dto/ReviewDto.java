@@ -1,8 +1,8 @@
 package com.gigker.server.domain.review.dto;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.LikeType;
@@ -20,7 +20,7 @@ public class ReviewDto {
 		@NotNull(message = "contentApplyId cannot be null")
 		private Long contentApplyId;
 		private LikeType likeType;
-		@Max(value = 200, message = "Comment can create up to 200 characters")
+		@Size(max = 200)
 		private String comment;
 		private boolean isAnonymous;
 	}
