@@ -1,9 +1,9 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import InputBox from "../components/Input";
 import Button from "../components/Buttons";
 import TextArea from "../components/TextArea";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
 import { WorkSchedule, Deadline } from "../components/TimeSelect";
 import { getDetailData } from "../api/getDetail";
 import axios from "axios";
@@ -44,6 +44,7 @@ interface Props {
 
 const EditHire = (props: Props) => {
   const { existingData } = props;
+  const navigate = useNavigate();
   const contentId = useParams().content_id;
   const [title, setTitle] = useState(existingData ? existingData.title : "");
   const [workDetail, setWorkDetail] = useState(
@@ -203,6 +204,7 @@ const EditHire = (props: Props) => {
       .catch((error) => {
         console.log(error);
       });
+    navigate(`/hireDetail/${contentId}`);
   };
   const handleDelete = () => {
     axios
@@ -215,6 +217,7 @@ const EditHire = (props: Props) => {
       .catch((error) => {
         console.log(error);
       });
+    navigate("/hire");
   };
 
   return (

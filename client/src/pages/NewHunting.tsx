@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import InputBox from "../components/Input";
 import Button from "../components/Buttons";
 import TextArea from "../components/TextArea";
@@ -17,6 +18,7 @@ interface WorkSchedule {
 }
 
 const EditHunting = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [workDetail, setWorkDetail] = useState("");
   const [pay, setPay] = useState("");
@@ -101,6 +103,7 @@ const EditHunting = () => {
       .catch((error) => {
         console.log(error);
       });
+    navigate("/hunting");
   };
 
   return (
