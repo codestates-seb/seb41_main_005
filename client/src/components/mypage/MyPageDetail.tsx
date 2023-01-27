@@ -2,12 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import Profile from "../Profile";
 import EditForm from "./EditForm";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../util/redux";
 import Button from "../Buttons";
 import axios from "axios";
 import { removeCookie } from "../../util/cookie";
 import { useNavigate } from "react-router-dom";
+import { setIsLogIn } from "../../util/redux/LogIn";
 
 const SideSection = styled.div`
   display: flex;
@@ -78,6 +79,7 @@ const ButtonContainer = styled.div`
 
 const MyPageDetail = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const logInEmail = useSelector((state: RootState) => state.LogIn.logInEmail);
   const logInNickname = useSelector(
@@ -91,11 +93,11 @@ const MyPageDetail = () => {
           "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/members"
         )
         .then((res) => {
-          console.log(res);
+          dispatch(setIsLogIn(false));
           localStorage.clear();
           removeCookie("refresh");
+          alert("탈퇴 처리 되었습니다\n이용해주셔서 감사합니다");
           navigate("/login", { replace: true });
-          navigate(0);
         })
         .catch((err) => {
           console.log(err);
