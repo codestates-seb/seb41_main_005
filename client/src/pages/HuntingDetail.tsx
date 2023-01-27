@@ -14,6 +14,7 @@ import { RootState } from "../util/redux";
 const Container = styled.div`
   display: block;
   max-width: 1060px;
+  margin: auto;
   .wrapper {
     padding-top: 80px;
     line-height: 20px;
@@ -117,6 +118,10 @@ function HuntingDetail() {
     }
   };
 
+  const handleDetailButton = () => {
+    navigate(`/review`);
+  };
+
   const handleApplyButton = () => {
     if (memberId !== applicantId) {
       axios
@@ -165,7 +170,7 @@ function HuntingDetail() {
                 <p>{datas.other}</p>
               </div>
             </section>
-            <UserInfo data={memberData} />
+            <UserInfo data={memberData} handlebutton={handleDetailButton} />
             <Warning nickName={datas.nickName} />
           </div>
           <div className="right">

@@ -119,6 +119,10 @@ function HireDetail() {
     }
   };
 
+  const handleDetailButton = () => {
+    navigate(`/review`);
+  };
+
   const handleApplyButton = () => {
     if (memberId !== applicantId) {
       axios
@@ -154,7 +158,6 @@ function HireDetail() {
                       ))
                     : (datas.contentTags = [])}
                 </ul>
-                <button onClick={handleEditButton}>수정버튼</button>
               </div>
             </section>
             <section className="description">
@@ -179,7 +182,7 @@ function HireDetail() {
                 <p>{datas.other}</p>
               </div>
             </section>
-            <UserInfo data={memberData} />
+            <UserInfo data={memberData} handlebutton={handleDetailButton} />
             <Warning nickName={datas.nickName} />
           </div>
           <div className="right">

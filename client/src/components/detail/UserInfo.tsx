@@ -36,7 +36,13 @@ const Container = styled.div`
   }
 `;
 
-export default function UserInfo({ data }: { data: any }) {
+export default function UserInfo({
+  data,
+  handlebutton,
+}: {
+  data: any;
+  handlebutton: any;
+}) {
   return (
     <Container>
       <div className="profile">
@@ -56,7 +62,7 @@ export default function UserInfo({ data }: { data: any }) {
           </div>
         </div>
       </div>
-      <Button color={"#6F38C5"} width={"120px"}>
+      <Button color={"#6F38C5"} width={"120px"} onClick={() => handlebutton()}>
         상세보기
       </Button>
     </Container>
