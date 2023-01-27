@@ -7,7 +7,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.mapper.ContentApplyMapper;
 import com.gigker.server.domain.member.entity.Member;
 import com.gigker.server.domain.member.mapper.MemberMapper;
@@ -25,8 +24,6 @@ public interface ReviewMapper {
 	@Mapping(source = "recipient.memberId", target = "recipientId")
 	ReviewDto.ReviewResponse reviewToResponse(Review review);
 
-	@Mapping(source = "writer.applicant.memberId", target = "writerId")
-	@Mapping(source = "recipient.memberId", target = "recipientId")
 	List<ReviewDto.ReviewResponse> reviewsToResponses(List<Review> reviews);
 
 	@Mapping(target = "memberId", source = "member.memberId")

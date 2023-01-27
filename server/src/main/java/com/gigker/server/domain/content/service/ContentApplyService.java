@@ -100,9 +100,8 @@ public class ContentApplyService {
 	}
 
 	@Transactional
-	public Page<ContentApply> findAllApplies(Content content, int page, int size) {
+	public Page<ContentApply> findAllApplies(Content content, Member writer, int page, int size) {
 		// 작성자만 조회 가능
-		Member writer = content.getMember();
 		verifyThisMemberIsWriter(writer);
 
 		return applyRepository.findAllByContent(content,
