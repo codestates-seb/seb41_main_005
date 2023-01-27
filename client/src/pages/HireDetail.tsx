@@ -14,11 +14,13 @@ import { RootState } from "../util/redux";
 const Container = styled.div`
   display: block;
   max-width: 1060px;
+  margin: auto;
   .wrapper {
     padding-top: 80px;
     line-height: 20px;
     position: relative;
     .left {
+      display: inline-block;
       vertical-align: top;
       width: 700px;
       .header {
@@ -75,7 +77,7 @@ const Container = styled.div`
     }
     .right {
       position: fixed;
-      right: 260px;
+      right: 300px;
       top: 80px;
     }
   }
