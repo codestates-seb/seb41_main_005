@@ -62,17 +62,9 @@ public class ContentService {
         return findContent;
     }
 
-    public List<Content> findContents(){
-        return contentRepository.findAll();
-    }
-
     public List<Content> findContentsByContentType(ContentType contentType){
         // 모집 중인 게시글만 조회한다.
         return contentRepository.findAllByStatusAndContentType(Content.Status.RECRUITING, contentType);
-    }
-
-    public Content findContent(long contentId){
-        return findVerifiedContent(contentId);
     }
 
     public void deleteContent(long contentId) {
