@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = @Index(name = "idx_apply_content", columnList = "content"))
+@Table(indexes = @Index(name = "idx_apply_content", columnList = "content_id"))
 public class ContentApply extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,42 +66,5 @@ public class ContentApply extends BaseEntity {
 
 	public void complete() {
 		this.applyStatus = ApplyStatus.COMPLETE;
-	}
-
-	// 지원자 정보 조회 시 좋아요 및 싫어요 정보를 가져온다.
-	public int getLikeCount() {
-		ContentType type = this.content.getContentType();
-		switch (type) {
-			case BUY:
-				return this.applicant.getSellLikeCount();
-			case SELL:
-				return this.applicant.getBuyLikeCount();
-			default:
-				return 0;
-		}
-	}
-
-	public int getDislikeCount() {
-		ContentType type = this.content.getContentType();
-		switch (type) {
-			case BUY:
-				return this.applicant.getSellDislikeCount();
-			case SELL:
-				return this.applicant.getBuyDislikeCount();
-			default:
-				return 0;
-		}
-	}
-
-	public int getReviewCount() {
-		ContentType type = this.content.getContentType();
-		switch (type) {
-			case BUY:
-				return this.applicant.getBuyReviewCount();
-			case SELL:
-				return this.applicant.getSellReviewCount();
-			default:
-				return 0;
-		}
 	}
 }

@@ -108,7 +108,7 @@ public class ReviewService {
 			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
 	}
 
-	// 리뷰, 좋아요, 싫어요 갯수 조회
+	// 해당 회원의 평판 정보를 가져오는 로직
 	public Map<String, Long> countProfile(Member member, ContentType type) {
 		Map<String, Long> map = new HashMap<>();
 		map.put("likeCount", reviewRepository.countLike(member, type));
@@ -116,6 +116,20 @@ public class ReviewService {
 		map.put("reviewCount", reviewRepository.countReviewByRecipientAndContentType(member, type));
 
 		return map;
+	}
+
+	// 지원자의 평판 정보를 가져오는 로직
+	public Map<String, Long> countApplicantProfile(Member applicant, ContentType type) {
+		switch (type) {
+			case BUY:
+				// 구인 글에 지원한 사람은 구직에 대한 평판 정보를 보여준다.
+				return countProfile(applicant, ContentType.SELL);
+			case SELL:
+				// 구직 글에 지원한 사람은 구인에 대한 평판 정보를 보여준다.
+				return countProfile(applicant, ContentType.BUY);
+			default:
+				throw new BusinessLogicException(ExceptionCode.NOT_FOUND_TYPE);
+		}
 	}
 
 	// == Create ==
