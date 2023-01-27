@@ -59,7 +59,7 @@ public class Content extends BaseEntity {
 	private String other;
 
 	// 카테고리
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
 	private Category category;
 
