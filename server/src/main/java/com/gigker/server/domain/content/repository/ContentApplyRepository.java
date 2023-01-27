@@ -30,13 +30,13 @@ public interface ContentApplyRepository extends JpaRepository<ContentApply, Long
 
 	// 내가 신청한 스케쥴 목록 확인
 	@Query("select DISTINCT ca from ContentApply ca " +
-		"join fetch ca.applicant " +
-		"where ca.applyStatus = 'MATCHED'")
+		"join fetch ca.applicant m " +
+		"where m = :applicant and ca.applyStatus = 'MATCH'")
 	List<ContentApply> findAllByMatchedApplicant(@Param("applicant") Member applicant);
 
 	// 내가 작성한 스케쥴 목록 확인
 	@Query("select DISTINCT ca from ContentApply ca " +
 		"join fetch ca.content c join fetch c.member " +
-		"where ca.applyStatus = 'MATCHED'")
+		"where ca.applyStatus = 'MATCH'")
 	List<ContentApply> findAllByMatchedWriter(@Param("writer") Member writer);
 }
