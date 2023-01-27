@@ -120,7 +120,7 @@ function HireDetail() {
   };
 
   const handleDetailButton = () => {
-    navigate(`/review`);
+    navigate(`/review/${contentId}`);
   };
 
   const handleApplyButton = () => {
@@ -131,6 +131,7 @@ function HireDetail() {
           { applicantId }
         )
         .then((res) => console.log(res.data));
+      alert("지원 완료!");
     } else {
       alert("본인이 작성한 게시글에는 지원할 수 없습니다.");
     }

@@ -29,7 +29,10 @@ const ReviewArticle = () => {
     <ReviewArticleContainer>
       {reviewData.map((review, index) => (
         <Card key={index}>
-          <CardNickname>작성자 {review.nickname}</CardNickname>
+          <CardNickname>
+            <span className="title">작성자</span>
+            <span>{review.nickname}</span>
+          </CardNickname>
           <CardContent>{review.reviewContent}</CardContent>
         </Card>
       ))}
@@ -56,6 +59,12 @@ const Card = styled.div`
 
 const CardNickname = styled.div`
   padding: 10px;
+  span {
+    padding-right: 10px;
+  }
+  .title {
+    color: #6667ab;
+  }
   &:after {
     content: "";
     display: block;

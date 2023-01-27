@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { getReview } from "../../api/getReivew";
 
 interface ReviewInfoCard {
   nickname: string;
@@ -16,14 +18,34 @@ export const ReviewInfoCard = {
 };
 
 const ReviewInfo = () => {
+  // const [reviewData, setReviewData] = useState();
+  // const contentId = useParams().content_id;
+
+  // useEffect(() => {
+  //   const review = async () => {
+  //     const data = await getReview(Number(contentId));
+  //     setReviewData(data);
+  //   };
+  //   review();
+  // }, [contentId]);
+
   return (
     <ReviewInfoContainer>
       <Card>
-        <CardNickname>작성자 {ReviewInfoCard.nickname}</CardNickname>
+        <CardNickname>
+          <span className="title">작성자</span>
+          <span>{ReviewInfoCard.nickname}</span>
+        </CardNickname>
         <CardScore>
-          평판 좋아요|{ReviewInfoCard.like} 싫어요|{ReviewInfoCard.dislike}
+          <span className="title">평판</span>
+          <span>
+            좋아요 {ReviewInfoCard.like} | 싫어요 {ReviewInfoCard.dislike}
+          </span>
         </CardScore>
-        <CardCount>리뷰 {ReviewInfoCard.reviewCount}</CardCount>
+        <CardCount>
+          <span className="title">리뷰</span>
+          <span>{ReviewInfoCard.reviewCount}</span>
+        </CardCount>
       </Card>
     </ReviewInfoContainer>
   );
@@ -31,15 +53,22 @@ const ReviewInfo = () => {
 
 const ReviewInfoContainer = styled.div`
   margin-top: 30px;
-  width: 230px;
+  width: 300px;
   position: fixed;
-  top: 15%;
-  right: 5%;
+  top: 10%;
+  right: 20%;
 `;
 const Card = styled.div`
   border: solid 1px #ccc;
   box-shadow: 1px 1px 1px #ccc;
-  padding: 15px;
+  padding: 10px;
+  margin: 10px;
+  span {
+    padding-right: 10px;
+  }
+  .title {
+    color: #6667ab;
+  }
 `;
 
 const CardNickname = styled.div`

@@ -13,7 +13,7 @@ const Container = styled.div`
   height: auto;
   margin: auto;
   padding-top: 70px;
-  padding-bottom: 300px;
+  padding-bottom: 70px;
   .section {
     justify-content: center;
     align-items: center;
