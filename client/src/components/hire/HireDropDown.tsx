@@ -206,7 +206,7 @@ const UpperWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 80px 120px 15px 120px;
+  padding: 80px 180px 15px 180px;
   border-bottom: 1px solid #dadbdc;
 `;
 
@@ -221,10 +221,11 @@ const ButtonSection = styled.div`
 `;
 
 const DropdownContainer = styled.div`
-  margin: 8px 50px 8px 50px;
+  margin: 8px 20px 8px 0;
   text-align: center;
   position: relative;
   flex: 0 1 auto;
+  width: 120px;
   max-width: 300px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -237,6 +238,7 @@ const DropdownContainer = styled.div`
 const DropdownWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 interface DropProps {
@@ -244,10 +246,24 @@ interface DropProps {
 }
 
 const DropdownTitle = styled.div<DropProps>`
-  background: gray;
+  background: #6667ab;
   position: absolute;
   top: 52px;
   left: 50%;
+  height: 300px;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: grey;
+    border-radius: 10px;
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #a9a9a9;
+    border-radius: 0 3px 3px 0;
+  }
   width: 130px;
   text-align: center;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
@@ -263,12 +279,12 @@ const DropdownTitle = styled.div<DropProps>`
     height: 0;
     width: 0;
     position: absolute;
-    top: -3px;
+    top: -5px;
     left: 50%;
     transform: translate(-50%, -50%);
     border: 12px solid transparent;
     border-top-width: 0;
-    border-bottom-color: gray;
+    border-bottom-color: #6667ab;
   }
 
   ${({ isDropped }) =>
@@ -283,11 +299,11 @@ const DropdownTitle = styled.div<DropProps>`
 
 const DropdownList = styled.ul`
   & > li {
-    margin-bottom: 10px;
-  }
-
-  & > li:first-of-type {
-    margin-top: 10px;
+    padding: 5px 0;
+    &:hover {
+      background-color: ${(props) => props.theme.color.main};
+      transition: all 0.5s;
+    }
   }
 
   list-style-type: none;
@@ -299,7 +315,10 @@ const DropdownList = styled.ul`
   align-items: center;
 `;
 
-const DropdownItem = styled.li``;
+const DropdownItem = styled.li`
+  width: 100%;
+  height: 100%;
+`;
 
 const LinkWrapper = styled.a`
   font-size: 16px;
@@ -311,7 +330,7 @@ const LinkWrapper = styled.a`
 const LowerWrapper = styled.div`
   width: 100%;
   height: 100px;
-  padding: 20px 120px 15px 120px;
+  padding: 20px 180px 15px 180px;
   border-bottom: 1px solid #dadbdc;
 `;
 
@@ -319,7 +338,7 @@ const TagWrapper = styled.div`
   display: flex;
   flex-direction: row;
   width: 500px;
-  margin-left: 30px;
+  margin: 8px;
   border: none;
   background-color: white;
   button {

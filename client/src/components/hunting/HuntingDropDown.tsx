@@ -10,6 +10,7 @@ import {
   resetTag,
 } from "../../util/redux/DropDown";
 import { useNavigate } from "react-router";
+import Button from "../Buttons";
 
 const tags = [
   "ALL",
@@ -135,43 +136,52 @@ const DropdownT = () => {
   return (
     <>
       <UpperWrapper>
-        <DropdownContainer>
-          <DropdownWrapper onClick={categoryHandler} ref={categoryRef}>
-            <span>{selectedCategory}</span>
-          </DropdownWrapper>
-          <DropdownTitle isDropped={categoryIsOpen}>
-            <DropdownList>
-              {category.map((category: string) => (
-                <DropdownItem key={category}>
-                  <LinkWrapper onClick={() => handleCategoryClick(category)}>
-                    {category}
-                  </LinkWrapper>
-                </DropdownItem>
-              ))}
-            </DropdownList>
-          </DropdownTitle>
-        </DropdownContainer>
+        <SelectSection>
+          <DropdownContainer>
+            <DropdownWrapper onClick={categoryHandler} ref={categoryRef}>
+              <span>{selectedCategory}</span>
+            </DropdownWrapper>
+            <DropdownTitle isDropped={categoryIsOpen}>
+              <DropdownList>
+                {category.map((category: string) => (
+                  <DropdownItem key={category}>
+                    <LinkWrapper onClick={() => handleCategoryClick(category)}>
+                      {category}
+                    </LinkWrapper>
+                  </DropdownItem>
+                ))}
+              </DropdownList>
+            </DropdownTitle>
+          </DropdownContainer>
 
-        <DropdownContainer>
-          <DropdownWrapper onClick={locationHandler} ref={locationRef}>
-            <span>{selectedLocation}</span>
-          </DropdownWrapper>
-          <DropdownTitle isDropped={locationIsOpen}>
-            <DropdownList>
-              {location.map((location: string) => (
-                <DropdownItem key={location}>
-                  <LinkWrapper onClick={() => handleLocationClick(location)}>
-                    {location}
-                  </LinkWrapper>
-                </DropdownItem>
-              ))}
-            </DropdownList>
-          </DropdownTitle>
-        </DropdownContainer>
-
-        <AddHire onClick={newHuntingClickHandler}>
-          {isLogin && <button> 게시글 작성</button>}
-        </AddHire>
+          <DropdownContainer>
+            <DropdownWrapper onClick={locationHandler} ref={locationRef}>
+              <span>{selectedLocation}</span>
+            </DropdownWrapper>
+            <DropdownTitle isDropped={locationIsOpen}>
+              <DropdownList>
+                {location.map((location: string) => (
+                  <DropdownItem key={location}>
+                    <LinkWrapper onClick={() => handleLocationClick(location)}>
+                      {location}
+                    </LinkWrapper>
+                  </DropdownItem>
+                ))}
+              </DropdownList>
+            </DropdownTitle>
+          </DropdownContainer>
+        </SelectSection>
+        <ButtonSection>
+          {isLogin && (
+            <Button
+              onClick={newHuntingClickHandler}
+              width={"100px"}
+              color={"#6F38C5"}
+            >
+              게시글 작성
+            </Button>
+          )}
+        </ButtonSection>
       </UpperWrapper>
       <LowerWrapper>
         <TagWrapper>
@@ -195,25 +205,40 @@ const UpperWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  padding: 70px 20px 15px 20px;
+  justify-content: space-between;
+  padding: 80px 180px 15px 180px;
   border-bottom: 1px solid #dadbdc;
 `;
 
+const SelectSection = styled.div`
+  display: flex;
+`;
+
+const ButtonSection = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 80px;
+`;
+
 const DropdownContainer = styled.div`
-  margin: 16px 50px 0 50px;
-  position: relative;
+  margin: 8px 20px 8px 0;
   text-align: center;
+  position: relative;
   flex: 0 1 auto;
+  width: 120px;
   max-width: 300px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  height: 38px;
+  height: 34px;
   padding: 8px;
   background-color: white;
+  cursor: pointer;
 `;
 
 const DropdownWrapper = styled.div`
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 interface DropProps {
@@ -221,10 +246,24 @@ interface DropProps {
 }
 
 const DropdownTitle = styled.div<DropProps>`
-  background: gray;
+  background: #6667ab;
   position: absolute;
   top: 52px;
   left: 50%;
+  height: 300px;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: grey;
+    border-radius: 10px;
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #a9a9a9;
+    border-radius: 0 3px 3px 0;
+  }
   width: 130px;
   text-align: center;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
@@ -240,12 +279,12 @@ const DropdownTitle = styled.div<DropProps>`
     height: 0;
     width: 0;
     position: absolute;
-    top: -3px;
+    top: -5px;
     left: 50%;
     transform: translate(-50%, -50%);
     border: 12px solid transparent;
     border-top-width: 0;
-    border-bottom-color: gray;
+    border-bottom-color: #6667ab;
   }
 
   ${({ isDropped }) =>
@@ -260,11 +299,11 @@ const DropdownTitle = styled.div<DropProps>`
 
 const DropdownList = styled.ul`
   & > li {
-    margin-bottom: 10px;
-  }
-
-  & > li:first-of-type {
-    margin-top: 10px;
+    padding: 5px 0;
+    &:hover {
+      background-color: ${(props) => props.theme.color.main};
+      transition: all 0.5s;
+    }
   }
 
   list-style-type: none;
@@ -276,7 +315,10 @@ const DropdownList = styled.ul`
   align-items: center;
 `;
 
-const DropdownItem = styled.li``;
+const DropdownItem = styled.li`
+  width: 100%;
+  height: 100%;
+`;
 
 const LinkWrapper = styled.a`
   font-size: 16px;
@@ -284,30 +326,11 @@ const LinkWrapper = styled.a`
   color: white;
 `;
 
-const AddHire = styled.div`
-  height: 38px;
-  margin: 12px 0 0 670px;
-  cursor: pointer;
-  font-size: 16px;
-  position: absolute;
-  button {
-    margin: 0 0.5rem;
-    height: 2.5rem;
-    font-size: 16px;
-    font-weight: regular;
-    color: #6f38c5;
-    background-color: white;
-    width: 120px;
-    border: solid 1.2px #6f38c5;
-    border-radius: 4px;
-  }
-`;
-
 //태그 파트
 const LowerWrapper = styled.div`
   width: 100%;
   height: 100px;
-  padding: 20px 20px 15px 20px;
+  padding: 20px 180px 15px 180px;
   border-bottom: 1px solid #dadbdc;
 `;
 
@@ -315,7 +338,7 @@ const TagWrapper = styled.div`
   display: flex;
   flex-direction: row;
   width: 500px;
-  margin-left: 30px;
+  margin: 8px;
   border: none;
   background-color: white;
   button {
