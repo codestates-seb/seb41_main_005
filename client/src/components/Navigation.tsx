@@ -21,7 +21,7 @@ const NavBar = styled.div`
   display: flex;
   justify-content: space-between;
   box-shadow: 0 2px 10px -5px;
-  padding: 0 120px;
+  padding: 0 180px;
   position: fixed;
   background-color: #ffffff;
   z-index: 900;
@@ -34,37 +34,56 @@ const ImgWrapper = styled.a`
 const LinkContainer = styled.div`
   display: flex;
   flex-grow: 0.5;
+  text-align: center;
 `;
 
-// eslint-disable-line no-unused-vars
-const LinkButton = styled.button`
+interface AnchorProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  color?: string | undefined;
+}
+
+const ButtonLink = styled(Link)<AnchorProps>`
+  text-decoration: none;
+  width: 5rem;
+  margin: 0 0 0 1rem;
+  height: 2.5rem;
+  font-size: ${(props) => props.theme.font.medium};
+  border: none;
+  line-height: 37px;
+  border-radius: 4px;
+  color: #ffffff;
+  background-color: ${(props) => props.color};
+  &:hover {
+    background-color: ${(props) => props.theme.color.main};
+    transition: all 0.5s;
+  }
+  &:disabled {
+    background-color: ${(props) => props.theme.color.back};
+  }
+`;
+
+const UnderLineLink = styled(Link)`
+  text-decoration: none;
+  color: black;
   width: 5rem;
   margin-right: 1rem;
   border: none;
+  align-items: center;
   background-color: #ffffff;
   font-size: ${(props) => props.theme.font.nav};
   line-height: 62px;
-  :after {
+  ::after {
     display: block;
     content: "";
     border-bottom: solid 3px ${(props) => props.theme.color.sub1};
     transform: scaleX(0);
     transition: transform 250ms ease-in-out;
   }
-  :hover:after {
+  &:hover::after {
     transform: scaleX(1);
   }
-  .fromRight:after {
-    transform-origin: 100% 50%;
+  &.active {
+    border-bottom: solid 3px ${(props) => props.theme.color.sub1};
   }
-  .fromLeft:after {
-    transform-origin: 0% 50%;
-  }
-`;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: black;
 `;
 
 const SvgContainer = styled.div`
@@ -81,9 +100,10 @@ const SvgContainer = styled.div`
 const LogInContainer = styled.div`
   /* margin-right: 40px; */
   display: flex;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   align-items: center;
-  padding: 0 1rem;
+  text-align: center;
+  padding: 0 0 0 1rem;
 `;
 
 const Navigation = () => {
@@ -120,43 +140,33 @@ const Navigation = () => {
           <Logo width={65} height={65} />
         </ImgWrapper>
         <LinkContainer>
-          <StyledLink to="/">
-            <LinkButton>홈</LinkButton>
-          </StyledLink>
-          <StyledLink to="/hire">
-            <LinkButton>구인</LinkButton>
-          </StyledLink>
-          <StyledLink to="/hunting">
-            <LinkButton>구직</LinkButton>
-          </StyledLink>
+          <UnderLineLink to={"/"}>홈</UnderLineLink>
+          <UnderLineLink to={"/hire"}>구인</UnderLineLink>
+          <UnderLineLink to={"/hunting"}>구직</UnderLineLink>
         </LinkContainer>
         <LogInContainer>
           {isLogIn ? (
             <>
-              <StyledLink to={"/mypage"}>
+              <Link to={"/mypage"}>
                 <Profile width={"40px"} height={"40px"} />
-              </StyledLink>
-              <StyledLink to={"/schedule"}>
+              </Link>
+              <Link to={"/schedule"}>
                 <SvgContainer>
                   <MdOutlineEditCalendar className={"schedule"} size={42} />
                 </SvgContainer>
-              </StyledLink>
+              </Link>
               <Button color={"#6F38C5"} width={"5rem"} onClick={handleLogOut}>
                 로그아웃
               </Button>
             </>
           ) : (
             <>
-              <StyledLink to="/login">
-                <Button color={"#6667AB"} width={"5rem"}>
-                  로그인
-                </Button>
-              </StyledLink>
-              <StyledLink to="/signup">
-                <Button color={"#6F38C5"} width={"5rem"}>
-                  회원가입
-                </Button>
-              </StyledLink>
+              <ButtonLink to={"/login"} color={"#6667AB"}>
+                로그인
+              </ButtonLink>
+              <ButtonLink to={"/signup"} color={"#6F38C5"}>
+                회원가입
+              </ButtonLink>
             </>
           )}
         </LogInContainer>
