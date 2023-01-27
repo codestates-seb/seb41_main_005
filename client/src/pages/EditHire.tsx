@@ -97,12 +97,13 @@ const EditHire = (props: Props) => {
     };
     detail();
   }, [contentId]);
-
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setExistingInfo({ ...existingInfo, categoryName: event.target.value });
     setCategory(event.target.value);
   };
 
   const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setExistingInfo({ ...existingInfo, cityName: event.target.value });
     setLocation(event.target.value);
   };
 
@@ -163,11 +164,6 @@ const EditHire = (props: Props) => {
   };
 
   const handleSubmit = () => {
-    const accessToken = localStorage.getItem("access_token");
-
-    if (accessToken) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    }
     const updatedData = {
       ...existingInfo,
       title: title,
