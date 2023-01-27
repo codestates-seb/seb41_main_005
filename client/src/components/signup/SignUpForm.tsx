@@ -31,7 +31,7 @@ import {
 interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
 
 const SignUpBox = styled.form<FormProps>`
-  margin-top: 20rem;
+  margin: 100px 0;
   width: 30rem;
   height: auto;
   border: 1px solid ${(props) => props.theme.color.back};
