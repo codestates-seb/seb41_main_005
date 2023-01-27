@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gigker.server.domain.common.ContentType;
+import com.gigker.server.domain.common.LikeType;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.service.ContentApplyService;
@@ -106,6 +107,16 @@ public class ReviewService {
 
 		return reviewRepository.findAllReviewByWriterAndContentType(member, type,
 			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
+	}
+
+	// 해당 회원의 모든 평판 정보를 가져오는 로직
+	public Map<String, Long> countProfiles(Member member) {
+		Map<String, Long> map = new HashMap<>();
+		map.put("totalLikeCount", reviewRepository.countByRecipientAndLikeType(member, LikeType.LIKE));
+		map.put("totalDislikeCount", reviewRepository.countByRecipientAndLikeType(member, LikeType.DISLIKE));
+		map.put("totalReviewCount", reviewRepository.countReviewByRecipient(member));
+
+		return map;
 	}
 
 	// 해당 회원의 평판 정보를 가져오는 로직
