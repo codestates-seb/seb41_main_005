@@ -39,6 +39,7 @@ public class ReviewDto {
 	public static class ReviewResponse {
 		private Long reviewId;
 		private Long writerId;
+		private String writerNickName;
 		private Long recipientId;
 		private LikeType likeType;
 		private String comment;

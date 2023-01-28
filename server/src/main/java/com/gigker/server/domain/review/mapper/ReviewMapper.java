@@ -21,6 +21,7 @@ public interface ReviewMapper {
 	Review postToReview(ReviewDto.ReviewPost post);
 
 	@Mapping(source = "writer.applicant.memberId", target = "writerId")
+	@Mapping(source = "writer.applicant.nickName", target = "writerNickName")
 	@Mapping(source = "recipient.memberId", target = "recipientId")
 	ReviewDto.ReviewResponse reviewToResponse(Review review);
 
