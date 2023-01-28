@@ -166,7 +166,7 @@ const EditHunting = (props: Props) => {
 
     axios
       .patch(
-        `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
+        `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
         existingInfo
       )
       .then((response) => {
@@ -180,7 +180,7 @@ const EditHunting = (props: Props) => {
   const handleDelete = () => {
     axios
       .delete(
-        `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
+        `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
       )
       .then((response) => {
         console.log(response);
@@ -196,37 +196,41 @@ const EditHunting = (props: Props) => {
       <TitleContainer>
         제목
         <InputBox
-          width="400px"
+          width="350px"
           onChange={handleTitleChange}
           defaultValue={existingInfo.title}
         />
         지원마감일
         <Deadline onChange={handleDeadlineChange} />
       </TitleContainer>
-      <TwoWrapper>
-        카테고리
-        <CategoryWrapper>
-          <select
-            value={existingInfo.categoryName}
-            placeholder={"카테고리"}
-            onChange={handleCategoryChange}
-          >
-            {categoryOptions.map(({ value, label }) => (
-              <option key={value}>{label}</option>
-            ))}
-          </select>
-        </CategoryWrapper>
-        태그
-        <TagWrapper>
-          <select placeholder={"태그"} onChange={handleTagChange}>
-            {tagOptions.map(({ value, label }) => (
-              <option key={value}>{label}</option>
-            ))}
-          </select>
-        </TagWrapper>
-      </TwoWrapper>
+      <SelectWrapper>
+        <WithTitle>
+          카테고리
+          <CategoryWrapper>
+            <select
+              value={existingInfo.categoryName}
+              placeholder={"카테고리"}
+              onChange={handleCategoryChange}
+            >
+              {categoryOptions.map(({ value, label }) => (
+                <option key={value}>{label}</option>
+              ))}
+            </select>
+          </CategoryWrapper>
+        </WithTitle>
+        <WithTitle>
+          태그
+          <TagWrapper>
+            <select placeholder={"태그"} onChange={handleTagChange}>
+              {tagOptions.map(({ value, label }) => (
+                <option key={value}>{label}</option>
+              ))}
+            </select>
+          </TagWrapper>
+        </WithTitle>
+      </SelectWrapper>
       <WithTitle>
-        업무시간
+        희망 업무시간
         <WorkSchedule
           workTime={workTime}
           onWorkTimeChange={handleWorkTimeChange}
@@ -234,7 +238,7 @@ const EditHunting = (props: Props) => {
       </WithTitle>
       <TwoInput>
         <WithTitle>
-          보수
+          희망보수
           <InputBox
             width="165px"
             onChange={handlePayChange}
@@ -242,7 +246,7 @@ const EditHunting = (props: Props) => {
           />
         </WithTitle>
         <WithTitle>
-          장소
+          희망장소
           <LocationWrapper>
             <select
               placeholder={"지역"}
@@ -283,12 +287,12 @@ const EditHunting = (props: Props) => {
 };
 
 const EditHireContainer = styled.div`
-  padding: 100px 50px 50px 50px;
+  background: #fafafa;
+  width: 80%;
+  margin: auto;
+  padding: 135px;
   display: flex;
   flex-direction: column;
-  $ {InputBox} { 
-    align-items: center;
-  }
 `;
 const TitleContainer = styled.div`
   display: flex;
@@ -302,13 +306,14 @@ const WithTitle = styled.div`
 const TwoInput = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
 `;
-const TwoWrapper = styled.div`
+const SelectWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
 `;
 const CategoryWrapper = styled.div`
-  margin: 10px;
   padding: 10px;
   select {
     width: 150px;
@@ -318,16 +323,14 @@ const CategoryWrapper = styled.div`
 `;
 const LocationWrapper = styled.div`
   width: 150px;
-  margin: 10px;
-  padding: 10px;
   select {
     width: 150px;
     height: 2.5rem;
     border-radius: 5px;
+    margin: 7px;
   }
 `;
 const TagWrapper = styled.div`
-  margin: 10px;
   padding: 10px;
   select {
     width: 150px;
@@ -337,8 +340,14 @@ const TagWrapper = styled.div`
 `;
 const SubmitWrapper = styled.div`
   .edithunting-submit {
-    margin: 30px;
-    width: 200px;
+    margin: 10px 50px 0 10px;
+    width: 150px;
+    float: right;
+    background-color: #6f38c5;
+    &:hover {
+      background-color: #fcc72c;
+      transition: all 0.5s;
+    }
   }
 `;
 export default EditHunting;

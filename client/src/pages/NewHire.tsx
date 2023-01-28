@@ -108,7 +108,7 @@ const NewHire = () => {
     }
     axios
       .post(
-        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
+        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents",
         {
           title: title,
           contentType: "BUY",
@@ -235,12 +235,12 @@ const NewHire = () => {
 };
 
 const EditHireContainer = styled.div`
-  padding: 100px 50px 50px 50px;
+  background: #fafafa;
+  width: 80%;
+  margin: auto;
+  padding: 135px;
   display: flex;
   flex-direction: column;
-  input {
-    align-items: center;
-  }
 `;
 const TitleContainer = styled.div`
   display: flex;
@@ -292,6 +292,11 @@ const SubmitWrapper = styled.div`
   .newhire-submit {
     margin-left: 330px;
     width: 300px;
+    background-color: #6f38c5;
+    &:hover {
+      background-color: #fcc72c;
+      transition: all 0.5s;
+    }
   }
 `;
 export default NewHire;
