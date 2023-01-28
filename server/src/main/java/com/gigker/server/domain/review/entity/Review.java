@@ -74,6 +74,10 @@ public class Review extends BaseEntity {
 		this.recipient = recipient;
 	}
 
+	public void setWriter(ContentApply writer) {
+		this.writer = writer;
+	}
+
 	public void setContentType(ContentType contentType) {
 		this.contentType = contentType;
 	}
