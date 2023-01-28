@@ -13,18 +13,20 @@ import { setIsLogIn } from "../util/redux/LogIn";
 
 const Block = styled.div`
   display: block;
+  height: 65px;
+  width: 100%;
+  box-shadow: 0 2px 10px -5px;
+  position: fixed;
+  z-index: 900;
 `;
 
 const NavBar = styled.div`
-  width: 100%;
-  height: 65px;
   display: flex;
+  height: 65px;
+  max-width: 1060px;
   justify-content: space-between;
-  box-shadow: 0 2px 10px -5px;
-  padding: 0 180px;
-  position: fixed;
+  margin: auto;
   background-color: #ffffff;
-  z-index: 900;
 `;
 
 const ImgWrapper = styled.a`
@@ -117,7 +119,7 @@ const Navigation = () => {
     if (result) {
       axios
         .post(
-          "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth/logout"
+          "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/auth/logout"
         )
         .then((res) => {
           dispatch(setIsLogIn(false));
