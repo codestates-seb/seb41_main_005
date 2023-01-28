@@ -93,51 +93,53 @@ const HuntingArticle: React.FC = () => {
         );
 
   return (
-    <div>
+    <ArticleContainer>
       <HuntingArticleContainer>
         {filteredCards
           .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
           .map((card, index) => (
             <Card key={index} onClick={() => handleClick(card.contentId)}>
-              <CardTitle>{card.title}</CardTitle>
-              <CardWriter>
-                <span className="sub-title">작성자</span> {card.nickName}
-              </CardWriter>
-              <CardPay>
-                <span className="sub-title">보수</span> {card.price}
-              </CardPay>
-              {card.workTimes && (
-                <>
-                  <CardStart>
-                    <span className="sub-title">시작시간</span>
-                    {new Date(card.workTimes[0].startWorkTime).toLocaleString(
-                      "ko-KR",
-                      {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: false,
-                      }
-                    )}
-                  </CardStart>
-                  <CardEnd>
-                    <span className="sub-title">종료시간</span>
-                    {new Date(card.workTimes[0].endWorkTime).toLocaleString(
-                      "ko-KR",
-                      {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: false,
-                      }
-                    )}
-                  </CardEnd>
-                </>
-              )}
+              <CardContent>
+                <CardTitle>{card.title}</CardTitle>
+                <CardWriter>
+                  <span className="sub-title">작성자</span> {card.nickName}
+                </CardWriter>
+                <CardPay>
+                  <span className="sub-title">보수</span> {card.price}
+                </CardPay>
+                {card.workTimes && (
+                  <>
+                    <CardStart>
+                      <span className="sub-title">시작시간</span>
+                      {new Date(card.workTimes[0].startWorkTime).toLocaleString(
+                        "ko-KR",
+                        {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: false,
+                        }
+                      )}
+                    </CardStart>
+                    <CardEnd>
+                      <span className="sub-title">종료시간</span>
+                      {new Date(card.workTimes[0].endWorkTime).toLocaleString(
+                        "ko-KR",
+                        {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: false,
+                        }
+                      )}
+                    </CardEnd>
+                  </>
+                )}
+              </CardContent>
             </Card>
           ))}
       </HuntingArticleContainer>
@@ -156,9 +158,14 @@ const HuntingArticle: React.FC = () => {
           pageClassName={"page-item"}
         />
       </PaginateContainer>
-    </div>
+    </ArticleContainer>
   );
 };
+
+const ArticleContainer = styled.div`
+  max-width: 1060px;
+  margin: auto;
+`;
 
 const PaginateContainer = styled.div`
   .page-item {
@@ -171,7 +178,7 @@ const PaginateContainer = styled.div`
     margin: 0 2px 2px 0;
     font-size: 18px;
     cursor: pointer;
-    &: hover {
+    &:hover {
       background-color: #6667ab;
       transition: all 0.5s;
     }
@@ -199,18 +206,12 @@ const HuntingArticleContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
   flex-wrap: wrap;
-  margin-left: 60px;
-  margin-right: 60px;
 `;
 
 const Card = styled.div`
-  width: 230px;
-  height: 150px;
-  border: 1px solid #ccc;
-  margin: 10px;
-  padding-bottom: 10px;
+  width: 265px;
+  padding: 10px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -219,27 +220,47 @@ const Card = styled.div`
   cursor: pointer;
 `;
 
+const CardContent = styled.div`
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  flex-grow: 1;
+  height: auto;
+  &:hover {
+    border: 1px solid #6f38c5;
+    transition: all 0.5s;
+    div:nth-child(2) {
+      border-top: 1px solid #6f38c5;
+      transition: all 0.5s;
+    }
+  }
+`;
+
 const CardTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
   text-align: left;
-  padding-top: 15px;
-  padding-left: 10px;
-  :after {
-    content: "";
-    display: flex;
-    margin-left: 10px;
-    margin-top: 10px;
-    width: 200px;
-    border-bottom: 1px solid #ccc;
-  }
+  max-width: 222px;
+  margin: 8px;
+  max-height: 80px;
+  overflow: hidden;
+  word-break: break-word;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 `;
 
 const CardWriter = styled.div`
   font-size: 14px;
+  max-width: 222px;
   text-align: left;
   word-spacing: 2px;
-  padding-left: 10px;
+  margin: 5px 8px 2px 8px;
+  padding-top: 5px;
+  border-top: 1px solid #ccc;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   .sub-title {
     color: #6667ab;
     padding-right: 5px;
@@ -250,7 +271,7 @@ const CardPay = styled.div`
   font-size: 14px;
   text-align: left;
   word-spacing: 2px;
-  padding-left: 10px;
+  padding: 2px 8px;
   .sub-title {
     color: #6667ab;
     padding-right: 5px;
@@ -260,7 +281,7 @@ const CardPay = styled.div`
 const CardStart = styled.div`
   font-size: 14px;
   word-spacing: 2px;
-  padding-left: 10px;
+  padding: 2px 8px;
   .sub-title {
     color: #6667ab;
     padding-right: 5px;
@@ -270,7 +291,7 @@ const CardStart = styled.div`
 const CardEnd = styled.div`
   font-size: 14px;
   word-spacing: 2px;
-  padding-left: 10px;
+  padding: 2px 8px 10px 8px;
   .sub-title {
     color: #6667ab;
     padding-right: 5px;

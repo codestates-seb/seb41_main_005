@@ -202,11 +202,12 @@ const DropdownT = () => {
 
 //카테고리파트
 const UpperWrapper = styled.div`
-  width: 100%;
+  max-width: 1060px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 80px 180px 15px 180px;
+  padding: 80px 0 15px 0;
+  margin: auto;
   border-bottom: 1px solid #dadbdc;
 `;
 
@@ -251,19 +252,6 @@ const DropdownTitle = styled.div<DropProps>`
   top: 52px;
   left: 50%;
   height: 300px;
-  overflow-y: scroll;
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: grey;
-    border-radius: 10px;
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background-color: #a9a9a9;
-    border-radius: 0 3px 3px 0;
-  }
   width: 130px;
   text-align: center;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
@@ -305,8 +293,22 @@ const DropdownList = styled.ul`
       transition: all 0.5s;
     }
   }
-
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: grey;
+    border-radius: 10px;
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #a9a9a9;
+    border-radius: 0 3px 3px 0;
+  }
+  overflow-y: scroll;
   list-style-type: none;
+  border-radius: 3px;
+  height: 100%;
   padding: 0;
   margin: 0;
   display: flex;
@@ -328,9 +330,10 @@ const LinkWrapper = styled.a`
 
 //태그 파트
 const LowerWrapper = styled.div`
-  width: 100%;
-  height: 100px;
-  padding: 20px 180px 15px 180px;
+  max-width: 1060px;
+  height: auto;
+  margin: auto;
+  padding: 15px 0;
   border-bottom: 1px solid #dadbdc;
 `;
 
@@ -342,17 +345,23 @@ const TagWrapper = styled.div`
   border: none;
   background-color: white;
   button {
-    margin: 0 0.3rem 0 0;
-    height: 1.5rem;
+    margin: 4px 8px 4px 0;
+    padding: 2px 5px;
+    height: auto;
     font-size: 14px;
     font-weight: regular;
-    color: #6f38c5;
+    color: #444444;
     background-color: white;
-    border: solid 1.2px #6f38c5;
-    border-radius: 4px;
+    border: solid 1px #fcc72c;
+    border-radius: 10px;
+    &:hover {
+      background-color: ${(props) => props.theme.color.main};
+      transition: all 0.5s;
+      color: white;
+    }
   }
   .clicked {
-    background-color: #6f38c5;
+    background-color: #fcc72c;
     color: white;
   }
 `;
