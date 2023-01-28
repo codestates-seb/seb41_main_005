@@ -203,7 +203,7 @@ const EditHire = (props: Props) => {
 
     axios
       .patch(
-        `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
+        `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
         existingInfo
       )
       .then((response) => {
@@ -218,7 +218,7 @@ const EditHire = (props: Props) => {
   const handleDelete = () => {
     axios
       .delete(
-        `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
+        `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
       )
       .then((response) => {
         console.log(response);
@@ -234,33 +234,35 @@ const EditHire = (props: Props) => {
       <TitleContainer>
         제목
         <InputBox
-          width="400px"
+          width="350px"
           onChange={handleTitleChange}
           defaultValue={existingInfo.title}
         />
         지원마감일
         <Deadline onChange={handleDeadlineChange} />
       </TitleContainer>
-      카테고리
-      <CategoryWrapper>
-        <select
-          value={existingInfo.categoryName}
-          placeholder={"카테고리"}
-          onChange={handleCategoryChange}
-        >
-          {categoryOptions.map(({ value, label }) => (
-            <option key={value}>{label}</option>
-          ))}
-        </select>
-      </CategoryWrapper>
-      태그
-      <TagWrapper>
-        <select placeholder={"태그"} onChange={handleTagChange}>
-          {tagOptions.map(({ value, label }) => (
-            <option key={value}>{label}</option>
-          ))}
-        </select>
-      </TagWrapper>
+      <SelectWrapper>
+        카테고리
+        <CategoryWrapper>
+          <select
+            value={existingInfo.categoryName}
+            placeholder={"카테고리"}
+            onChange={handleCategoryChange}
+          >
+            {categoryOptions.map(({ value, label }) => (
+              <option key={value}>{label}</option>
+            ))}
+          </select>
+        </CategoryWrapper>
+        태그
+        <TagWrapper>
+          <select placeholder={"태그"} onChange={handleTagChange}>
+            {tagOptions.map(({ value, label }) => (
+              <option key={value}>{label}</option>
+            ))}
+          </select>
+        </TagWrapper>
+      </SelectWrapper>
       <WithTitle>
         업무시간
         <WorkSchedule
@@ -329,11 +331,11 @@ const EditHire = (props: Props) => {
         />
       </WithTitle>
       <SubmitWrapper>
-        <Button className="edithunting-submit" onClick={handleDelete}>
-          삭제하기
-        </Button>
         <Button className="edithunting-submit" onClick={handleSubmit}>
           수정하기
+        </Button>
+        <Button className="edithunting-submit" onClick={handleDelete}>
+          삭제하기
         </Button>
       </SubmitWrapper>
     </EditHireContainer>
@@ -341,14 +343,18 @@ const EditHire = (props: Props) => {
 };
 
 const EditHireContainer = styled.div`
-  padding: 100px 50px 50px 50px;
+  background: #fafafa;
+  width: 80%;
+  margin: auto;
+  padding: 135px;
   display: flex;
   flex-direction: column;
-  input {
-    align-items: center;
-  }
 `;
 const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+const SelectWrapper = styled.div`
   display: flex;
   flex-direction: row;
 `;
@@ -372,12 +378,11 @@ const CategoryWrapper = styled.div`
 `;
 const LocationWrapper = styled.div`
   width: 150px;
-  margin: 10px;
-  padding: 10px;
   select {
     width: 150px;
     height: 2.5rem;
     border-radius: 5px;
+    margin: 7px;
   }
 `;
 const TagWrapper = styled.div`
@@ -391,8 +396,14 @@ const TagWrapper = styled.div`
 `;
 const SubmitWrapper = styled.div`
   .edithunting-submit {
-    margin: 30px;
-    width: 200px;
+    margin: 10px 50px 0 10px;
+    width: 150px;
+    float: right;
+    background-color: #6f38c5;
+    &:hover {
+      background-color: #fcc72c;
+      transition: all 0.5s;
+    }
   }
 `;
 export default EditHire;
