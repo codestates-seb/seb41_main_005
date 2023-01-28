@@ -17,14 +17,18 @@ const Container = styled.div`
   margin: auto;
   .wrapper {
     padding-top: 80px;
+    padding-left: 10px;
     line-height: 20px;
     position: relative;
     .left {
       display: inline-block;
       vertical-align: top;
       width: 700px;
+      hr {
+        border-line: solid 0.5px #a9a9a9;
+        width: 680px;
+      }
       .header {
-        border-bottom: 1px solid #a9a9a9;
         padding: 0px 0px 0px 5px;
         .title {
           display: flex;
@@ -75,10 +79,22 @@ const Container = styled.div`
         }
       }
     }
-    .right {
-      position: fixed;
-      right: 300px;
-      top: 80px;
+    @media (min-width: 1200px) {
+      .left {
+        display: inline-block;
+        width: calc(100% - 360px);
+        vertical-align: top;
+      }
+      .right {
+        position: fixed;
+        right: calc((100% - 1060px) / 2);
+        top: 80px;
+      }
+    }
+    @media (min-width: 992px) and (max-width: 1199px) {
+      .right {
+        width: 340px;
+      }
     }
   }
 `;
@@ -165,6 +181,7 @@ function HireDetail() {
                     : (datas.contentTags = [])}
                 </ul>
               </div>
+              <hr />
             </section>
             <section className="description">
               <div>

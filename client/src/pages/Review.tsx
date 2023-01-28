@@ -18,10 +18,22 @@ const Container = styled.div`
       vertical-align: top;
       width: 720px;
     }
-    .right {
-      position: fixed;
-      right: 340px;
-      top: 70px;
+    @media (min-width: 1200px) {
+      .left {
+        display: inline-block;
+        width: calc(100% - 360px);
+        vertical-align: top;
+      }
+      .right {
+        position: fixed;
+        right: calc((100% - 1060px) / 2);
+        top: 70px;
+      }
+    }
+    @media (min-width: 992px) and (max-width: 1199px) {
+      .right {
+        width: 340px;
+      }
     }
   }
 `;

@@ -29,6 +29,7 @@ const ReviewInfo = ({ datas }: { datas: any }) => {
 };
 
 const ReviewInfoContainer = styled.div`
+  background-color: #fff;
   width: 300px;
   font-size: 16px;
   border: solid 1px #ccc;

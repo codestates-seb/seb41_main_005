@@ -8,6 +8,7 @@ const Container = styled.aside`
   border: 1px solid #a9a9a9;
   border-radius: 2px;
   padding: 10px 0px 20px 11px;
+  background-color: #fff;
   div {
     margin: 10px;
     span {
