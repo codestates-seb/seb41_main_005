@@ -31,7 +31,7 @@ import {
 interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
 
 const SignUpBox = styled.form<FormProps>`
-  margin-top: 20rem;
+  margin: 100px 0;
   width: 30rem;
   height: auto;
   border: 1px solid ${(props) => props.theme.color.back};
@@ -262,7 +262,7 @@ const SignUpForm = () => {
     formData.append("image", signUpImg);
     axios
       .post(
-        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/members",
+        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/members",
         formData,
         {
           headers: {
@@ -355,7 +355,7 @@ const SignUpForm = () => {
         )}
       </InputSection>
       <IntroduceSection>
-        <label htmlFor={"introdution"}>자기소개</label>
+        <label htmlFor={"introduction"}>자기소개</label>
         <StyledTextArea
           id={"introduction"}
           name={"introduction"}

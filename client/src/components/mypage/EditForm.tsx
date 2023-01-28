@@ -201,20 +201,15 @@ const EditForm = () => {
         type: "application/json",
       })
     );
-    console.log(Data);
-    console.log(formData);
-    console.log(signUpImg);
     if (signUpImg === "") {
       formData.append("image", new Blob());
     } else {
       formData.append("image", signUpImg);
     }
-    console.log(formData.get("key"));
-    console.log(formData.get("image"));
 
     axios
       .patch(
-        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/members",
+        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/members",
         formData,
         {
           headers: {
@@ -223,7 +218,6 @@ const EditForm = () => {
         }
       )
       .then((res) => {
-        console.log(res);
         dispatch(setImgUrl(res.data.pictureUrl));
         dispatch(setLogInNickname(res.data.nickName));
         dispatch(setLogInIntroduction(res.data.about));
@@ -231,7 +225,6 @@ const EditForm = () => {
         navigate(0);
       })
       .catch((err) => {
-        console.log(err);
         alert("중복된 닉네임입니다");
       });
   };

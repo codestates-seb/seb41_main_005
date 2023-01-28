@@ -31,21 +31,17 @@ const EditHunting = () => {
 
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setCategory(event.target.value);
-    console.log("category:", event.target.value);
   };
 
   const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setLocation(event.target.value);
-    console.log("location:", event.target.value);
   };
   const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setTag(event.target.value);
-    console.log("tag:", event.target.value);
   };
 
   const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
     setWorkTime(workTime);
-    console.log("worktime:", workTime);
   };
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -65,8 +61,27 @@ const EditHunting = () => {
   const handleDeadlineChange = (deadline: string) => {
     setDeadline(deadline);
   };
+  const validateForm = () => {
+    if (
+      !title ||
+      !workDetail ||
+      !pay ||
+      !location ||
+      !category ||
+      !tag ||
+      !workTime ||
+      !deadline
+    ) {
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = () => {
+    if (!validateForm()) {
+      alert("(선택)을 제외한 모든 창에 입력해주세요.");
+      return;
+    }
     axios
       .post(
         "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
@@ -93,11 +108,11 @@ const EditHunting = () => {
       )
       .then((response) => {
         console.log(response);
+        navigate("/hunting");
       })
       .catch((error) => {
         console.log(error);
       });
-    navigate("/hunting");
   };
 
   return (
@@ -114,7 +129,7 @@ const EditHunting = () => {
           <select placeholder={"카테고리"} onChange={handleCategoryChange}>
             {categoryOptions.map(({ value, label }) => (
               <option key={value} value={value}>
-                {label}
+                선택
               </option>
             ))}
           </select>
@@ -123,7 +138,7 @@ const EditHunting = () => {
         <TagWrapper>
           <select onChange={handleTagChange}>
             <option defaultValue="" hidden>
-              태그
+              선택
             </option>
             {tagOptions.map(({ value, label }) => (
               <option key={value} value={value}>
@@ -151,7 +166,7 @@ const EditHunting = () => {
             <select placeholder={"지역"} onChange={handleLocationChange}>
               {locationOptions.map(({ value, label }) => (
                 <option key={value} value={value}>
-                  {label}
+                  선택
                 </option>
               ))}
             </select>
