@@ -43,8 +43,6 @@ export default function CalloutBox({
         <span className="title">
           {data.type === "buy" ? "업무 시간" : "희망 시간"}
         </span>
-
-        {/* {transDateTime(data.workTimes)} */}
         <ul>
           {transDateTime(data.workTimes).map((item, idx) => (
             <li key={idx}>{item}</li>
