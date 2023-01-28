@@ -10,7 +10,7 @@ export const handleRefresh = async () => {
   if (AUTH_TOKEN) {
     axios
       .get(
-        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth/refresh"
+        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/auth/refresh"
       )
       .then((res) => {
         onLogInSuccess(res);
