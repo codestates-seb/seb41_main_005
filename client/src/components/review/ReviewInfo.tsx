@@ -1,86 +1,91 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { getReview } from "../../api/getReivew";
 
-interface ReviewInfoCard {
-  nickname: string;
-  like: number;
-  dislike: number;
-  reviewCount: number;
-}
-
-export const ReviewInfoCard = {
-  nickname: "(주)느낌오조",
-  like: 5,
-  dislike: 1,
-  reviewCount: 14,
-};
-
-const ReviewInfo = () => {
-  // const [reviewData, setReviewData] = useState();
-  // const contentId = useParams().content_id;
-
-  // useEffect(() => {
-  //   const review = async () => {
-  //     const data = await getReview(Number(contentId));
-  //     setReviewData(data);
-  //   };
-  //   review();
-  // }, [contentId]);
-
+const ReviewInfo = ({ datas }: { datas: any }) => {
   return (
     <ReviewInfoContainer>
-      <Card>
-        <CardNickname>
-          <span className="title">작성자</span>
-          <span>{ReviewInfoCard.nickname}</span>
-        </CardNickname>
-        <CardScore>
+      <Image>
+        <img src={datas.pictureUrl} alt="" />
+      </Image>
+      <Info>
+        <div>
+          <span className="title">닉네임</span>
+          <span>{datas.nickName}</span>
+        </div>
+        <ReviewScore>
           <span className="title">평판</span>
-          <span>
-            좋아요 {ReviewInfoCard.like} | 싫어요 {ReviewInfoCard.dislike}
-          </span>
-        </CardScore>
-        <CardCount>
+          <div>
+            <span className="like">좋아요 {datas.likeCount}</span>
+            <hr />
+            <span className="dislike">싫어요 {datas.dislikeCount}</span>
+          </div>
+        </ReviewScore>
+        <div>
           <span className="title">리뷰</span>
-          <span>{ReviewInfoCard.reviewCount}</span>
-        </CardCount>
-      </Card>
+          <span>{datas.reviewCount}</span>
+        </div>
+      </Info>
     </ReviewInfoContainer>
   );
 };
 
 const ReviewInfoContainer = styled.div`
-  margin-top: 30px;
   width: 300px;
-  position: fixed;
-  top: 10%;
-  right: 20%;
-`;
-const Card = styled.div`
+  font-size: 16px;
   border: solid 1px #ccc;
+  border-radius: 2px;
   box-shadow: 1px 1px 1px #ccc;
+  padding: 15px 10px 15px 10px;
+  margin: 20px 10px 10px 10px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-aroud;
+`;
+
+const Image = styled.div`
   padding: 10px;
-  margin: 10px;
-  span {
-    padding-right: 10px;
-  }
-  .title {
-    color: #6667ab;
+  img {
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
   }
 `;
 
-const CardNickname = styled.div`
-  padding: 5px;
+const Info = styled.div`
+  div {
+    margin: 5px;
+    .title {
+      color: #6667ab;
+      padding-right: 10px;
+    }
+  }
 `;
 
-const CardScore = styled.div`
-  padding: 5px;
-`;
-
-const CardCount = styled.div`
-  padding: 5px;
+const ReviewScore = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  jutify-content: space-between;
+  align-items: center;
+  div {
+    display: flex;
+    flex-direction: row;
+    jutify-content: space-between;
+    align-items: center;
+    .like {
+      padding-right: 5px;
+    }
+    .dislike {
+      padding-left: 5px;
+    }
+    hr {
+      border-right: solid 1px #a9a9a9;
+      border-bottom: 0px;
+      width: 0px;
+      height: 16px;
+    }
+  }
 `;
 
 export default ReviewInfo;
