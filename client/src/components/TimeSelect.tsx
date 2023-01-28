@@ -212,6 +212,7 @@ const StyledDatePicker = styled(DatePicker)`
 const StyledSelect = styled(Select)`
   width: 120px;
   font-size: 14px;
+  margin-top: 10px;
 `;
 
 const TimeContainer = styled.div`
@@ -239,14 +240,24 @@ const SumWrapper = styled.div`
 const ButtonWrapper = styled.div`
   .worktime-submit {
     width: 50px;
-    margin-top: 65px;
+    margin-top: 70px;
     margin-left: -10px;
+    background-color: #6f38c5;
+    &:hover {
+      background-color: #fcc72c;
+      transition: all 0.5s;
+    }
   }
   .deadline-submit {
     width: 50px;
     float: right;
     margin-top: -40px;
     margin-right: -60px;
+    background-color: #6f38c5;
+    &:hover {
+      background-color: #fcc72c;
+      transition: all 0.5s;
+    }
   }
 `;
 

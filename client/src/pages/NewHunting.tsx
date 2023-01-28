@@ -84,7 +84,7 @@ const EditHunting = () => {
     }
     axios
       .post(
-        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
+        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents",
         {
           title: title,
           contentType: "SELL",
@@ -124,29 +124,33 @@ const EditHunting = () => {
         <Deadline onChange={handleDeadlineChange} />
       </TitleContainer>
       <SelectWrapper>
-        카테고리
-        <CategoryWrapper>
-          <select placeholder={"카테고리"} onChange={handleCategoryChange}>
-            {categoryOptions.map(({ value, label }) => (
-              <option key={value} value={value}>
+        <WithTitle>
+          카테고리
+          <CategoryWrapper>
+            <select placeholder={"카테고리"} onChange={handleCategoryChange}>
+              {categoryOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  선택
+                </option>
+              ))}
+            </select>
+          </CategoryWrapper>
+        </WithTitle>
+        <WithTitle>
+          태그
+          <TagWrapper>
+            <select onChange={handleTagChange}>
+              <option defaultValue="" hidden>
                 선택
               </option>
-            ))}
-          </select>
-        </CategoryWrapper>
-        태그
-        <TagWrapper>
-          <select onChange={handleTagChange}>
-            <option defaultValue="" hidden>
-              선택
-            </option>
-            {tagOptions.map(({ value, label }) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </TagWrapper>
+              {tagOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </TagWrapper>
+        </WithTitle>
       </SelectWrapper>
       <PossibleTime>
         희망 업무시간
@@ -191,7 +195,10 @@ const EditHunting = () => {
 };
 
 const EditHuntingContainer = styled.div`
-  padding: 100px 50px 50px 50px;
+  background: #fafafa;
+  width: 80%;
+  margin: auto;
+  padding: 135px;
   display: flex;
   flex-direction: column;
 `;
@@ -212,15 +219,14 @@ const WithTitle = styled.div`
 const TwoInput = styled.div`
   display: flex;
   flex-direction: row;
-  margin-left: 50px;
+  justify-content: center;
 `;
 const SelectWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  margin-left: 70px;
+  justify-content: center;
 `;
 const CategoryWrapper = styled.div`
-  margin: 10px;
   padding: 10px;
   select {
     width: 150px;
@@ -238,7 +244,6 @@ const LocationWrapper = styled.div`
   }
 `;
 const TagWrapper = styled.div`
-  margin: 10px;
   padding: 10px;
   select {
     width: 150px;
@@ -250,6 +255,11 @@ const SubmitWrapper = styled.div`
   .newhunting-submit {
     margin-left: 330px;
     width: 300px;
+    background-color: #6f38c5;
+    &:hover {
+      background-color: #fcc72c;
+      transition: all 0.5s;
+    }
   }
 `;
 export default EditHunting;
