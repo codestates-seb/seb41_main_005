@@ -69,7 +69,7 @@ const location = [
   "강동구",
 ];
 
-const DropdownMenu = () => {
+const DropdownH = () => {
   const dispatch = useDispatch();
   //태그버튼 클릭시
   const [clickedTag, setClickedTag] = useState("");
@@ -357,4 +357,4 @@ const TagWrapper = styled.div`
   }
 `;
 
-export default DropdownMenu;
+export default DropdownH;

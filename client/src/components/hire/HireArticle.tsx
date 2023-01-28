@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { CardProps, ServerData } from "./CardProps";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../util/redux";
+import {
+  resetCategory,
+  resetLocation,
+  resetTag,
+} from "../../util/redux/DropDown";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
@@ -29,11 +34,19 @@ const HireArticle: React.FC = (card) => {
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+  // 태그 카테고리 지역 리셋
+  useEffect(() => {
+    dispatch(resetCategory());
+    dispatch(resetLocation());
+    dispatch(resetTag());
+  }, []);
+
   useEffect(() => {
     const getData = async (contentType: string) => {
       try {
         const response = await axios.get(
-          "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
+          "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents",
           {
             params: {
               contentType: contentType,
@@ -154,7 +167,7 @@ const PaginateContainer = styled.div`
     border: 1px solid #a9a9a9;
     display: flex;
     justify-content: center;
-    padding: 4px;
+    padding: 1px;
     margin: 0 2px 2px 0;
     font-size: 18px;
     cursor: pointer;
