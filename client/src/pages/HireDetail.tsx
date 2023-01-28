@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -85,26 +85,29 @@ const Container = styled.div`
 
 function HireDetail() {
   const [datas, setDatas] = useState<hireDetailProps>();
-  const [memberData, setMemberData] = useState();
+  const [memberData, setMemberData] = useState<any>();
 
   const navigate = useNavigate();
   const contentId = useParams().content_id;
   const memberId = datas?.memberId;
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
   const applicantId = useSelector((state: RootState) => state.LogIn.logInMID);
+  const reviewCount = memberData?.totalReviewCount;
+
+  const detailAPI = useCallback(async () => {
+    const data = await getDetailData(Number(contentId));
+    setDatas(data);
+  }, [contentId]);
+
+  const memberAPI = useCallback(async () => {
+    const data = await getMemberData(memberId);
+    setMemberData(data);
+  }, [memberId]);
 
   useEffect(() => {
-    const detail = async () => {
-      const data = await getDetailData(Number(contentId));
-      setDatas(data);
-    };
-    const member = async () => {
-      const data = await getMemberData(memberId);
-      setMemberData(data);
-    };
-    detail();
-    member();
-  }, [contentId, memberId]);
+    detailAPI();
+    memberAPI();
+  }, [detailAPI, memberAPI]);
 
   const handleEditButton = () => {
     navigate(`/edithire/${contentId}`);
@@ -120,14 +123,16 @@ function HireDetail() {
   };
 
   const handleDetailButton = () => {
-    navigate(`/review/${contentId}`);
+    reviewCount !== 0
+      ? navigate(`/review/${contentId}`)
+      : alert("아직 작성된 리뷰가 없습니다.");
   };
 
   const handleApplyButton = () => {
     if (memberId !== applicantId) {
       axios
         .post(
-          `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
+          `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
           { applicantId }
         )
         .then((res) => console.log(res.data));
@@ -139,7 +144,7 @@ function HireDetail() {
 
   return (
     <Container>
-      {datas && (
+      {datas && memberData ? (
         <div className="wrapper">
           <div className="left">
             <section className="header">
@@ -194,7 +199,7 @@ function HireDetail() {
             />
           </div>
         </div>
-      )}
+      ) : null}
     </Container>
   );
 }
