@@ -50,7 +50,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/schedule" element={<Schedule />} />
-          <Route path="/review" element={<Review />} />
+          <Route path="/review/:content_id" element={<Review />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>

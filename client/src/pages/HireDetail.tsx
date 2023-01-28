@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -17,14 +17,18 @@ const Container = styled.div`
   margin: auto;
   .wrapper {
     padding-top: 80px;
+    padding-left: 10px;
     line-height: 20px;
     position: relative;
     .left {
       display: inline-block;
       vertical-align: top;
       width: 700px;
+      hr {
+        border-line: solid 0.5px #a9a9a9;
+        width: 680px;
+      }
       .header {
-        border-bottom: 1px solid #a9a9a9;
         padding: 0px 0px 0px 5px;
         .title {
           display: flex;
@@ -75,36 +79,51 @@ const Container = styled.div`
         }
       }
     }
-    .right {
-      position: fixed;
-      right: 300px;
-      top: 80px;
+    @media (min-width: 1200px) {
+      .left {
+        display: inline-block;
+        width: calc(100% - 360px);
+        vertical-align: top;
+      }
+      .right {
+        position: fixed;
+        right: calc((100% - 1060px) / 2);
+        top: 80px;
+      }
+    }
+    @media (min-width: 992px) and (max-width: 1199px) {
+      .right {
+        width: 340px;
+      }
     }
   }
 `;
 
 function HireDetail() {
   const [datas, setDatas] = useState<hireDetailProps>();
-  const [memberData, setMemberData] = useState();
+  const [memberData, setMemberData] = useState<any>();
 
   const navigate = useNavigate();
   const contentId = useParams().content_id;
   const memberId = datas?.memberId;
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
   const applicantId = useSelector((state: RootState) => state.LogIn.logInMID);
+  const reviewCount = memberData?.totalReviewCount;
+
+  const detailAPI = useCallback(async () => {
+    const data = await getDetailData(Number(contentId));
+    setDatas(data);
+  }, [contentId]);
+
+  const memberAPI = useCallback(async () => {
+    const data = await getMemberData(memberId);
+    setMemberData(data);
+  }, [memberId]);
 
   useEffect(() => {
-    const detail = async () => {
-      const data = await getDetailData(Number(contentId));
-      setDatas(data);
-    };
-    const member = async () => {
-      const data = await getMemberData(memberId);
-      setMemberData(data);
-    };
-    detail();
-    member();
-  }, [contentId, memberId]);
+    detailAPI();
+    memberAPI();
+  }, [detailAPI, memberAPI]);
 
   const handleEditButton = () => {
     navigate(`/edithire/${contentId}`);
@@ -120,17 +139,20 @@ function HireDetail() {
   };
 
   const handleDetailButton = () => {
-    navigate(`/review`);
+    reviewCount !== 0
+      ? navigate(`/review/${contentId}`)
+      : alert("아직 작성된 리뷰가 없습니다.");
   };
 
   const handleApplyButton = () => {
     if (memberId !== applicantId) {
       axios
         .post(
-          `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
+          `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}/apply`,
           { applicantId }
         )
         .then((res) => console.log(res.data));
+      alert("지원 완료!");
     } else {
       alert("본인이 작성한 게시글에는 지원할 수 없습니다.");
     }
@@ -138,7 +160,7 @@ function HireDetail() {
 
   return (
     <Container>
-      {datas && (
+      {datas && memberData ? (
         <div className="wrapper">
           <div className="left">
             <section className="header">
@@ -159,6 +181,7 @@ function HireDetail() {
                     : (datas.contentTags = [])}
                 </ul>
               </div>
+              <hr />
             </section>
             <section className="description">
               <div>
@@ -193,7 +216,7 @@ function HireDetail() {
             />
           </div>
         </div>
-      )}
+      ) : null}
     </Container>
   );
 }
