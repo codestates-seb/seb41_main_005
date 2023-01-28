@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
@@ -100,9 +101,8 @@ public class ContentApplyService {
 	}
 
 	@Transactional
-	public Page<ContentApply> findAllApplies(Content content, int page, int size) {
+	public Page<ContentApply> findAllApplies(Content content, Member writer, int page, int size) {
 		// 작성자만 조회 가능
-		Member writer = content.getMember();
 		verifyThisMemberIsWriter(writer);
 
 		return applyRepository.findAllByContent(content,
@@ -146,6 +146,16 @@ public class ContentApplyService {
 				apply.getContent().setStatus(Content.Status.COMPLETED);
 			}
 		}
+	}
+
+	// 특정 회원의 게시글 타입별 완료 건수 조회
+	public Long countComplete(Member member, ContentType type) {
+		return applyRepository.countByApplicantAndContentType(member, type);
+	}
+
+	// 특정 회원의 전체 완료 건수 조회
+	public Long countTotalComplete(Member member) {
+		return applyRepository.countByApplicant(member);
 	}
 
 	// == Find ==
