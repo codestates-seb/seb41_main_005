@@ -8,9 +8,10 @@ import Warning from "../components/detail/Warning";
 import { getDetailData } from "../api/getDetail";
 import { getMemberData } from "../api/getMember";
 import { hireDetailProps } from "../util/hireDetailData";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../util/redux";
 import Button from "../components/Buttons";
+import { setTabNum } from "../util/redux/LogIn";
 
 const Container = styled.div`
   display: block;
@@ -99,6 +100,7 @@ function HireDetail() {
   const [memberData, setMemberData] = useState<any>();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const contentId = useParams().content_id;
   const memberId = datas?.memberId;
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
@@ -129,6 +131,7 @@ function HireDetail() {
       navigate("/newhire");
     } else {
       alert("로그인 후 이용하세요.");
+      dispatch(setTabNum(4));
       navigate("/login");
     }
   };
