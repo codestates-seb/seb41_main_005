@@ -192,7 +192,7 @@ public class ContentApplyService {
 	}
 
 	// 해당 글에 이미 신청내역이 있는지 확인
-	private void verifyExistMemberApply(Member applicant, Content content) {
+	public void verifyExistMemberApply(Member applicant, Content content) {
 		Optional<ContentApply> optionalApply = applyRepository.findByApplicantAndContent(applicant, content);
 
 		if (optionalApply.isPresent()) {
