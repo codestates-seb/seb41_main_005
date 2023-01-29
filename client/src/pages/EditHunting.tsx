@@ -110,6 +110,11 @@ const EditHunting = (props: Props) => {
   };
 
   const handlePayChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    if (!Number(inputValue) || Number(inputValue) < 0) {
+      event.preventDefault();
+      alert("숫자만 입력 가능하고, 음수는 입력할 수 없습니다.");
+    }
     setExistingInfo({
       ...existingInfo,
       price: parseFloat(event.target.value),
@@ -196,7 +201,12 @@ const EditHunting = (props: Props) => {
       <TitleContainer>
         <InputSection>
           <label htmlFor="title">제목</label>
-          <InputBox width="400px" id="title" onChange={handleTitleChange} />
+          <InputBox
+            value={existingInfo.title}
+            width="400px"
+            id="title"
+            onChange={handleTitleChange}
+          />
         </InputSection>
         <DeadLineSection>
           <label htmlFor="date">구직마감일</label>
@@ -207,7 +217,11 @@ const EditHunting = (props: Props) => {
         <InputSection>
           <label htmlFor="category">카테고리</label>
           <CategoryWrapper>
-            <select onChange={handleCategoryChange} id={"category"}>
+            <select
+              value={existingInfo.categoryName}
+              onChange={handleCategoryChange}
+              id={"category"}
+            >
               <option defaultValue="" hidden>
                 선택
               </option>
@@ -242,12 +256,21 @@ const EditHunting = (props: Props) => {
       <TwoInput>
         <InputSection>
           <label htmlFor="num">희망보수</label>
-          <InputBox width="150px" onChange={handlePayChange} id={"num"} />
+          <InputBox
+            value={existingInfo.price}
+            width="150px"
+            onChange={handlePayChange}
+            id={"num"}
+          />
         </InputSection>
         <InputSection>
           <label htmlFor="location">희망장소</label>
           <LocationWrapper>
-            <select onChange={handleLocationChange} id={"location"}>
+            <select
+              value={existingInfo.cityName}
+              onChange={handleLocationChange}
+              id={"location"}
+            >
               <option defaultValue="" hidden>
                 선택
               </option>
@@ -262,11 +285,19 @@ const EditHunting = (props: Props) => {
       </TwoInput>
       <WithTitle>
         <label htmlFor="content">업무내용</label>
-        <TextArea onChange={handleWorkDetailChange} id={"content"} />
+        <TextArea
+          value={existingInfo.workContent}
+          onChange={handleWorkDetailChange}
+          id={"content"}
+        />
       </WithTitle>
       <WithTitle>
         <label htmlFor="etc">기타 (선택)</label>
-        <TextArea onChange={handleEtcChange} id={"etc"} />
+        <TextArea
+          value={existingInfo.other}
+          onChange={handleEtcChange}
+          id={"etc"}
+        />
       </WithTitle>
       <SubmitWrapper>
         <Button className="edithunting-submit" onClick={handleDelete}>

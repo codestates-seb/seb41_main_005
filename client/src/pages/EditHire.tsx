@@ -122,6 +122,11 @@ const EditHire = (props: Props) => {
   };
 
   const handleVolumeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    if (!Number(inputValue) || Number(inputValue) < 0) {
+      event.preventDefault();
+      alert("숫자만 입력 가능하고, 음수는 입력할 수 없습니다.");
+    }
     setExistingInfo({
       ...existingInfo,
       recruitingCount: parseInt(event.target.value),
@@ -130,6 +135,11 @@ const EditHire = (props: Props) => {
   };
 
   const handlePayChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    if (!Number(inputValue) || Number(inputValue) < 0) {
+      event.preventDefault();
+      alert("숫자만 입력 가능하고, 음수는 입력할 수 없습니다.");
+    }
     setExistingInfo({
       ...existingInfo,
       price: parseFloat(event.target.value),
@@ -234,7 +244,12 @@ const EditHire = (props: Props) => {
       <TitleContainer>
         <InputSection>
           <label htmlFor="title">제목</label>
-          <InputBox width="400px" id="title" onChange={handleTitleChange} />
+          <InputBox
+            width="400px"
+            id="title"
+            value={existingInfo.title}
+            onChange={handleTitleChange}
+          />
         </InputSection>
         <DeadLineSection>
           <label htmlFor="date">지원마감일</label>
@@ -245,7 +260,11 @@ const EditHire = (props: Props) => {
         <InputSection>
           <label htmlFor="category">카테고리</label>
           <CategoryWrapper>
-            <select onChange={handleCategoryChange} id={"category"}>
+            <select
+              value={existingInfo.categoryName}
+              onChange={handleCategoryChange}
+              id={"category"}
+            >
               <option defaultValue="" hidden>
                 선택
               </option>
@@ -280,16 +299,30 @@ const EditHire = (props: Props) => {
       <ThreeInput>
         <InputSection>
           <label htmlFor="num">모집인원</label>
-          <InputBox width="150px" onChange={handleVolumeChange} id={"num"} />
+          <InputBox
+            value={existingInfo.recruitingCount}
+            width="150px"
+            onChange={handleVolumeChange}
+            id={"num"}
+          />
         </InputSection>
         <InputSection>
           <label htmlFor="income">보수</label>
-          <InputBox width="150px" onChange={handlePayChange} id={"income"} />
+          <InputBox
+            value={existingInfo.price}
+            width="150px"
+            onChange={handlePayChange}
+            id={"income"}
+          />
         </InputSection>
         <InputSection>
           <label htmlFor="location">지역</label>
           <LocationWrapper>
-            <select onChange={handleLocationChange} id={"location"}>
+            <select
+              value={existingInfo.cityName}
+              onChange={handleLocationChange}
+              id={"location"}
+            >
               <option defaultValue="" hidden>
                 선택
               </option>
@@ -304,19 +337,35 @@ const EditHire = (props: Props) => {
       </ThreeInput>
       <WithTitle>
         <label htmlFor="content">업무내용</label>
-        <TextArea onChange={handleWorkDetailChange} id={"content"} />
+        <TextArea
+          value={existingInfo.workContent}
+          onChange={handleWorkDetailChange}
+          id={"content"}
+        />
       </WithTitle>
       <WithTitle>
         <label htmlFor="qualification">자격요건</label>
-        <TextArea onChange={handleQualificationChange} id={"qualification"} />
+        <TextArea
+          value={existingInfo.qualification}
+          onChange={handleQualificationChange}
+          id={"qualification"}
+        />
       </WithTitle>
       <WithTitle>
         <label htmlFor="prefer">우대사항 (선택)</label>
-        <TextArea onChange={handlePreferentialChange} id={"prefer"} />
+        <TextArea
+          value={existingInfo.preference}
+          onChange={handlePreferentialChange}
+          id={"prefer"}
+        />
       </WithTitle>
       <WithTitle>
         <label htmlFor="etc">기타 (선택)</label>
-        <TextArea onChange={handleEtcChange} id={"etc"} />
+        <TextArea
+          value={existingInfo.other}
+          onChange={handleEtcChange}
+          id={"etc"}
+        />
       </WithTitle>
       <SubmitWrapper>
         <Button className="edithunting-submit" onClick={handleDelete}>
