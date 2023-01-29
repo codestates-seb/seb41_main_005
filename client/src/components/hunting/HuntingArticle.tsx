@@ -213,7 +213,7 @@ const HuntingArticleContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  min-height: 560px;
+  min-height: 720px;
 `;
 
 const Card = styled.div`

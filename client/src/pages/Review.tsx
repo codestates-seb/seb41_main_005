@@ -9,6 +9,7 @@ const Container = styled.div`
   display: block;
   max-width: 1060px;
   margin: auto;
+  min-height: 700px;
   .wrapper {
     padding-top: 80px;
     line-height: 20px;
