@@ -129,6 +129,11 @@ public class ContentApplyService {
 			throw new BusinessLogicException(ExceptionCode.DELETE_NOT_ALLOWED);
 		}
 
+		// 만약 이미 매칭된 후에 취소했다면, 게시글 상태를 다시 모집 중으로 변경
+		if (apply.getApplyStatus() == ContentApply.ApplyStatus.MATCH) {
+			apply.getContent().setStatus(Content.Status.RECRUITING);
+		}
+
 		applyRepository.delete(apply);
 	}
 
