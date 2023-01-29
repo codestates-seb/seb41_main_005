@@ -192,87 +192,81 @@ const EditHunting = (props: Props) => {
   };
 
   return (
-    <EditHireContainer>
+    <EditHuntingContainer>
       <TitleContainer>
-        제목
-        <InputBox
-          width="350px"
-          onChange={handleTitleChange}
-          defaultValue={existingInfo.title}
-        />
-        지원마감일
-        <Deadline onChange={handleDeadlineChange} />
+        <InputSection>
+          <label htmlFor="title">제목</label>
+          <InputBox width="400px" id="title" onChange={handleTitleChange} />
+        </InputSection>
+        <DeadLineSection>
+          <label htmlFor="date">구직마감일</label>
+          <Deadline onChange={handleDeadlineChange} />
+        </DeadLineSection>
       </TitleContainer>
-      <SelectWrapper>
-        <WithTitle>
-          카테고리
+      <SelectContainer>
+        <InputSection>
+          <label htmlFor="category">카테고리</label>
           <CategoryWrapper>
-            <select
-              value={existingInfo.categoryName}
-              placeholder={"카테고리"}
-              onChange={handleCategoryChange}
-            >
+            <select onChange={handleCategoryChange} id={"category"}>
+              <option defaultValue="" hidden>
+                선택
+              </option>
               {categoryOptions.map(({ value, label }) => (
-                <option key={value}>{label}</option>
+                <option key={value} value={value}>
+                  {label}
+                </option>
               ))}
             </select>
           </CategoryWrapper>
-        </WithTitle>
-        <WithTitle>
-          태그
+        </InputSection>
+        <InputSection>
+          <label htmlFor="tag">태그</label>
           <TagWrapper>
-            <select placeholder={"태그"} onChange={handleTagChange}>
+            <select onChange={handleTagChange} id={"tag"}>
+              <option defaultValue="" hidden>
+                선택
+              </option>
               {tagOptions.map(({ value, label }) => (
-                <option key={value}>{label}</option>
+                <option key={value} value={value}>
+                  {label}
+                </option>
               ))}
             </select>
           </TagWrapper>
-        </WithTitle>
-      </SelectWrapper>
-      <WithTitle>
-        희망 업무시간
+        </InputSection>
         <WorkSchedule
           workTime={workTime}
           onWorkTimeChange={handleWorkTimeChange}
         />
-      </WithTitle>
+      </SelectContainer>
       <TwoInput>
-        <WithTitle>
-          희망보수
-          <InputBox
-            width="165px"
-            onChange={handlePayChange}
-            value={existingInfo.price}
-          />
-        </WithTitle>
-        <WithTitle>
-          희망장소
+        <InputSection>
+          <label htmlFor="num">희망보수</label>
+          <InputBox width="150px" onChange={handlePayChange} id={"num"} />
+        </InputSection>
+        <InputSection>
+          <label htmlFor="location">희망장소</label>
           <LocationWrapper>
-            <select
-              placeholder={"지역"}
-              value={existingInfo.cityName}
-              onChange={handleLocationChange}
-            >
+            <select onChange={handleLocationChange} id={"location"}>
+              <option defaultValue="" hidden>
+                선택
+              </option>
               {locationOptions.map(({ value, label }) => (
-                <option key={value}>{label}</option>
+                <option key={value} value={value}>
+                  {label}
+                </option>
               ))}
             </select>
           </LocationWrapper>
-        </WithTitle>
+        </InputSection>
       </TwoInput>
       <WithTitle>
-        업무내용
-        <TextArea
-          onChange={handleWorkDetailChange}
-          defaultValue={existingInfo.workContent}
-        />
+        <label htmlFor="content">업무내용</label>
+        <TextArea onChange={handleWorkDetailChange} id={"content"} />
       </WithTitle>
       <WithTitle>
-        기타 (선택)
-        <TextArea
-          onChange={handleEtcChange}
-          defaultValue={existingInfo.other}
-        />
+        <label htmlFor="etc">기타 (선택)</label>
+        <TextArea onChange={handleEtcChange} id={"etc"} />
       </WithTitle>
       <SubmitWrapper>
         <Button className="edithunting-submit" onClick={handleDelete}>
@@ -282,39 +276,63 @@ const EditHunting = (props: Props) => {
           수정하기
         </Button>
       </SubmitWrapper>
-    </EditHireContainer>
+    </EditHuntingContainer>
   );
 };
 
-const EditHireContainer = styled.div`
+const EditHuntingContainer = styled.div`
   background: #fafafa;
-  width: 80%;
+  max-width: 1060px;
   margin: auto;
-  padding: 135px;
+  padding: 135px 190px 100px 150px;
   display: flex;
   flex-direction: column;
 `;
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 `;
+const InputSection = styled.div`
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  label {
+    margin-left: 1rem;
+  }
+`;
+const DeadLineSection = styled.div`
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  margin-right: 19px;
+  label {
+    margin-left: 1rem;
+  }
+`;
+
 const WithTitle = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  margin-bottom: 16px;
+  label {
+    margin-left: 1rem;
+  }
 `;
 const TwoInput = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  margin-bottom: 16px;
 `;
-const SelectWrapper = styled.div`
+const SelectContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
 `;
 const CategoryWrapper = styled.div`
-  padding: 10px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
@@ -322,16 +340,15 @@ const CategoryWrapper = styled.div`
   }
 `;
 const LocationWrapper = styled.div`
-  width: 150px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
     border-radius: 5px;
-    margin: 7px;
   }
 `;
 const TagWrapper = styled.div`
-  padding: 10px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
@@ -339,10 +356,11 @@ const TagWrapper = styled.div`
   }
 `;
 const SubmitWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
   .edithunting-submit {
-    margin: 10px 50px 0 10px;
+    margin-left: 20px;
     width: 150px;
-    float: right;
     background-color: #6f38c5;
     &:hover {
       background-color: #fcc72c;

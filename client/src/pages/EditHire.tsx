@@ -232,110 +232,98 @@ const EditHire = (props: Props) => {
   return (
     <EditHireContainer>
       <TitleContainer>
-        제목
-        <InputBox
-          width="350px"
-          onChange={handleTitleChange}
-          defaultValue={existingInfo.title}
-        />
-        지원마감일
-        <Deadline onChange={handleDeadlineChange} />
+        <InputSection>
+          <label htmlFor="title">제목</label>
+          <InputBox width="400px" id="title" onChange={handleTitleChange} />
+        </InputSection>
+        <DeadLineSection>
+          <label htmlFor="date">지원마감일</label>
+          <Deadline onChange={handleDeadlineChange} />
+        </DeadLineSection>
       </TitleContainer>
-      <SelectWrapper>
-        카테고리
-        <CategoryWrapper>
-          <select
-            value={existingInfo.categoryName}
-            placeholder={"카테고리"}
-            onChange={handleCategoryChange}
-          >
-            {categoryOptions.map(({ value, label }) => (
-              <option key={value}>{label}</option>
-            ))}
-          </select>
-        </CategoryWrapper>
-        태그
-        <TagWrapper>
-          <select placeholder={"태그"} onChange={handleTagChange}>
-            {tagOptions.map(({ value, label }) => (
-              <option key={value}>{label}</option>
-            ))}
-          </select>
-        </TagWrapper>
-      </SelectWrapper>
-      <WithTitle>
-        업무시간
+      <SelectContainer>
+        <InputSection>
+          <label htmlFor="category">카테고리</label>
+          <CategoryWrapper>
+            <select onChange={handleCategoryChange} id={"category"}>
+              <option defaultValue="" hidden>
+                선택
+              </option>
+              {categoryOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </CategoryWrapper>
+        </InputSection>
+        <InputSection>
+          <label htmlFor="tag">태그</label>
+          <TagWrapper>
+            <select onChange={handleTagChange} id={"tag"}>
+              <option defaultValue="" hidden>
+                선택
+              </option>
+              {tagOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </TagWrapper>
+        </InputSection>
         <WorkSchedule
           workTime={workTime}
           onWorkTimeChange={handleWorkTimeChange}
         />
-      </WithTitle>
+      </SelectContainer>
       <ThreeInput>
-        <WithTitle>
-          모집인원
-          <InputBox
-            width="165px"
-            onChange={handleVolumeChange}
-            value={existingInfo.recruitingCount}
-          />
-        </WithTitle>
-        <WithTitle>
-          보수
-          <InputBox
-            width="165px"
-            onChange={handlePayChange}
-            value={existingInfo.price}
-          />
-        </WithTitle>
-        <WithTitle>
-          장소
+        <InputSection>
+          <label htmlFor="num">모집인원</label>
+          <InputBox width="150px" onChange={handleVolumeChange} id={"num"} />
+        </InputSection>
+        <InputSection>
+          <label htmlFor="income">보수</label>
+          <InputBox width="150px" onChange={handlePayChange} id={"income"} />
+        </InputSection>
+        <InputSection>
+          <label htmlFor="location">지역</label>
           <LocationWrapper>
-            <select
-              placeholder={"지역"}
-              value={existingInfo.cityName}
-              onChange={handleLocationChange}
-            >
+            <select onChange={handleLocationChange} id={"location"}>
+              <option defaultValue="" hidden>
+                선택
+              </option>
               {locationOptions.map(({ value, label }) => (
-                <option key={value}>{label}</option>
+                <option key={value} value={value}>
+                  {label}
+                </option>
               ))}
             </select>
           </LocationWrapper>
-        </WithTitle>
+        </InputSection>
       </ThreeInput>
       <WithTitle>
-        업무내용
-        <TextArea
-          onChange={handleWorkDetailChange}
-          defaultValue={existingInfo.workContent}
-        />
+        <label htmlFor="content">업무내용</label>
+        <TextArea onChange={handleWorkDetailChange} id={"content"} />
       </WithTitle>
       <WithTitle>
-        자격요건
-        <TextArea
-          onChange={handleQualificationChange}
-          defaultValue={existingInfo.qualification}
-        />
+        <label htmlFor="qualification">자격요건</label>
+        <TextArea onChange={handleQualificationChange} id={"qualification"} />
       </WithTitle>
       <WithTitle>
-        우대사항 (선택)
-        <TextArea
-          onChange={handlePreferentialChange}
-          defaultValue={existingInfo.preference}
-        />
+        <label htmlFor="prefer">우대사항 (선택)</label>
+        <TextArea onChange={handlePreferentialChange} id={"prefer"} />
       </WithTitle>
       <WithTitle>
-        기타 (선택)
-        <TextArea
-          onChange={handleEtcChange}
-          defaultValue={existingInfo.other}
-        />
+        <label htmlFor="etc">기타 (선택)</label>
+        <TextArea onChange={handleEtcChange} id={"etc"} />
       </WithTitle>
       <SubmitWrapper>
-        <Button className="edithunting-submit" onClick={handleSubmit}>
-          수정하기
-        </Button>
         <Button className="edithunting-submit" onClick={handleDelete}>
           삭제하기
+        </Button>
+        <Button className="edithunting-submit" onClick={handleSubmit}>
+          수정하기
         </Button>
       </SubmitWrapper>
     </EditHireContainer>
@@ -344,32 +332,56 @@ const EditHire = (props: Props) => {
 
 const EditHireContainer = styled.div`
   background: #fafafa;
-  width: 80%;
+  max-width: 1060px;
   margin: auto;
-  padding: 135px;
+  padding: 135px 190px 100px 150px;
   display: flex;
   flex-direction: column;
 `;
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 `;
-const SelectWrapper = styled.div`
+const InputSection = styled.div`
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  label {
+    margin-left: 1rem;
+  }
+`;
+const DeadLineSection = styled.div`
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  margin-right: 19px;
+  label {
+    margin-left: 1rem;
+  }
+`;
+const SelectContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 `;
 const WithTitle = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  margin-bottom: 16px;
+  label {
+    margin-left: 1rem;
+  }
 `;
 const ThreeInput = styled.div`
   display: flex;
   flex-direction: row;
+  margin-bottom: 16px;
 `;
 const CategoryWrapper = styled.div`
-  margin: 10px;
-  padding: 10px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
@@ -377,17 +389,15 @@ const CategoryWrapper = styled.div`
   }
 `;
 const LocationWrapper = styled.div`
-  width: 150px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
     border-radius: 5px;
-    margin: 7px;
   }
 `;
 const TagWrapper = styled.div`
-  margin: 10px;
-  padding: 10px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
@@ -395,10 +405,12 @@ const TagWrapper = styled.div`
   }
 `;
 const SubmitWrapper = styled.div`
+  display: flex;
+  justify-content: right;
+  margin: 32px 0;
   .edithunting-submit {
-    margin: 10px 50px 0 10px;
+    margin-left: 30px;
     width: 150px;
-    float: right;
     background-color: #6f38c5;
     &:hover {
       background-color: #fcc72c;
