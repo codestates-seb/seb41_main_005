@@ -51,7 +51,7 @@ public class ReviewController {
 		Review createdReview = reviewService.writeReview(review);
 		ReviewDto.ReviewResponse response = reviewMapper.reviewToResponse(createdReview);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+		return ResponseEntity.status(HttpStatus.CREATED).body(new SingleResponseDto<>(response));
 	}
 
 	// 2차 리뷰 작성
