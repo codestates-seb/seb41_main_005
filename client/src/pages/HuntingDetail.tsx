@@ -10,17 +10,18 @@ import { getMemberData } from "../api/getMember";
 import { huntingDetailProps } from "../util/huntingDetailData";
 import { useSelector } from "react-redux";
 import { RootState } from "../util/redux";
+import Button from "../components/Buttons";
 
 const Container = styled.div`
   display: block;
   max-width: 1060px;
   margin: auto;
   .wrapper {
-    padding-top: 80px;
-    padding-left: 10px;
+    padding: 100px 10px;
     line-height: 20px;
     position: relative;
     .left {
+      display: inline-block;
       vertical-align: top;
       width: 700px;
       hr {
@@ -28,7 +29,6 @@ const Container = styled.div`
         width: 680px;
       }
       .header {
-        // border-bottom: 1px solid #a9a9a9;
         padding: 0px 0px 0px 5px;
         .title {
           display: flex;
@@ -40,15 +40,10 @@ const Container = styled.div`
             padding-top: 8px;
           }
           button {
-            margin: 0 0.5rem;
+            margin: 0 1.5rem;
             height: 2.5rem;
             font-size: 16px;
             font-weight: regular;
-            color: #6f38c5;
-            background-color: white;
-            width: 120px;
-            border: solid 1.2px #6f38c5;
-            border-radius: 4px;
           }
         }
         .tags {
@@ -88,7 +83,7 @@ const Container = styled.div`
       .right {
         position: fixed;
         right: calc((100% - 1060px) / 2);
-        top: 80px;
+        top: 100px;
       }
     }
     @media (min-width: 992px) and (max-width: 1199px) {
@@ -165,11 +160,22 @@ function HuntingDetail() {
             <section className="header">
               <div className="title">
                 <p>{datas.title}</p>
-
                 {memberId === applicantId ? (
-                  <button onClick={handleEditButton}>수정하기</button>
+                  <Button
+                    onClick={handleEditButton}
+                    width={"120px"}
+                    color={"#6f38c5"}
+                  >
+                    수정하기
+                  </Button>
                 ) : (
-                  <button onClick={handleWriteButton}>게시글 작성</button>
+                  <Button
+                    onClick={handleWriteButton}
+                    width={"120px"}
+                    color={"#6f38c5"}
+                  >
+                    게시글 작성
+                  </Button>
                 )}
               </div>
               <div className="tags">
