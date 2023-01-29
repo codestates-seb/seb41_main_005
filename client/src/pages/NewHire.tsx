@@ -53,10 +53,20 @@ const NewHire = () => {
   };
 
   const handleVolumeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    if (!Number(inputValue) || Number(inputValue) < 0) {
+      event.preventDefault();
+      alert("숫자만 입력 가능하고, 음수는 입력할 수 없습니다.");
+    }
     setVolume(event.target.value);
   };
 
   const handlePayChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    if (!Number(inputValue) || Number(inputValue) < 0) {
+      event.preventDefault();
+      alert("숫자만 입력 가능하고, 음수는 입력할 수 없습니다.");
+    }
     setPay(event.target.value);
   };
 
