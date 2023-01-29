@@ -6,7 +6,7 @@ interface TextAreaProps
 
 const StyledTextArea = styled.textarea<TextAreaProps>`
   height: 7rem;
-  width: 600px;
+  width: 703px;
   margin: 0.5rem 1rem 0 1rem;
   padding-left: 10px;
   padding-right: 5px;
