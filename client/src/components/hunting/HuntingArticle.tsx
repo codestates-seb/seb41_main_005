@@ -168,6 +168,9 @@ const ArticleContainer = styled.div`
 `;
 
 const PaginateContainer = styled.div`
+  a {
+    width: 26px;
+  }
   .page-item {
     width: 30px;
     height: 30px;
@@ -177,6 +180,7 @@ const PaginateContainer = styled.div`
     padding: 1px;
     margin: 0 2px 2px 0;
     font-size: 18px;
+    text-align: center;
     cursor: pointer;
     &:hover {
       background-color: #6667ab;
@@ -207,10 +211,13 @@ const HuntingArticleContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  min-height: 535px;
 `;
 
 const Card = styled.div`
   width: 265px;
+  min-height: 150px;
+  max-height: 220px;
   padding: 10px;
   display: flex;
   flex-direction: row;
