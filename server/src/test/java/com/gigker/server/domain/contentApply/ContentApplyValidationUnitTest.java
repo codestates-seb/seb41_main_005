@@ -27,7 +27,7 @@ import com.gigker.server.global.exception.ExceptionCode;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("신청 기능 테스트")
-public class ContentApplyServiceTest {
+public class ContentApplyValidationUnitTest {
 	private final List<ContentApply> applies = getApplies();
 
 	@InjectMocks
