@@ -19,6 +19,7 @@ import MyPage from "./pages/MyPage";
 import Schedule from "./pages/Schedule";
 import Review from "./pages/Review";
 import ScrollToTop from "./util/scrollRestoration";
+import Footer from "./components/Footer";
 import { handleRefresh } from "./util/logInApi";
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/review/:content_id" element={<Review />} />
         </Routes>
+        <Footer />
       </ThemeProvider>
     </BrowserRouter>
   );

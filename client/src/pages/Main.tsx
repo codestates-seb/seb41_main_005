@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import Footer from "../components/Footer";
 import MainSlider from "../components/main/MainSlider";
 import { getDatas } from "../api/getDatas";
 import { sliderProps, serverData } from "../util/sliderData";
@@ -126,7 +125,6 @@ function Main() {
           </StyledArticle>
         </section>
       </Container>
-      <Footer />
     </>
   );
 }
