@@ -1,205 +1,105 @@
-// package com.gigker.server.domain.contentApply;
-//
-// import static com.gigker.server.domain.stub.ContentApplyStubData.*;
-// import static com.gigker.server.domain.stub.ContentStubData.*;
-// import static com.gigker.server.domain.stub.MemberStubData.*;
-// import static org.junit.jupiter.api.Assertions.*;
-//
-// import java.util.List;
-//
-// import org.junit.jupiter.api.BeforeAll;
-// import org.junit.jupiter.api.DisplayName;
-// import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.TestInstance;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.test.context.SpringBootTest;
-// import org.springframework.transaction.annotation.Transactional;
-//
-// import com.gigker.server.domain.content.entity.Content;
-// import com.gigker.server.domain.content.entity.ContentApply;
-// import com.gigker.server.domain.content.repository.ContentApplyRepository;
-// import com.gigker.server.domain.content.repository.ContentRepository;
-// import com.gigker.server.domain.content.service.ContentApplyService;
-// import com.gigker.server.domain.content.service.ContentService;
-// import com.gigker.server.domain.member.entity.Member;
-// import com.gigker.server.domain.member.repository.MemberRepository;
-// import com.gigker.server.domain.member.service.MemberService;
-// import com.gigker.server.global.exception.BusinessLogicException;
-// import com.gigker.server.global.exception.ExceptionCode;
-//
-// // @ActiveProfiles("local")
-// @SpringBootTest
-// @DisplayName("신청 기능 테스트")
-// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-// public class ContentApplyServiceTest {
-// 	private ContentApply badRequestApply;
-// 	private ContentApply matchedApply;
-// 	private List<ContentApply> existApplies;
-//
-// 	@Autowired
-// 	MemberService memberService;
-//
-// 	@Autowired
-// 	ContentService contentService;
-//
-// 	@Autowired
-// 	ContentApplyService applyService;
-//
-// 	@Autowired
-// 	MemberRepository memberRepository;
-//
-// 	@Autowired
-// 	ContentRepository contentRepository;
-//
-// 	@Autowired
-// 	ContentApplyRepository applyRepository;
-//
-// 	@BeforeAll
-// 	void beforeAll() {
-// 		cleanRepository();
-//
-// 		List<Member> members = getMembers();
-// 		memberRepository.saveAll(members);
-//
-// 		Content content = getContent();
-// 		Content matchedContent = getMatchedContent();
-// 		contentRepository.saveAll(List.of(content, matchedContent));
-//
-// 		// 작성자 ID와 신청자 ID가 동일한 Apply
-// 		badRequestApply = getApply();
-//
-// 		// 매칭된 Apply
-// 		matchedApply = getMatchedApply();
-//
-// 		// 이미 지원한 Apply 리스트
-// 		existApplies = getApplies();
-// 		applyRepository.saveAll(existApplies);
-// 	}
-//
-// 	void cleanRepository() {
-// 		memberRepository.deleteAll();
-// 		contentRepository.deleteAll();
-// 		applyRepository.deleteAll();
-// 	}
-//
-//	TODO: 테스트코드 리팩터링 예정
-//
-// 	// == Create ==
-//
-// 	@Test
-// 	void 존재하는_회원인지_검사한다() throws Exception {
-// 		// given
-// 		Long memberId = 10L;
-//
-// 		// when then
-// 		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
-// 			() -> memberService.findMemberById(memberId));
-//
-// 		assertEquals(ExceptionCode.NOT_FOUND_MEMBER, ex.getExceptionCode());
-// 	}
-//
-// 	@Test
-// 	void 존재하는_게시글인지_검사한다() throws Exception {
-// 		// given
-// 		Long contentId = 10L;
-//
-// 		// when then
-// 		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
-// 			() -> contentService.findContentByContentId(contentId));
-//
-// 		assertEquals(ExceptionCode.NOT_FOUND_CONTENT, ex.getExceptionCode());
-// 	}
-//
-// 	@Transactional
-// 	@Test
-// 	void 모집_중인_게시글인지_검사한다() throws Exception {
-// 		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
-// 			() -> applyService.createApply(matchedApply));
-//
-// 		assertEquals(ExceptionCode.BAD_REQUEST_RECRUITING, ex.getExceptionCode());
-// 	}
-//
-// 	@Transactional
-// 	@Test
-// 	void 지원자가_작성자인지_검사한다() throws Exception {
-// 		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
-// 			() -> applyService.createApply(badRequestApply));
-//
-// 		assertEquals(ExceptionCode.BAD_REQUEST_APPLY, ex.getExceptionCode());
-// 	}
-//
-// 	@Transactional
-// 	@Test
-// 	void 이미_지원했는지_검사한다() throws Exception {
-// 		// then
-// 		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
-// 			() -> applyService.createApply(existApplies.get(0)));
-//
-// 		assertEquals(ExceptionCode.EXISTS_APPLY, ex.getExceptionCode());
-// 	}
-//
-// 	// == Accept ==
-//
-// 	@Test
-// 	void 존재하는_지원인지_확인한다() throws Exception {
-// 		// given
-// 		Long applyId = 10L;
-//
-// 		// when then
-// 		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
-// 			() -> applyService.findVerifiedApply(applyId));
-//
-// 		assertEquals(ExceptionCode.NOT_FOUND_APPLY, ex.getExceptionCode());
-// 	}
-//
-// 	@Transactional
-// 	@Test
-// 	void 게시글_아이디와_지원자의_게시글_아이디가_동일한지_확인한다() throws Exception {
-// 		// given
-// 		Long contentId = 111L;
-// 		Long applyId = existApplies.get(0).getContentApplyId();
-//
-// 		// when then
-// 		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
-// 			() -> applyService.acceptApply(applyId, contentId));
-//
-// 		assertEquals(ExceptionCode.EDIT_NOT_ALLOWED, ex.getExceptionCode());
-// 	}
-//
-// 	@Transactional
-// 	@Test
-// 	void 이미_승인된_게시글인지_확인한다() throws Exception {
-// 		// given
-// 		applyRepository.save(matchedApply);
-// 		Long matchedApplyId = matchedApply.getContentApplyId();
-// 		Long contentId = matchedApply.getContent().getContentId();
-//
-// 		// when then
-// 		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
-// 			() -> applyService.acceptApply(matchedApplyId, contentId));
-//
-// 		assertEquals(ExceptionCode.EXISTS_APPLY, ex.getExceptionCode());
-// 	}
-//
-// 	@Transactional
-// 	@Test
-// 	void 지원요청_승인_시_나머지_지원자는_자동취소_됐는지_확인한다() throws Exception {
-// 		// given
-// 		Long applyId = existApplies.get(0).getContentApplyId();
-// 		Long contentId = existApplies.get(0).getContent().getContentId();
-//
-// 		// when
-// 		applyService.acceptApply(applyId, contentId);
-// 		ContentApply apply = applyRepository.findById(applyId).get();
-//
-// 		// then
-// 		// 지원 요청이 승인 됐는지 확인
-// 		assertEquals(apply.getApplyStatus(), ContentApply.ApplyStatus.MATCH);
-//
-// 		// 나머지 지원자 자동취소 됐는지 확인
-// 		assertEquals(1, applyRepository.findAll().size());
-//
-// 		// 해당 글의 상태가 모집 완료로 변경 됐는지 확인
-// 		assertEquals(apply.getContent().getStatus(), Content.Status.MATCHED);
-// 	}
-// }
+package com.gigker.server.domain.contentApply;
+
+import static com.gigker.server.domain.stub.ContentApplyStubData.*;
+import static com.gigker.server.domain.stub.ContentStubData.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.gigker.server.domain.content.entity.Content;
+import com.gigker.server.domain.content.entity.ContentApply;
+import com.gigker.server.domain.content.repository.ContentApplyRepository;
+import com.gigker.server.domain.content.service.ContentApplyService;
+import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.global.exception.BusinessLogicException;
+import com.gigker.server.global.exception.ExceptionCode;
+
+@ExtendWith(MockitoExtension.class)
+@DisplayName("신청 기능 테스트")
+public class ContentApplyServiceTest {
+	private final List<ContentApply> applies = getApplies();
+
+	@InjectMocks
+	ContentApplyService applyService;
+
+	@Mock
+	ContentApplyRepository applyRepository;
+
+	@AfterEach
+	void clean() {
+		applyRepository.deleteAll();
+	}
+
+	// == Find ==
+	@Transactional
+	@Test
+	@DisplayName("해당 ApplyId가 존재하는지 확인")
+	void findVerifiedApply() throws Exception {
+		given(applyRepository.findById(anyLong())).willReturn(Optional.of(getApply()));
+
+		assertDoesNotThrow(() -> applyService.findVerifiedApply(1L));
+	}
+
+	// == Create ==
+
+	@Test
+	@DisplayName("해당 글이 모집 중인지 확인")
+	void isContentRecruiting() throws Exception {
+		Content content = getContent();
+		Content matchedContent = getMatchedContent();
+
+		assertEquals(content.getStatus(), Content.Status.RECRUITING);
+		assertNotEquals(matchedContent.getStatus(), Content.Status.RECRUITING);
+	}
+
+	@Test
+	@DisplayName("신청자가 글 작성자인지 확인")
+	void verifyApplicantEqualsToWriter() throws Exception {
+		ContentApply normalApply = applies.get(1);
+		ContentApply writerApply = applies.get(0);
+		Content content = writerApply.getContent();
+
+		assertEquals(writerApply.getApplicant().getMemberId(), content.getMember().getMemberId());
+		assertNotEquals(normalApply.getApplicant().getMemberId(), content.getMember().getMemberId());
+	}
+
+	@Transactional
+	@Test
+	@DisplayName("해당 글에 이미 신청 내역이 있는지 확인")
+	void verifyExistMemberApply() throws Exception {
+		ContentApply apply = applies.get(0);
+		Member applicant = apply.getApplicant();
+		Content content = apply.getContent();
+
+		given(applyRepository.findByApplicantAndContent(any(Member.class), any(Content.class)))
+			.willReturn(Optional.of(apply));
+
+		BusinessLogicException ex = assertThrows(BusinessLogicException.class,
+			() -> applyService.verifyExistMemberApply(applicant, content));
+
+		assertEquals(ex.getExceptionCode(), ExceptionCode.EXISTS_APPLY);
+	}
+
+	// == Accept ==
+
+	@Test
+	@DisplayName("아직 지원 요청이 승인된 상태가 아닌지 확인")
+	void isApplyStatusNone() throws Exception {
+		ContentApply apply = getApply();
+		ContentApply matchedApply = getMatchedApply();
+
+		assertEquals(apply.getApplyStatus(), ContentApply.ApplyStatus.NONE);
+		assertNotEquals(matchedApply.getApplyStatus(), ContentApply.ApplyStatus.NONE);
+	}
+}
