@@ -67,12 +67,12 @@ const ReviewScore = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  jutify-content: space-between;
+  justify-content: space-between;
   align-items: center;
   div {
     display: flex;
     flex-direction: row;
-    jutify-content: space-between;
+    justify-content: space-between;
     align-items: center;
     .like {
       padding-right: 5px;
