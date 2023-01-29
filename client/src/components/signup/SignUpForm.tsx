@@ -44,8 +44,8 @@ const SignUpBox = styled.form<FormProps>`
 `;
 
 const InputSection = styled.div`
-  margin: 1rem 0 0 0;
-  height: 5rem;
+  margin: 4px 0 0 0;
+  height: 6rem;
   display: flex;
   flex-direction: column;
   label {
@@ -181,7 +181,7 @@ const SignUpForm = () => {
   };
 
   const handleNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const nicknameRegex = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
+    const nicknameRegex = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/i;
     const nickNameCurrent = e.currentTarget.value;
     dispatch(setNickname(nickNameCurrent));
     if (!nicknameRegex.test(nickNameCurrent)) {
