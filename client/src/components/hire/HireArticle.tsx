@@ -129,7 +129,9 @@ const HireArticle: React.FC = (card) => {
                   <span className="sub-title">작성자</span> {card.nickName}
                 </CardWriter>
                 <CardPay>
-                  <span className="sub-title">보수</span> {card.price}
+                  <span className="sub-title">보수</span>{" "}
+                  {card.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  원
                 </CardPay>
                 {card.workTimes && (
                   <>
