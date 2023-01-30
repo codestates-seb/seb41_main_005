@@ -13,6 +13,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -92,12 +93,33 @@ public interface ContentMapper {
         return content;
     }
 
-    @Mapping(source = "contentId", target = "contentId")
-    @Mapping(source = "member.memberId", target = "memberId")
-    @Mapping(source = "member.nickName", target = "nickName")
-    @Mapping(source = "category.categoryName", target = "categoryName")
-    @Mapping(source = "location.cityName", target = "cityName")
-    ContentResponseDto.ContentResponse contentResponseDto(Content content);
+    @Mapping(source = "content.contentId", target = "contentId")
+    @Mapping(source = "content.title", target = "title")
+    @Mapping(source = "content.contentType", target = "contentType")
+    @Mapping(source = "content.recruitingCount", target = "recruitingCount")
+    @Mapping(source = "content.workContent", target = "workContent")
+    @Mapping(source = "content.qualification", target = "qualification")
+    @Mapping(source = "content.preference", target = "preference")
+    @Mapping(source = "content.other", target = "other")
+    @Mapping(source = "content.workTimes", target = "workTimes")
+    @Mapping(source = "content.contentTags", target = "contentTags")
+    @Mapping(source = "content.price", target = "price")
+    @Mapping(source = "content.createdAt", target = "createdAt")
+    @Mapping(source = "content.lastModifiedAt", target = "lastModifiedAt")
+    @Mapping(source = "content.relistedAt", target = "relistedAt")
+    @Mapping(source = "content.deadLine", target = "deadLine")
+    @Mapping(source = "content.status", target = "status")
+    @Mapping(source = "content.isPremium", target = "isPremium")
+    @Mapping(source = "content.applies", target = "applies")
+    @Mapping(source = "content.member.memberId", target = "memberId")
+    @Mapping(source = "content.member.nickName", target = "nickName")
+    @Mapping(source = "content.member.pictureUrl", target = "pictureUrl")
+    @Mapping(target = "likeCount", expression = "java(count.get(\"likeCount\"))")
+    @Mapping(target = "dislikeCount", expression = "java(count.get(\"dislikeCount\"))")
+    @Mapping(target = "reviewCount", expression = "java(count.get(\"reviewCount\"))")
+    @Mapping(source = "content.category.categoryName", target = "categoryName")
+    @Mapping(source = "content.location.cityName", target = "cityName")
+    ContentResponseDto.ContentResponse contentResponseDto(Content content, Map<String, Long> count);
 
     @Mapping(source = "member.memberId", target = "memberId")
     @Mapping(source = "member.nickName", target = "nickName")

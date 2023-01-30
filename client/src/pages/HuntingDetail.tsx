@@ -102,6 +102,8 @@ function HuntingDetail() {
   const contentId = useParams().content_id;
   const memberId = datas?.memberId;
   const reviewCount = datas?.reviewCount;
+  const contentId = useParams().content_id;
+  const memberId = datas?.memberId;
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
   const applicantId = useSelector((state: RootState) => state.LogIn.logInMID);
   const navigate = useNavigate();

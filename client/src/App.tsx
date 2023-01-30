@@ -52,7 +52,6 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/review/:content_id" element={<Review />} />
-          <Route path="/review" element={<Review />} />
         </Routes>
         <Footer />
       </ThemeProvider>

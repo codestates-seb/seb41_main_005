@@ -27,6 +27,7 @@ import com.gigker.server.domain.content.mapper.ContentApplyMapper;
 import com.gigker.server.domain.content.mapper.ContentMapper;
 import com.gigker.server.domain.content.service.ContentApplyService;
 import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.domain.member.service.MemberService;
 import com.gigker.server.domain.review.service.ReviewService;
 import com.gigker.server.global.dto.MultiResponseDto;
 import com.gigker.server.global.dto.SingleResponseDto;
@@ -42,6 +43,7 @@ public class ContentApplyController {
 	private final ContentApplyService applyService;
 	private final ContentApplyMapper applyMapper;
 	private final ContentMapper contentMapper;
+	private final MemberService memberService;
 	private final ReviewService reviewService;
 
 	// 게시글에 지원
@@ -49,7 +51,8 @@ public class ContentApplyController {
 	public ResponseEntity postApply(
 		@PathVariable("content-id") @Positive Long contentId) {
 
-		ContentApply apply = applyService.createApply(contentId);
+		Member applicant = memberService.getCurrentMember();
+		ContentApply apply = applyService.createApply(contentId, applicant);
 		ContentApplyResponseDto.ApplyResponse response = applyMapper.applyToResponse(apply);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -61,7 +64,8 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
-		applyService.acceptApply(applyId, contentId);
+		Member writer = memberService.getCurrentMember();
+		applyService.acceptApply(applyId, contentId, writer);
 
 		return ResponseEntity.ok().build();
 	}
@@ -73,7 +77,7 @@ public class ContentApplyController {
 		@RequestParam @Positive int page) {
 
 		Content content = applyService.getContentByContentId(contentId);
-		Member writer = content.getMember();
+		Member writer = memberService.getCurrentMember();
 		ContentType type = content.getContentType();
 
 		// 페이지당 출력 수는 15로 고정
@@ -98,7 +102,9 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
-		ContentApply apply = applyService.findApply(applyId);
+		Member writer = memberService.getCurrentMember();
+		ContentApply apply = applyService.findApply(applyId, contentId, writer);
+
 		Map<String, Long> counts =
 			reviewService.countApplicantProfile(apply.getApplicant(), apply.getContent().getContentType());
 
@@ -113,7 +119,8 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
-		applyService.deleteApply(applyId);
+		Member applicant = memberService.getCurrentMember();
+		applyService.deleteApply(applyId, contentId, applicant);
 
 		return ResponseEntity.noContent().build();
 	}

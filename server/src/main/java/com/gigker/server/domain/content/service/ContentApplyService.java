@@ -20,7 +20,6 @@ import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.repository.ContentApplyRepository;
 import com.gigker.server.domain.member.entity.Member;
-import com.gigker.server.domain.member.service.MemberService;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 
@@ -31,13 +30,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ContentApplyService {
 	private final ContentApplyRepository applyRepository;
-	private final MemberService memberService;
 	private final ContentService contentService;
 
 	@Transactional
-	public ContentApply createApply(Long contentId) {
-		// Member, Content 유효성 검사
-		Member applicant = memberService.getCurrentMember();    // Authentication 적용
+	public ContentApply createApply(Long contentId, Member applicant) {
+		// Content 유효성 검사
 		Content content = getContentByContentId(contentId);
 
 		// 모집 중인 게시글인지 확인
@@ -57,15 +54,16 @@ public class ContentApplyService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-	public void acceptApply(Long applyId, Long contentId) {
+	public void acceptApply(Long applyId, Long contentId, Member writer) {
 		ContentApply apply = findVerifiedApply(applyId);
 
-		// 작성자만 승인 가능
-		Member writer = apply.getContent().getMember();
-		verifyThisMemberIsWriter(writer);
-
-		// contentId와 Apply.Content.ContentId가 같은지 확인한다.
+		// 정상적인 접근인지 확인
 		if (!Objects.equals(apply.getContent().getContentId(), contentId)) {
+			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST);
+		}
+
+		// 로그인한 사용자가 글 작성자인지 확인
+		if (isMemberEqualsToWriter(writer, apply.getContent())) {
 			throw new BusinessLogicException(ExceptionCode.EDIT_NOT_ALLOWED);
 		}
 
@@ -90,12 +88,18 @@ public class ContentApplyService {
 	}
 
 	@Transactional
-	public ContentApply findApply(Long applyId) {
+	public ContentApply findApply(Long applyId, Long contentId, Member writer) {
 		ContentApply apply = findVerifiedApply(applyId);
 
+		// 정상적인 접근인지 확인
+		if (!Objects.equals(apply.getContent().getContentId(), contentId)) {
+			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST);
+		}
+
 		// 작성자만 조회 가능
-		Member writer = apply.getContent().getMember();
-		verifyThisMemberIsWriter(writer);
+		if (isMemberEqualsToWriter(writer, apply.getContent())) {
+			throw new BusinessLogicException(ExceptionCode.ACCESS_NOT_ALLOWED);
+		}
 
 		return apply;
 	}
@@ -103,25 +107,33 @@ public class ContentApplyService {
 	@Transactional
 	public Page<ContentApply> findAllApplies(Content content, Member writer, int page, int size) {
 		// 작성자만 조회 가능
-		verifyThisMemberIsWriter(writer);
-
+		if (isMemberEqualsToWriter(writer, content)) {
+			throw new BusinessLogicException(ExceptionCode.ACCESS_NOT_ALLOWED);
+		}
 		return applyRepository.findAllByContent(content,
 			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
 	}
 
 	@Transactional
-	public void deleteApply(Long applyId) {
+	public void deleteApply(Long applyId, Long contentId, Member applicant) {
 		ContentApply apply = findVerifiedApply(applyId);
 
+		// 정상적인 접근인지 확인
+		if (!Objects.equals(apply.getContent().getContentId(), contentId)) {
+			throw new BusinessLogicException(ExceptionCode.BAD_REQUEST);
+		}
+
 		// 지원자만 취소 가능
-		Member applicant = apply.getApplicant();
-		verifyThisMemberIsWriter(applicant);
+		if (isMemberEqualsToApplicant(applicant, apply)) {
+			throw new BusinessLogicException(ExceptionCode.DELETE_NOT_ALLOWED);
+		}
+
+		// 만약 이미 매칭된 후에 취소했다면, 게시글 상태를 다시 모집 중으로 변경
+		if (apply.getApplyStatus() == ContentApply.ApplyStatus.MATCH) {
+			apply.getContent().setStatus(Content.Status.RECRUITING);
+		}
 
 		applyRepository.delete(apply);
-	}
-
-	public Content getContentByContentId(Long contentId) {
-		return contentService.findContentByContentId(contentId);
 	}
 
 	// 30분 마다 완료된 지원과 글을 찾아서 상태를 변경해준다.
@@ -168,12 +180,18 @@ public class ContentApplyService {
 		return optionalApply.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_APPLY));
 	}
 
-	// 현재 사용자가 권한이 있는지 확인
-	public void verifyThisMemberIsWriter(Member member) {
-		Member currentMember = memberService.getCurrentMember();
-		if (!Objects.equals(currentMember.getMemberId(), member.getMemberId())) {
-			throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
-		}
+	// 로그인한 사용자가 게시글 작성자가 아닌지 확인
+	private boolean isMemberEqualsToWriter(Member member, Content content) {
+		return !Objects.equals(member.getMemberId(), content.getMember().getMemberId());
+	}
+
+	// 로그인한 사용자가 지원자가 아닌지 확인
+	private boolean isMemberEqualsToApplicant(Member member, ContentApply apply) {
+		return !Objects.equals(member.getMemberId(), apply.getApplicant().getMemberId());
+	}
+
+	public Content getContentByContentId(Long contentId) {
+		return contentService.findContentByContentId(contentId);
 	}
 
 	// == Create ==
@@ -192,7 +210,7 @@ public class ContentApplyService {
 	}
 
 	// 해당 글에 이미 신청내역이 있는지 확인
-	private void verifyExistMemberApply(Member applicant, Content content) {
+	public void verifyExistMemberApply(Member applicant, Content content) {
 		Optional<ContentApply> optionalApply = applyRepository.findByApplicantAndContent(applicant, content);
 
 		if (optionalApply.isPresent()) {
@@ -215,6 +233,6 @@ public class ContentApplyService {
 		contents.stream()
 			.filter(a -> a.getApplyStatus() == ContentApply.ApplyStatus.NONE)
 			.mapToLong(ContentApply::getContentApplyId)
-			.forEach(this::deleteApply);
+			.forEach(applyRepository::deleteById);
 	}
 }

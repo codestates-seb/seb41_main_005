@@ -10,6 +10,7 @@ import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentTag;
 import com.gigker.server.domain.location.entity.Location;
+
 public class ContentStubData {
 
 	public static Content getContent() {
@@ -20,9 +21,10 @@ public class ContentStubData {
 		content.setTitle("제목");
 		content.setRecruitingCount(3);
 		content.setWorkContent("일할 사람");
-		content.setWorkTimes(null);
-		content.setCategory(null);
-		//content.setLocation("444123");
+		content.setCategory(stubCategory());
+		content.setContentTags(stubTags());
+		content.setWorkTimes(stubWorkTimes());
+		content.setLocation(stubLocation());
 		content.setPrice(100000);
 		content.setStatus(Content.Status.RECRUITING);
 		content.setIsPremium(false);
@@ -38,13 +40,13 @@ public class ContentStubData {
 		content.setTitle("제목");
 		content.setRecruitingCount(3);
 		content.setWorkContent("일할 사람");
-		content.setWorkTimes(null);
-		content.setCategory(null);
-		//content.setLocation("444123");
+		content.setCategory(stubCategory());
+		content.setContentTags(stubTags());
+		content.setWorkTimes(stubWorkTimes());
+		content.setLocation(stubLocation());
 		content.setPrice(100000);
 		content.setStatus(Content.Status.MATCHED);
 		content.setIsPremium(false);
-
 
 		return content;
 	}
@@ -54,7 +56,7 @@ public class ContentStubData {
 		for (int i = 1; i <= 5; i++) {
 			Content content = new Content();
 			content.setContentId((long)i);
-			content.setMember(MemberStubData.getMember());
+			content.setMember(MemberStubData.getMembers().get(i - 1));
 			content.setContentType(ContentType.BUY);
 			content.setTitle(String.format("제목%02d", i));
 			content.setRecruitingCount(i);
@@ -117,10 +119,10 @@ public class ContentStubData {
 
 	private static Location stubLocation() {
 		return Location.builder()
-				.locationId(1L)
-				.stateName("서울")
-				.cityName("강서구")
-				.locationNumber("11111")
-				.build();
+			.locationId(1L)
+			.stateName("서울")
+			.cityName("강서구")
+			.locationNumber("11111")
+			.build();
 	}
 }
