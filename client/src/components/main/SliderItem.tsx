@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { images } from "../../assets/sliderImages";
 import { setTabNum } from "../../util/redux/LogIn";
 import { useDispatch } from "react-redux";
+import { images } from "../../assets/sliderImages";
 
 const matchImage = (
   categoryName: string,
@@ -28,6 +28,7 @@ const SliderItem = ({
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const num = matchImage(categoryName, images);
 
   const hireCase = () => {
     dispatch(setTabNum(1));
@@ -46,11 +47,19 @@ const SliderItem = ({
   return (
     <SliderItemContainer onClick={handleClick}>
       <SliderImageWrapper>
-        <img
-          className="slider-image"
-          src={matchImage(categoryName, images)}
-          alt="SliderImg"
-        />
+        {categoryName === null ? (
+          <img
+            className="slider-image"
+            src={`/assets/sliderIMG/00.jpg`}
+            alt="SliderImg"
+          />
+        ) : (
+          <img
+            className="slider-image"
+            src={`/assets/sliderIMG/${num}.jpg`}
+            alt="SliderImg"
+          />
+        )}
       </SliderImageWrapper>
       <SliderItemContent>
         <Title>{title}</Title>
