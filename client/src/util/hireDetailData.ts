@@ -17,6 +17,10 @@ export interface hireDetailProps {
   preference: string;
   qualification: string;
   status: string;
+  likeCount: number;
+  dislikeCount: number;
+  reviewCount: number;
+  pictureUrl: string;
 }
 
 export interface serverData {
@@ -25,6 +29,10 @@ export interface serverData {
   contentType: string;
   title: string;
   nickName: string;
+  likeCount: number;
+  dislikeCount: number;
+  reviewCount: number;
+  pictureUrl: string;
   cityName: string;
   contentTags: Array<{
     tagName: string;

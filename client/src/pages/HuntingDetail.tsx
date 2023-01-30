@@ -98,11 +98,10 @@ const Container = styled.div`
 
 function HuntingDetail() {
   const [datas, setDatas] = useState<huntingDetailProps>();
-  const [memberData, setMemberData] = useState<any>();
 
   const contentId = useParams().content_id;
   const memberId = datas?.memberId;
-  const reviewCount = memberData?.totalReviewCount;
+  const reviewCount = datas?.reviewCount;
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
   const applicantId = useSelector((state: RootState) => state.LogIn.logInMID);
   const navigate = useNavigate();
@@ -113,15 +112,9 @@ function HuntingDetail() {
     setDatas(data);
   }, [contentId]);
 
-  const memberAPI = useCallback(async () => {
-    const data = await getMemberData(memberId);
-    setMemberData(data);
-  }, [memberId]);
-
   useEffect(() => {
     detailAPI();
-    memberAPI();
-  }, [detailAPI, memberAPI]);
+  }, [detailAPI]);
 
   const handleEditButton = () => {
     navigate(`/edithunting/${contentId}`);
@@ -158,7 +151,7 @@ function HuntingDetail() {
 
   return (
     <Container>
-      {datas && memberData ? (
+      {datas ? (
         <div className="wrapper">
           <div className="left">
             <section className="header">
@@ -203,7 +196,7 @@ function HuntingDetail() {
                 <p>{datas.other}</p>
               </div>
             </section>
-            <UserInfo data={memberData} handlebutton={handleDetailButton} />
+            <UserInfo data={datas} handlebutton={handleDetailButton} />
             <Warning nickName={datas.nickName} />
           </div>
           <div className="right">
