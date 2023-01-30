@@ -55,7 +55,20 @@ const HireArticle: React.FC = (card) => {
           }
         );
         if (response.data.data) {
-          setCards(response.data.data.map(mapDataToCardProps));
+          const sortedCards = response.data.data
+            .map(mapDataToCardProps)
+            .sort(
+              (
+                a: { createdAt: string | number | Date },
+                b: { createdAt: string | number | Date }
+              ) => {
+                return (
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
+                );
+              }
+            );
+          setCards(sortedCards);
         } else {
           console.log("Data is undefined or null, cannot map to CardProps.");
         }
@@ -65,6 +78,15 @@ const HireArticle: React.FC = (card) => {
     };
     getData("BUY");
   }, []);
+  // useEffect(() => {
+  //   setCards(
+  //     cards.sort((a, b) => {
+  //       return (
+  //         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  //       );
+  //     })
+  //   );
+  // }, [cards]);
 
   const handleClick = (contentId: number) => {
     navigate(`/hireDetail/${contentId}`);
@@ -79,15 +101,7 @@ const HireArticle: React.FC = (card) => {
   const selectedTag = useSelector(
     (state: RootState) => state.DropDown.selectedTag
   );
-  useEffect(() => {
-    setCards(
-      cards.sort((a, b) => {
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      })
-    );
-  }, [cards]);
+
   const filteredCards =
     selectedCategory === "카테고리" &&
     selectedLocation === "지역" &&
