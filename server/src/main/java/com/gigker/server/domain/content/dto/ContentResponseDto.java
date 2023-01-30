@@ -51,6 +51,11 @@ public class ContentResponseDto {
         private String title;
         private int price;
         private List<WorkTimeResponseDto> workTimes;
+        private String cityName;
+        private String categoryName;
+        private List<ContentTagResponseDto> contentTags;
+        private LocalDateTime createdAt;
+        private LocalDateTime lastModifiedAt;
         private Long memberId;
         private String nickName;
     }
