@@ -3,11 +3,16 @@ export const transDateTime = (workTimes: any[]) => {
   for (let i = 0; i < workTimes.length; i++) {
     const start = workTimes[i].startWorkTime.split("T");
     const end = workTimes[i].endWorkTime.split("T");
-    const date = start[0].split("-");
-    if (date[1][0] === "0") date[1] = date[1].slice(1);
-    if (date[2][0] === "0") date[2] = date[2].slice(1);
+    const startDate = start[0].split("-");
+    if (startDate[1][0] === "0") startDate[1] = startDate[1].slice(1);
+    if (startDate[2][0] === "0") startDate[2] = startDate[2].slice(1);
+    const endDate = end[0].split("-");
+    if (endDate[1][0] === "0") endDate[1] = endDate[1].slice(1);
+    if (endDate[2][0] === "0") endDate[2] = endDate[2].slice(1);
     workTime.push(
-      `${date[1]}월 ${date[2]}일 ${start[1].slice(0, 5)}~${end[1].slice(0, 5)}`
+      `${startDate[1]}월 ${startDate[2]}일 ${start[1].slice(0, 5)} ~ ${
+        endDate[1]
+      }월 ${endDate[2]}일 ${end[1].slice(0, 5)}`
     );
   }
   return workTime;
