@@ -1,6 +1,6 @@
 import ReviewInfo from "../components/review/ReviewInfo";
 import ReviewArticle from "../components/review/ReviewArticle";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getReview } from "../api/getReivew";
@@ -9,6 +9,7 @@ const Container = styled.div`
   display: block;
   max-width: 1060px;
   margin: auto;
+  min-height: 700px;
   .wrapper {
     padding-top: 80px;
     line-height: 20px;
@@ -69,13 +70,15 @@ interface ReviewProps {
 function Review() {
   const [reviewData, setReviewData] = useState<ReviewProps>();
   const contentId = useParams().content_id;
-  useEffect(() => {
-    const review = async () => {
-      const data = await getReview(Number(contentId));
-      setReviewData(data);
-    };
-    review();
+
+  const reviewAPI = useCallback(async () => {
+    const data = await getReview(Number(contentId));
+    setReviewData(data);
   }, [contentId]);
+
+  useEffect(() => {
+    reviewAPI();
+  }, [reviewAPI]);
 
   return (
     <Container>

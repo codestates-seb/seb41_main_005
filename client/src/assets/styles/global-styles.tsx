@@ -8,6 +8,10 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
+  body, html {
+    height: 100%;
+  }
+
   body {
     font-family: 'Noto Sans KR', sans-serif;
 <<<<<<< HEAD
@@ -16,6 +20,7 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.4;
 >>>>>>> 63201111f2ab941dcb3284b8aa360e73701121ca
   }
+  
   a {
     cursor: pointer;
   }

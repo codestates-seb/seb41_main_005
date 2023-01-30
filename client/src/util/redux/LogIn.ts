@@ -6,7 +6,8 @@ type LogInActions =
   | { type: "IMG_URL"; payload: string }
   | { type: "LOGIN_NICKNAME"; payload: string }
   | { type: "LOGIN_INTRODUCTION"; payload: string }
-  | { type: "LOGIN_MID"; payload: number };
+  | { type: "LOGIN_MID"; payload: number }
+  | { type: "CURRENT_TAB"; payload: number };
 
 // 상태 타입
 type LogInState = {
@@ -17,6 +18,7 @@ type LogInState = {
   logInNickname: string;
   logInIntroduction: string;
   logInMID: number;
+  tabNum: number;
 };
 
 // 초기값
@@ -28,6 +30,7 @@ const initialState: LogInState = {
   logInNickname: "",
   logInIntroduction: "",
   logInMID: -1,
+  tabNum: 0,
 };
 
 //액션 생성 함수 선언
@@ -66,6 +69,11 @@ export const setLogInMID = (mid: number) => ({
   payload: mid,
 });
 
+export const setTabNum = (tab: number) => ({
+  type: "CURRENT_TAB",
+  payload: tab,
+});
+
 // 리듀서
 export const LogIn = (
   state = initialState,
@@ -86,6 +94,8 @@ export const LogIn = (
       return { ...state, logInIntroduction: action.payload };
     case "LOGIN_MID":
       return { ...state, logInMID: action.payload };
+    case "CURRENT_TAB":
+      return { ...state, tabNum: action.payload };
     default:
       return state;
   }

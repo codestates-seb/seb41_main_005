@@ -25,6 +25,7 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
     categories: data.categoryName,
     tag: data.contentTags[0].tagName,
     contentId: data.contentId,
+    createdAt: data.createdAt,
   };
 };
 
@@ -78,6 +79,15 @@ const HireArticle: React.FC = (card) => {
   const selectedTag = useSelector(
     (state: RootState) => state.DropDown.selectedTag
   );
+  useEffect(() => {
+    setCards(
+      cards.sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      })
+    );
+  }, [cards]);
   const filteredCards =
     selectedCategory === "카테고리" &&
     selectedLocation === "지역" &&
@@ -168,6 +178,9 @@ const ArticleContainer = styled.div`
 `;
 
 const PaginateContainer = styled.div`
+  a {
+    width: 26px;
+  }
   .page-item {
     width: 30px;
     height: 30px;
@@ -177,6 +190,7 @@ const PaginateContainer = styled.div`
     padding: 1px;
     margin: 0 2px 2px 0;
     font-size: 18px;
+    text-align: center;
     cursor: pointer;
     &:hover {
       background-color: #6667ab;
@@ -207,11 +221,14 @@ const HireArticleContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  min-height: 720px;
 `;
 
 const Card = styled.div`
   width: 265px;
   padding: 10px;
+  min-height: 150px;
+  max-height: 220px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;

@@ -11,6 +11,7 @@ export interface CardProps {
   categories: string | null;
   tag: string;
   contentId: number;
+  createdAt: string;
 }
 export interface ServerData {
   title: string;
@@ -27,4 +28,5 @@ export interface ServerData {
     tagName: string;
   }>;
   contentId: number;
+  createdAt: string;
 }

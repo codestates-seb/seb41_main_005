@@ -9,7 +9,7 @@ import { MdOutlineEditCalendar } from "react-icons/md";
 import Profile from "./Profile";
 import axios from "axios";
 import { removeCookie } from "../util/cookie";
-import { setIsLogIn } from "../util/redux/LogIn";
+import { setIsLogIn, setTabNum } from "../util/redux/LogIn";
 
 const Block = styled.div`
   display: block;
@@ -73,18 +73,20 @@ const UnderLineLink = styled(Link)`
   background-color: #ffffff;
   font-size: ${(props) => props.theme.font.nav};
   line-height: 62px;
+`;
+
+const TapWrapper = styled.div<{ isHere?: boolean }>`
+  ${(props) => (props.isHere ? "border-bottom: solid 3px #6F38C5;" : null)}
   ::after {
     display: block;
     content: "";
-    border-bottom: solid 3px ${(props) => props.theme.color.sub1};
+    ${(props) => (props.isHere ? null : "border-bottom: solid 3px #6F38C5;")}
+    /* border-bottom: solid 3px ${(props) => props.theme.color.sub1}; */
     transform: scaleX(0);
     transition: transform 250ms ease-in-out;
   }
   &:hover::after {
     transform: scaleX(1);
-  }
-  &.active {
-    border-bottom: solid 3px ${(props) => props.theme.color.sub1};
   }
 `;
 
@@ -100,11 +102,11 @@ const SvgContainer = styled.div`
 `;
 
 const LogInContainer = styled.div`
-  /* margin-right: 40px; */
   display: flex;
-  /* justify-content: space-around; */
   align-items: center;
   text-align: center;
+  width: 250px;
+  justify-content: right;
   padding: 0 0 0 1rem;
 `;
 
@@ -112,6 +114,7 @@ const Navigation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
+  const tabNum = useSelector((state: RootState) => state.LogIn.tabNum);
 
   // 로그아웃 함수
   const handleLogOut = async () => {
@@ -142,31 +145,67 @@ const Navigation = () => {
           <Logo width={65} height={65} />
         </ImgWrapper>
         <LinkContainer>
-          <UnderLineLink to={"/"}>홈</UnderLineLink>
-          <UnderLineLink to={"/hire"}>구인</UnderLineLink>
-          <UnderLineLink to={"/hunting"}>구직</UnderLineLink>
+          <UnderLineLink to={"/"}>
+            <TapWrapper
+              isHere={tabNum === 0}
+              onClick={() => dispatch(setTabNum(0))}
+            >
+              홈
+            </TapWrapper>
+          </UnderLineLink>
+          <UnderLineLink to={"/hire"}>
+            <TapWrapper
+              isHere={tabNum === 1}
+              onClick={() => dispatch(setTabNum(1))}
+            >
+              구인
+            </TapWrapper>
+          </UnderLineLink>
+          <UnderLineLink to={"/hunting"}>
+            <TapWrapper
+              isHere={tabNum === 2}
+              onClick={() => dispatch(setTabNum(2))}
+            >
+              구직
+            </TapWrapper>
+          </UnderLineLink>
         </LinkContainer>
         <LogInContainer>
           {isLogIn ? (
             <>
-              <Link to={"/mypage"}>
+              <Link to={"/mypage"} onClick={() => dispatch(setTabNum(4))}>
                 <Profile width={"40px"} height={"40px"} />
               </Link>
-              <Link to={"/schedule"}>
+              <Link to={"/schedule"} onClick={() => dispatch(setTabNum(4))}>
                 <SvgContainer>
                   <MdOutlineEditCalendar className={"schedule"} size={42} />
                 </SvgContainer>
               </Link>
-              <Button color={"#6F38C5"} width={"5rem"} onClick={handleLogOut}>
+              <Button
+                color={"#6F38C5"}
+                width={"5rem"}
+                onClick={() => {
+                  handleLogOut();
+                  dispatch(setTabNum(4));
+                }}
+              >
                 로그아웃
               </Button>
             </>
           ) : (
             <>
-              <ButtonLink to={"/login"} color={"#6667AB"}>
+              <ButtonLink
+                onClick={() => dispatch(setTabNum(4))}
+                to={"/login"}
+                color={"#6667AB"}
+              >
                 로그인
               </ButtonLink>
-              <ButtonLink to={"/signup"} color={"#6F38C5"}>
+              <ButtonLink
+                onClick={() => dispatch(setTabNum(4))}
+                to={"/signup"}
+                color={"#6F38C5"}
+              >
                 회원가입
               </ButtonLink>
             </>

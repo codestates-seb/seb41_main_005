@@ -57,6 +57,7 @@ public class ReviewService {
 		// 이미 리뷰를 작성했는지 확인
 		verifyReviewExist(writer, content);
 
+		review.setWriter(apply);
 		review.setRecipient(content.getMember());
 		review.setContentType(content.getContentType());
 
