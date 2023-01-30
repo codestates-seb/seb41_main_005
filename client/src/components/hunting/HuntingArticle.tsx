@@ -59,7 +59,20 @@ const HuntingArticle: React.FC = () => {
           }
         );
         if (response.data.data) {
-          setCards(response.data.data.map(mapDataToCardProps));
+          const sortedCards = response.data.data
+            .map(mapDataToCardProps)
+            .sort(
+              (
+                a: { createdAt: string | number | Date },
+                b: { createdAt: string | number | Date }
+              ) => {
+                return (
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
+                );
+              }
+            );
+          setCards(sortedCards);
         } else {
           console.log("Data is undefined or null, cannot map to CardProps.");
         }
