@@ -28,11 +28,11 @@ public class ContentApplyStubData {
 	public static List<ContentApply> getApplies() {
 		List<ContentApply> applies = new ArrayList<>();
 
-		for (int i = 1; i <= 4; i++) {
+		for (int i = 1; i <= 5; i++) {
 			ContentApply apply = ContentApply.builder()
 				.contentApplyId((long)i)
-				.applicant(MemberStubData.getMembers().get(i))
-					.content(ContentStubData.getContents().get(i))
+				.applicant(MemberStubData.getMembers().get(i - 1))
+				.content(ContentStubData.getContents().get(i - 1))
 				.applyStatus(ContentApply.ApplyStatus.NONE)
 				.build();
 

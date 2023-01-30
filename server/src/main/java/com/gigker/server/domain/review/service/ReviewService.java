@@ -39,23 +39,23 @@ public class ReviewService {
 	private final ContentApplyService applyService;
 
 	@Transactional
-	public Review writeReview(Review review) {
-		// Writer, Recipient 할당
+	public Review writeReview(Review review, Member member) {
+		// Apply, Content, Recipient 할당
 		ContentApply apply = applyService.findVerifiedApply(review.getWriter().getContentApplyId());
 		Content content = contentService.findContentByContentId(apply.getContent().getContentId());
-
-		Member writer = memberService.findMemberById(apply.getApplicant().getMemberId());
 		Member recipient = memberService.findMemberById(content.getMember().getMemberId());
 
-		// 로그인한 사용자가 작성자인지 확인
-		applyService.verifyThisMemberIsWriter(writer);
+		// 로그인한 사용자가 지원자(리뷰 작성자)인지 확인
+		if (isMemberEqualsToWriter(apply.getApplicant(), member)) {
+			throw new BusinessLogicException(ExceptionCode.WRITE_NOT_ALLOWED);
+		}
 
 		// Content 및 ContentApply 완료 상태인지 확인
 		verifyContentStatusIsCompleted(content);
 		verifyContentApplyStatusIsCompleted(apply);
 
 		// 이미 리뷰를 작성했는지 확인
-		verifyReviewExist(writer, content);
+		verifyReviewExist(member, content);
 
 		review.setWriter(apply);
 		review.setRecipient(content.getMember());
@@ -65,12 +65,14 @@ public class ReviewService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-	public void writeSecondReview(Long reviewId, ReviewDto.ReviewPatch patch) {
+	public void writeSecondReview(Long reviewId, ReviewDto.ReviewPatch patch, Member member) {
 		Review review = findVerifyReview(reviewId);
 		Member writer = review.getWriter().getApplicant();
 
 		// 로그인한 사용자가 작성자인지 확인
-		applyService.verifyThisMemberIsWriter(writer);
+		if (isMemberEqualsToWriter(member, writer)) {
+			throw new BusinessLogicException(ExceptionCode.EDIT_NOT_ALLOWED);
+		}
 
 		// 이미 2차 리뷰를 작성했는지 확인
 		if (review.getSecondComment() != null) {
@@ -80,12 +82,14 @@ public class ReviewService {
 		review.writeSecondReview(patch.getSecondComment());
 	}
 
-	public void deleteReview(Long reviewId) {
+	public void deleteReview(Long reviewId, Member member) {
 		Review review = findVerifyReview(reviewId);
 		Member writer = review.getWriter().getApplicant();
 
 		// 로그인한 사용자가 작성자인지 확인
-		applyService.verifyThisMemberIsWriter(writer);
+		if (isMemberEqualsToWriter(member, writer)) {
+			throw new BusinessLogicException(ExceptionCode.DELETE_NOT_ALLOWED);
+		}
 
 		reviewRepository.delete(review);
 	}
@@ -142,6 +146,13 @@ public class ReviewService {
 			default:
 				throw new BusinessLogicException(ExceptionCode.NOT_FOUND_TYPE);
 		}
+	}
+
+	// == Find ==
+
+	// 로그인한 사용자가 리뷰 작성자가 아닌지 확인
+	private boolean isMemberEqualsToWriter(Member member, Member writer) {
+		return !Objects.equals(member.getMemberId(), writer.getMemberId());
 	}
 
 	// == Create ==
