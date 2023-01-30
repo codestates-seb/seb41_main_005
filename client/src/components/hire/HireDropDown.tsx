@@ -318,11 +318,14 @@ const DropdownList = styled.ul`
 `;
 
 const DropdownItem = styled.li`
+  display: flex;
+  justify-content: center;
   width: 100%;
   height: 100%;
 `;
 
 const LinkWrapper = styled.a`
+  width: 100%;
   font-size: 16px;
   text-decoration: none;
   color: white;

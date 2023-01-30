@@ -23,6 +23,7 @@ import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.service.ContentService;
 import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.domain.member.service.MemberService;
 import com.gigker.server.domain.review.dto.ReviewDto;
 import com.gigker.server.domain.review.entity.Review;
 import com.gigker.server.domain.review.mapper.ReviewMapper;
@@ -40,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReviewController {
 	private final ReviewService reviewService;
 	private final ReviewMapper reviewMapper;
+	private final MemberService memberService;
 	private final ContentService contentService;
 
 	// 리뷰 작성
@@ -48,7 +50,8 @@ public class ReviewController {
 		@RequestBody @Valid ReviewDto.ReviewPost post) {
 
 		Review review = reviewMapper.postToReview(post);
-		Review createdReview = reviewService.writeReview(review);
+		Member member = memberService.getCurrentMember();
+		Review createdReview = reviewService.writeReview(review, member);
 		ReviewDto.ReviewResponse response = reviewMapper.reviewToResponse(createdReview);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(new SingleResponseDto<>(response));
@@ -60,7 +63,8 @@ public class ReviewController {
 		@PathVariable("review-id") @Positive Long reviewId,
 		@RequestBody @Valid ReviewDto.ReviewPatch patch) {
 
-		reviewService.writeSecondReview(reviewId, patch);
+		Member member = memberService.getCurrentMember();
+		reviewService.writeSecondReview(reviewId, patch, member);
 
 		return ResponseEntity.ok().build();
 	}
@@ -70,7 +74,8 @@ public class ReviewController {
 	public ResponseEntity deleteReview(
 		@PathVariable("review-id") @Positive Long reviewId) {
 
-		reviewService.deleteReview(reviewId);
+		Member member = memberService.getCurrentMember();
+		reviewService.deleteReview(reviewId, member);
 
 		return ResponseEntity.noContent().build();
 	}

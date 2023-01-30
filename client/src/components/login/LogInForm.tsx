@@ -42,6 +42,10 @@ const InputSection = styled.div`
   label {
     margin-left: 1rem;
   }
+  a {
+    text-decoration: none;
+    color: #6f38c5;
+  }
 `;
 
 const ButtonSection = styled.div`

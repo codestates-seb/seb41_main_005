@@ -6,7 +6,6 @@ import CalloutBox from "../components/detail/CalloutBox";
 import UserInfo from "../components/detail/UserInfo";
 import Warning from "../components/detail/Warning";
 import { getDetailData } from "../api/getDetail";
-import { getMemberData } from "../api/getMember";
 import { hireDetailProps } from "../util/hireDetailData";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../util/redux";
@@ -97,7 +96,6 @@ const Container = styled.div`
 
 function HireDetail() {
   const [datas, setDatas] = useState<hireDetailProps>();
-  const [memberData, setMemberData] = useState<any>();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -105,22 +103,16 @@ function HireDetail() {
   const memberId = datas?.memberId;
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
   const applicantId = useSelector((state: RootState) => state.LogIn.logInMID);
-  const reviewCount = memberData?.totalReviewCount;
+  const reviewCount = datas?.reviewCount;
 
   const detailAPI = useCallback(async () => {
     const data = await getDetailData(Number(contentId));
     setDatas(data);
   }, [contentId]);
 
-  const memberAPI = useCallback(async () => {
-    const data = await getMemberData(memberId);
-    setMemberData(data);
-  }, [memberId]);
-
   useEffect(() => {
     detailAPI();
-    memberAPI();
-  }, [detailAPI, memberAPI]);
+  }, [detailAPI]);
 
   const handleEditButton = () => {
     navigate(`/edithire/${contentId}`);
@@ -158,7 +150,7 @@ function HireDetail() {
 
   return (
     <Container>
-      {datas && memberData ? (
+      {datas ? (
         <div className="wrapper">
           <div className="left">
             <section className="header">
@@ -215,7 +207,7 @@ function HireDetail() {
                 <p>{datas.other}</p>
               </div>
             </section>
-            <UserInfo data={memberData} handlebutton={handleDetailButton} />
+            <UserInfo data={datas} handlebutton={handleDetailButton} />
             <Warning nickName={datas.nickName} />
           </div>
           <div className="right">

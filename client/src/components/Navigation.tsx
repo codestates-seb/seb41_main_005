@@ -141,7 +141,7 @@ const Navigation = () => {
   return (
     <Block>
       <NavBar>
-        <ImgWrapper href={"/"}>
+        <ImgWrapper href={"/"} onClick={() => dispatch(setTabNum(0))}>
           <Logo width={65} height={65} />
         </ImgWrapper>
         <LinkContainer>
