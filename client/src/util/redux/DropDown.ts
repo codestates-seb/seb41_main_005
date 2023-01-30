@@ -3,6 +3,8 @@ type DropDownActions =
   | { type: "SELECT_CATEGORY"; payload: string }
   | { type: "SELECT_LOCATION"; payload: string }
   | { type: "SELECT_TAG"; payload: string }
+  | { type: "RESET_CATEGORY" }
+  | { type: "RESET_LOCATION" }
   | { type: "RESET_TAG" };
 // 상태 타입
 type DropDownState = {
@@ -34,6 +36,14 @@ export const selectTag = (tag: string) => ({
   payload: tag,
 });
 
+export const resetCategory = () => ({
+  type: "RESET_CATEGORY",
+});
+
+export const resetLocation = () => ({
+  type: "RESET_LOCATION",
+});
+
 export const resetTag = () => ({
   type: "RESET_TAG",
 });
@@ -50,6 +60,10 @@ export const DropDown = (
       return { ...state, selectedLocation: action.payload };
     case "SELECT_TAG":
       return { ...state, selectedTag: action.payload };
+    case "RESET_CATEGORY":
+      return { ...state, selectedCategory: "카테고리" };
+    case "RESET_LOCATION":
+      return { ...state, selectedLocation: "지역" };
     case "RESET_TAG":
       return { ...state, selectedTag: "" };
     default:

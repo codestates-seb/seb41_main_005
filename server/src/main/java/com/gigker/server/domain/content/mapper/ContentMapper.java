@@ -99,18 +99,10 @@ public interface ContentMapper {
     @Mapping(source = "location.cityName", target = "cityName")
     ContentResponseDto.ContentResponse contentResponseDto(Content content);
 
-    @Mapping(source = "contentId", target = "contentId")
-    @Mapping(source = "price", target = "price")
-    // @Mapping(source = "workTimes", target = "workTime")
     @Mapping(source = "member.memberId", target = "memberId")
     @Mapping(source = "member.nickName", target = "nickName")
     ContentResponseDto.SimpleContentResponse contentToSimpleContent(Content content);
 
-    @Mapping(source = "contentId", target = "contentId")
-    @Mapping(source = "price", target = "price")
-    // @Mapping(source = "workTimes", target = "workTime")
-    @Mapping(source = "member.memberId", target = "memberId")
-    @Mapping(source = "member.nickName", target = "nickName")
     List<ContentResponseDto.SimpleContentResponse> contentsToSimpleContents(List<Content> content);
 
     List<ContentResponseDto.ContentResponse> contentsResponseDto(List<Content> contents);

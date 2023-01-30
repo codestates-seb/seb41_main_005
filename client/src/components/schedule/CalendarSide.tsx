@@ -9,6 +9,7 @@ const SideContainer = styled.div`
   width: 300px;
   line-height: 1.5;
   height: 100vh;
+  margin-top: 12px;
   border-right: 1px solid #d3e2e8;
   h2 {
     margin: 0;

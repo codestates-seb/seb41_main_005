@@ -18,13 +18,14 @@ import { setCurrentEvents } from "../../util/redux/CalendarEvents";
 
 const CalendarContainer = styled.div`
   display: flex;
-  min-height: 80%;
-  min-width: 80%;
   font-size: 14px;
+  width: 100%;
 `;
 
 const Calendersection = styled.div`
+  display: flex;
   padding: 3em;
+  width: auto;
   flex-grow: 1;
 `;
 

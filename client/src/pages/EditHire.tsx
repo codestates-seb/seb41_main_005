@@ -122,6 +122,11 @@ const EditHire = (props: Props) => {
   };
 
   const handleVolumeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    if (!Number(inputValue) || Number(inputValue) < 0) {
+      event.preventDefault();
+      alert("숫자만 입력 가능하고, 음수는 입력할 수 없습니다.");
+    }
     setExistingInfo({
       ...existingInfo,
       recruitingCount: parseInt(event.target.value),
@@ -130,6 +135,11 @@ const EditHire = (props: Props) => {
   };
 
   const handlePayChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    if (!Number(inputValue) || Number(inputValue) < 0) {
+      event.preventDefault();
+      alert("숫자만 입력 가능하고, 음수는 입력할 수 없습니다.");
+    }
     setExistingInfo({
       ...existingInfo,
       price: parseFloat(event.target.value),
@@ -162,8 +172,20 @@ const EditHire = (props: Props) => {
   const handleDeadlineChange = (deadline: string) => {
     setDeadline(deadline);
   };
+  const validateForm = () => {
+    if (!location || !category || !tag || !workTime || !deadline) {
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = () => {
+    if (!validateForm()) {
+      alert(
+        "지원마감일, 카테고리, 태그, 업무시간, 지역 창을 반드시 입력해주세요."
+      );
+      return;
+    }
     const updatedData = {
       ...existingInfo,
       title: title,
@@ -191,21 +213,22 @@ const EditHire = (props: Props) => {
 
     axios
       .patch(
-        `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
+        `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
         existingInfo
       )
       .then((response) => {
         console.log(response);
+        navigate(`/hireDetail/${contentId}`);
       })
       .catch((error) => {
         console.log(error);
       });
-    navigate(`/hireDetail/${contentId}`);
   };
+
   const handleDelete = () => {
     axios
       .delete(
-        `http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
+        `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
       )
       .then((response) => {
         console.log(response);
@@ -219,100 +242,129 @@ const EditHire = (props: Props) => {
   return (
     <EditHireContainer>
       <TitleContainer>
-        제목
-        <InputBox
-          width="400px"
-          onChange={handleTitleChange}
-          defaultValue={existingInfo.title}
-        />
-        지원마감일
-        <Deadline onChange={handleDeadlineChange} />
+        <InputSection>
+          <label htmlFor="title">제목</label>
+          <InputBox
+            width="400px"
+            id="title"
+            value={existingInfo.title}
+            onChange={handleTitleChange}
+          />
+        </InputSection>
+        <DeadLineSection>
+          <label htmlFor="date">지원마감일</label>
+          <Deadline onChange={handleDeadlineChange} />
+        </DeadLineSection>
       </TitleContainer>
-      카테고리
-      <CategoryWrapper>
-        <select
-          value={existingInfo.categoryName}
-          placeholder={"카테고리"}
-          onChange={handleCategoryChange}
-        >
-          {categoryOptions.map(({ value, label }) => (
-            <option key={value}>{label}</option>
-          ))}
-        </select>
-      </CategoryWrapper>
-      태그
-      <TagWrapper>
-        <select placeholder={"태그"} onChange={handleTagChange}>
-          {tagOptions.map(({ value, label }) => (
-            <option key={value}>{label}</option>
-          ))}
-        </select>
-      </TagWrapper>
-      <WithTitle>
-        업무시간
+      <SelectContainer>
+        <InputSection>
+          <label htmlFor="category">카테고리</label>
+          <CategoryWrapper>
+            <select
+              value={existingInfo.categoryName}
+              onChange={handleCategoryChange}
+              id={"category"}
+            >
+              <option defaultValue="" hidden>
+                선택
+              </option>
+              {categoryOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </CategoryWrapper>
+        </InputSection>
+        <InputSection>
+          <label htmlFor="tag">태그</label>
+          <TagWrapper>
+            <select onChange={handleTagChange} id={"tag"}>
+              <option defaultValue="" hidden>
+                선택
+              </option>
+              {tagOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </TagWrapper>
+        </InputSection>
         <WorkSchedule
           workTime={workTime}
           onWorkTimeChange={handleWorkTimeChange}
         />
-      </WithTitle>
+      </SelectContainer>
       <ThreeInput>
-        <WithTitle>
-          모집인원
+        <InputSection>
+          <label htmlFor="num">모집인원</label>
           <InputBox
-            width="165px"
-            onChange={handleVolumeChange}
             value={existingInfo.recruitingCount}
+            width="150px"
+            onChange={handleVolumeChange}
+            id={"num"}
           />
-        </WithTitle>
-        <WithTitle>
-          보수
+        </InputSection>
+        <InputSection>
+          <label htmlFor="income">보수</label>
           <InputBox
-            width="165px"
-            onChange={handlePayChange}
             value={existingInfo.price}
+            width="150px"
+            onChange={handlePayChange}
+            id={"income"}
           />
-        </WithTitle>
-        <WithTitle>
-          장소
+        </InputSection>
+        <InputSection>
+          <label htmlFor="location">지역</label>
           <LocationWrapper>
             <select
-              placeholder={"지역"}
               value={existingInfo.cityName}
               onChange={handleLocationChange}
+              id={"location"}
             >
+              <option defaultValue="" hidden>
+                선택
+              </option>
               {locationOptions.map(({ value, label }) => (
-                <option key={value}>{label}</option>
+                <option key={value} value={value}>
+                  {label}
+                </option>
               ))}
             </select>
           </LocationWrapper>
-        </WithTitle>
+        </InputSection>
       </ThreeInput>
       <WithTitle>
-        업무내용
+        <label htmlFor="content">업무내용</label>
         <TextArea
+          value={existingInfo.workContent}
           onChange={handleWorkDetailChange}
-          defaultValue={existingInfo.workContent}
+          id={"content"}
         />
       </WithTitle>
       <WithTitle>
-        자격요건
+        <label htmlFor="qualification">자격요건</label>
         <TextArea
+          value={existingInfo.qualification}
           onChange={handleQualificationChange}
-          defaultValue={existingInfo.qualification}
+          id={"qualification"}
         />
       </WithTitle>
       <WithTitle>
-        우대사항 (선택)
+        <label htmlFor="prefer">우대사항 (선택)</label>
         <TextArea
+          value={existingInfo.preference}
           onChange={handlePreferentialChange}
-          defaultValue={existingInfo.preference}
+          id={"prefer"}
         />
       </WithTitle>
       <WithTitle>
-        기타 (선택)
+        <label htmlFor="etc">기타 (선택)</label>
         <TextArea
+          value={existingInfo.other}
           onChange={handleEtcChange}
-          defaultValue={existingInfo.other}
+          id={"etc"}
         />
       </WithTitle>
       <SubmitWrapper>
@@ -328,29 +380,57 @@ const EditHire = (props: Props) => {
 };
 
 const EditHireContainer = styled.div`
-  padding: 100px 50px 50px 50px;
+  background: #fafafa;
+  max-width: 1060px;
+  margin: auto;
+  padding: 135px 190px 100px 150px;
   display: flex;
   flex-direction: column;
-  input {
-    align-items: center;
-  }
 `;
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+`;
+const InputSection = styled.div`
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  label {
+    margin-left: 1rem;
+  }
+`;
+const DeadLineSection = styled.div`
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  margin-right: 19px;
+  label {
+    margin-left: 1rem;
+  }
+`;
+const SelectContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 const WithTitle = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  margin-bottom: 16px;
+  label {
+    margin-left: 1rem;
+  }
 `;
 const ThreeInput = styled.div`
   display: flex;
   flex-direction: row;
+  margin-bottom: 16px;
 `;
 const CategoryWrapper = styled.div`
-  margin: 10px;
-  padding: 10px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
@@ -358,9 +438,7 @@ const CategoryWrapper = styled.div`
   }
 `;
 const LocationWrapper = styled.div`
-  width: 150px;
-  margin: 10px;
-  padding: 10px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
@@ -368,8 +446,7 @@ const LocationWrapper = styled.div`
   }
 `;
 const TagWrapper = styled.div`
-  margin: 10px;
-  padding: 10px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
@@ -377,9 +454,17 @@ const TagWrapper = styled.div`
   }
 `;
 const SubmitWrapper = styled.div`
+  display: flex;
+  justify-content: right;
+  margin: 32px 0;
   .edithunting-submit {
-    margin: 30px;
-    width: 200px;
+    margin-left: 30px;
+    width: 150px;
+    background-color: #6f38c5;
+    &:hover {
+      background-color: #fcc72c;
+      transition: all 0.5s;
+    }
   }
 `;
 export default EditHire;

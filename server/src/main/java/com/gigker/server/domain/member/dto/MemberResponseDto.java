@@ -21,16 +21,16 @@ public class MemberResponseDto {
     private String pictureUrl;
 
     //종합 좋아요 수
-    private int totalLikeCount;
+    private Long totalLikeCount;
 
     //종합 싫어요 수
-    private int totalDislikeCount;
+    private Long totalDislikeCount;
 
     //종합 완료 건 수
-    private int totalCompletedCount;
+    private Long totalCompletedCount;
 
     //종합 리뷰 수
-    private  int totalReviewCount;
+    private  Long totalReviewCount;
     }
 
 

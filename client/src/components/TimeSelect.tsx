@@ -81,41 +81,47 @@ const WorkSchedule: React.FC<Props> = ({ workTime, onWorkTimeChange }) => {
 
   return (
     <TimeContainer>
-      <SelectWrapper>
-        <div>
-          시작
-          <StyledDatePicker
-            selected={startDate}
-            onChange={handleStartDateChange}
-            dateFormat="yyyy-MM-dd"
-            locale={ko}
-          />
-          <StyledSelect
-            placeholder={"시간"}
-            options={timeOptions}
-            onChange={handleStartTimeChange}
-          />
-        </div>
-        <div>
-          종료
-          <StyledDatePicker
-            selected={endDate}
-            onChange={handleEndDateChange}
-            dateFormat="yyyy-MM-dd"
-            locale={ko}
-          />
-          <StyledSelect
-            placeholder={"시간"}
-            options={timeOptions}
-            onChange={handleEndTimeChange}
-          />
-        </div>
-        <ButtonWrapper>
-          <Button className="worktime-submit" onClick={handleAddSchedule}>
-            추가
-          </Button>
-        </ButtonWrapper>
-      </SelectWrapper>
+      <TimeWrapper>
+        <StartContainer>
+          <label htmlFor="start">시작 시간</label>
+          <StartWrapper>
+            <StyledDatePicker
+              selected={startDate}
+              onChange={handleStartDateChange}
+              dateFormat="yyyy-MM-dd"
+              locale={ko}
+              id={"start"}
+            />
+            <StyledSelect
+              placeholder={"시간"}
+              options={timeOptions}
+              onChange={handleStartTimeChange}
+            />
+          </StartWrapper>
+        </StartContainer>
+        <EndContainer>
+          <label htmlFor="end">종료 시간</label>
+          <EndWrapper>
+            <StyledDatePicker
+              selected={endDate}
+              onChange={handleEndDateChange}
+              dateFormat="yyyy-MM-dd"
+              locale={ko}
+              id={"end"}
+            />
+            <StyledSelect
+              placeholder={"시간"}
+              options={timeOptions}
+              onChange={handleEndTimeChange}
+            />
+          </EndWrapper>
+          <ButtonWrapper>
+            <Button className="worktime-submit" onClick={handleAddSchedule}>
+              추가
+            </Button>
+          </ButtonWrapper>
+        </EndContainer>
+      </TimeWrapper>
       <ListWrapper>
         {workSchedule.map((schedule, index) => (
           <div key={index}>
@@ -165,7 +171,6 @@ const Deadline: React.FC<DueDate> = ({ onChange }) => {
       .toISOString()
       .slice(0, 10)}T${deadlineTime}:00`;
     setdeadlineSum(deadline);
-    console.log(deadline);
     onChange(deadline);
   };
 
@@ -176,6 +181,7 @@ const Deadline: React.FC<DueDate> = ({ onChange }) => {
         onChange={handledeadlineDateChange}
         dateFormat="yyyy-MM-dd"
         locale={ko}
+        id={"date"}
       />
       <StyledSelect
         placeholder={"시간"}
@@ -200,9 +206,13 @@ const Deadline: React.FC<DueDate> = ({ onChange }) => {
 const StyledDatePicker = styled(DatePicker)`
   width: 120px;
   height: 2.5rem;
-  margin-top: 10px;
+  padding: 8px;
   border: solid 1px ${(props) => props.theme.color.sub2};
   border-radius: 8px;
+  :hover {
+    border: solid 1px ${(props) => props.theme.color.main};
+    transition: all 0.5s;
+  }
   :focus {
     border: solid 1px ${(props) => props.theme.color.main};
     -webkit-transition: 0.25s;
@@ -212,47 +222,96 @@ const StyledDatePicker = styled(DatePicker)`
 `;
 const StyledSelect = styled(Select)`
   width: 120px;
+  height: 40px;
   font-size: 14px;
+  margin-top: 10px;
 `;
 
 const TimeContainer = styled.div`
+  height: auto;
+  width: auto;
   display: flex;
-  flex-direction: row;
-  margin: 10px;
-  padding: 10px;
+  flex-direction: column;
 `;
 
-const SelectWrapper = styled.div`
+const TimeWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  margin: 10px;
+`;
+
+const StartContainer = styled.div`
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  label {
+    margin-left: 1rem;
+  }
+`;
+
+const EndContainer = styled.div`
+  height: auto;
+  width: 187px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 19px;
+  label {
+    margin-left: 1rem;
+  }
+`;
+
+const StartWrapper = styled.div`
+  margin: 8px 16px 0;
+`;
+
+const EndWrapper = styled.div`
+  margin: 8px 16px 0;
 `;
 
 const ListWrapper = styled.div`
-  margin-left: -10px;
-  margin-top: 30px;
+  margin: 8px 0;
+  padding-left: 16px;
+  height: 45px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const SumWrapper = styled.div`
-  margin-top: 10px;
+  margin: 8px 0 15px 0;
+  height: 22px;
+  width: 155px;
 `;
 
 const ButtonWrapper = styled.div`
   .worktime-submit {
     width: 50px;
-    margin-top: 65px;
-    margin-left: -10px;
+    margin-top: -40px;
+    margin-right: -19px;
+    float: right;
+    background-color: #6f38c5;
+    &:hover {
+      background-color: #fcc72c;
+      transition: all 0.5s;
+    }
   }
   .deadline-submit {
     width: 50px;
     float: right;
     margin-top: -40px;
-    margin-right: -60px;
+    margin-right: -35px;
+    background-color: #6f38c5;
+    &:hover {
+      background-color: #fcc72c;
+      transition: all 0.5s;
+    }
   }
 `;
 
 const DeadlineWrapper = styled.div`
-  margin: 10px;
+  margin: 8px 16px 0;
 `;
 
 export { WorkSchedule, Deadline };

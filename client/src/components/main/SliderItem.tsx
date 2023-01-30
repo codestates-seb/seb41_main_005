@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { images } from "../../assets/sliderImages";
+import { setTabNum } from "../../util/redux/LogIn";
+import { useDispatch } from "react-redux";
 
 const matchImage = (
   categoryName: string,
@@ -25,11 +27,20 @@ const SliderItem = ({
   categoryName: string;
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const hireCase = () => {
+    dispatch(setTabNum(1));
+    navigate(`/hireDetail/${contentId}`);
+  };
+
+  const huntingCase = () => {
+    dispatch(setTabNum(2));
+    navigate(`/huntingDetail/${contentId}`);
+  };
 
   const handleClick = () => {
-    contentType === "BUY"
-      ? navigate(`/hireDetail/${contentId}`)
-      : navigate(`/huntingDetail/${contentId}`);
+    contentType === "BUY" ? hireCase() : huntingCase();
   };
 
   return (

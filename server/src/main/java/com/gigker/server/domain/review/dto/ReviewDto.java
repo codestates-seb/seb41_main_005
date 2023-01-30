@@ -2,6 +2,7 @@ package com.gigker.server.domain.review.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.common.LikeType;
@@ -19,6 +20,7 @@ public class ReviewDto {
 		@NotNull(message = "contentApplyId cannot be null")
 		private Long contentApplyId;
 		private LikeType likeType;
+		@Size(max = 200)
 		private String comment;
 		private boolean isAnonymous;
 	}
@@ -37,11 +39,12 @@ public class ReviewDto {
 	public static class ReviewResponse {
 		private Long reviewId;
 		private Long writerId;
+		private String writerNickName;
 		private Long recipientId;
 		private LikeType likeType;
 		private String comment;
 		private String secondComment;
-		private boolean isAnonymous;
+		private Boolean isAnonymous;
 		private ContentType contentType;
 	}
 
@@ -49,11 +52,11 @@ public class ReviewDto {
 	@Setter
 	@NoArgsConstructor
 	public static class SimpleMemberResponse {
-		private int memberId;
+		private Long memberId;
 		private String nickName;
 		private String pictureUrl;
-		private int likeCount;
-		private int dislikeCount;
-		private int reviewCount;
+		private Long likeCount;
+		private Long dislikeCount;
+		private Long reviewCount;
 	}
 }

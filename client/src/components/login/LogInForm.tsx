@@ -15,6 +15,7 @@ import {
   setLogInNickname,
   setLogInIntroduction,
   setLogInMID,
+  setTabNum,
 } from "../../util/redux/LogIn";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -22,7 +23,8 @@ import { onLogInSuccess } from "../../util/logInApi";
 
 const LoginBox = styled.form`
   width: 25rem;
-  height: 35rem;
+  height: auto;
+  margin: 100px 0;
   border: 1px solid ${(props) => props.theme.color.back};
   box-shadow: 2px 2px 10px -5px;
   display: flex;
@@ -77,7 +79,7 @@ const LogInForm = () => {
   const handleLogIn = async () => {
     axios
       .post(
-        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/auth/login",
+        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/auth/login",
         {
           username: logInEmail,
           password: logInPassword,
@@ -90,9 +92,9 @@ const LogInForm = () => {
         dispatch(setLogInNickname(res.data.nickName));
         dispatch(setLogInIntroduction(res.data.about));
         dispatch(setLogInMID(res.data.memberId));
+        dispatch(setTabNum(0));
         alert(`어서오세요 ${res.data.nickName}님 :)`);
         navigate("/", { replace: true });
-        navigate(0);
       })
       .catch((err) => {
         console.log(err);
@@ -139,7 +141,7 @@ const LogInForm = () => {
           로그인
         </Button>
       </ButtonSection>
-      <SocialLogin>
+      {/* <SocialLogin>
         <a href={"/"}>
           <FcGoogle size={50} />
         </a>
@@ -149,7 +151,7 @@ const LogInForm = () => {
         <a href={"/"}>
           <RiKakaoTalkFill size={50} color={"#F7E600"} />
         </a>
-      </SocialLogin>
+      </SocialLogin> */}
       <InputSection>
         <Link to={"/signup"}>회원가입</Link>
       </InputSection>
