@@ -119,6 +119,29 @@ const HuntingArticle: React.FC = () => {
   return (
     <ArticleContainer>
       <HuntingArticleContainer>
+<<<<<<< HEAD
+        {filteredCards
+          .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+          .map((card, index) => (
+            <Card key={index} onClick={() => handleClick(card.contentId)}>
+              <CardContent>
+                <CardTitle>{card.title}</CardTitle>
+                <CardWriter>
+                  <span className="sub-title">작성자</span> {card.nickName}
+                </CardWriter>
+                <CardPay>
+                  <span className="sub-title">보수</span>{" "}
+                  {card.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  원
+                </CardPay>
+                {card.workTimes && (
+                  <>
+                    <CardStart>
+                      <span className="sub-title">시작시간</span>
+                      {new Date(card.workTimes[0].startWorkTime).toLocaleString(
+                        "ko-KR",
+                        {
+=======
         {filteredCards.length === 0 ? (
           <NoResultsContainer>
             <img src={Nodata} alt="No results found" />
@@ -147,6 +170,7 @@ const HuntingArticle: React.FC = () => {
                         {new Date(
                           card.workTimes[0].startWorkTime
                         ).toLocaleString("ko-KR", {
+>>>>>>> 900654fa9c88c2a89e53245c778c8cef0e3dcc6a
                           year: "numeric",
                           month: "2-digit",
                           day: "2-digit",
