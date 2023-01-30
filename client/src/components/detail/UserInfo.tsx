@@ -82,12 +82,12 @@ export default function UserInfo({
           <div className="reputation">
             <span className="title">평판</span>
             <div>
-              <span className="like">좋아요 {data.totalLikeCount} </span>
+              <span className="like">좋아요 {data.likeCount} </span>
               <hr />
-              <span className="dislike">싫어요 {data.totalDislikeCount}</span>
+              <span className="dislike">싫어요 {data.dislikeCount}</span>
             </div>
             <span className="title review">리뷰</span>
-            <span>{data.totalReviewCount}</span>
+            <span>{data.reviewCount}</span>
           </div>
         </div>
       </div>

@@ -104,6 +104,7 @@ public class ContentApplyController {
 
 		Member writer = memberService.getCurrentMember();
 		ContentApply apply = applyService.findApply(applyId, contentId, writer);
+
 		Map<String, Long> counts =
 			reviewService.countApplicantProfile(apply.getApplicant(), apply.getContent().getContentType());
 

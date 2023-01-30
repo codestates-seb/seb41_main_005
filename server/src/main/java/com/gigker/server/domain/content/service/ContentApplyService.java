@@ -110,7 +110,6 @@ public class ContentApplyService {
 		if (isMemberEqualsToWriter(writer, content)) {
 			throw new BusinessLogicException(ExceptionCode.ACCESS_NOT_ALLOWED);
 		}
-
 		return applyRepository.findAllByContent(content,
 			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
 	}

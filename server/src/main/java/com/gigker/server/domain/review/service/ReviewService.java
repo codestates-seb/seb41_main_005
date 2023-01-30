@@ -154,7 +154,7 @@ public class ReviewService {
 	private boolean isMemberEqualsToWriter(Member member, Member writer) {
 		return !Objects.equals(member.getMemberId(), writer.getMemberId());
 	}
-
+  
 	// == Create ==
 
 	// Content 완료 상태인지 확인
