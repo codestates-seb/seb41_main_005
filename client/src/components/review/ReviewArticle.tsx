@@ -9,7 +9,7 @@ const ReviewArticle = ({ datas }: { datas: Array<any> }) => {
           <CardHeader>
             <div>
               <span className="title">작성자</span>
-              <span>{data.anonymous ? "익명" : data.nickName}</span>
+              <span>{data.anonymous ? "익명" : data.writerNickName}</span>
             </div>
             <span className="liketype">
               {data.likeType === "LIKE" ? "👍좋아요" : "👎싫어요"}
