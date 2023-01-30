@@ -14,4 +14,8 @@ export interface huntingDetailProps {
   title: string;
   workContent: string;
   other: string;
+  likeCount: number;
+  dislikeCount: number;
+  reviewCount: number;
+  pictureUrl: string;
 }

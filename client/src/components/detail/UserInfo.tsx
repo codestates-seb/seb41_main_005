@@ -24,7 +24,34 @@ const Container = styled.div`
     margin-left: 10px;
     line-height: 28px;
     .reputation {
-      margin-right: 60px;
+      padding-right: 60px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        .like {
+          padding-right: 5px;
+        }
+        .dislike {
+          padding-left: 5px;
+        }
+        hr {
+          border-right: solid 1px #a9a9a9;
+          border-bottom: 0px;
+          width: 0px;
+          height: 16px;
+        }
+      }
+      .review {
+        padding-left: 70px;
+        padding-right: 10px;
+      }
     }
   }
   .title {
@@ -52,13 +79,15 @@ export default function UserInfo({
             <span className="title">닉네임</span>
             <span>{data.nickName}</span>
           </div>
-          <div>
+          <div className="reputation">
             <span className="title">평판</span>
-            <span className="reputation">
-              좋아요 {data.totalLikeCount} | 싫어요 {data.totalDislikeCount}
-            </span>
-            <span className="title">리뷰</span>
-            <span>{data.totalReviewCount}</span>
+            <div>
+              <span className="like">좋아요 {data.likeCount} </span>
+              <hr />
+              <span className="dislike">싫어요 {data.dislikeCount}</span>
+            </div>
+            <span className="title review">리뷰</span>
+            <span>{data.reviewCount}</span>
           </div>
         </div>
       </div>

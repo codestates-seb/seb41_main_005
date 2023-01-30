@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import Footer from "../components/Footer";
 import MainSlider from "../components/main/MainSlider";
 import { getDatas } from "../api/getDatas";
 import { sliderProps, serverData } from "../util/sliderData";
@@ -13,7 +12,7 @@ const Container = styled.div`
   height: auto;
   margin: auto;
   padding-top: 70px;
-  padding-bottom: 300px;
+  padding-bottom: 70px;
   .section {
     justify-content: center;
     align-items: center;
@@ -126,7 +125,6 @@ function Main() {
           </StyledArticle>
         </section>
       </Container>
-      <Footer />
     </>
   );
 }

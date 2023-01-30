@@ -10,6 +10,7 @@ import com.gigker.server.domain.content.mapper.ContentMapper;
 import com.gigker.server.domain.content.service.ContentService;
 import com.gigker.server.domain.location.entity.Location;
 import com.gigker.server.domain.location.service.LocationService;
+import com.gigker.server.domain.review.service.ReviewService;
 import com.gigker.server.global.dto.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +29,8 @@ public class ContentController {
     private final ContentMapper contentMapper;
     private final CategoryService categoryService;
     private final LocationService locationService;
+    private final ReviewService reviewService;
+
     @PostMapping
     public ResponseEntity postContent(@Valid @RequestBody ContentPostDto contentPostDto) {
 
@@ -69,9 +72,11 @@ public class ContentController {
     @GetMapping("/{content_id}")
     public ResponseEntity getContent(@PathVariable("content_id") long contentId){
         Content content = contentService.findVerifiedContent(contentId);
+        Map<String, Long> count =
+            reviewService.countProfile(content.getMember(), content.getContentType());
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(contentMapper.contentResponseDto(content))
+                new SingleResponseDto<>(contentMapper.contentResponseDto(content, count))
                 ,HttpStatus.OK
         );
     }

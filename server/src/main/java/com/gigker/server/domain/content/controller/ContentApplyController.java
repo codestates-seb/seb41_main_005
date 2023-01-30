@@ -1,6 +1,8 @@
 package com.gigker.server.domain.content.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Positive;
 
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.dto.ContentApplyResponseDto;
 import com.gigker.server.domain.content.dto.ContentResponseDto;
 import com.gigker.server.domain.content.entity.Content;
@@ -23,6 +26,9 @@ import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.mapper.ContentApplyMapper;
 import com.gigker.server.domain.content.mapper.ContentMapper;
 import com.gigker.server.domain.content.service.ContentApplyService;
+import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.domain.member.service.MemberService;
+import com.gigker.server.domain.review.service.ReviewService;
 import com.gigker.server.global.dto.MultiResponseDto;
 import com.gigker.server.global.dto.SingleResponseDto;
 
@@ -37,13 +43,16 @@ public class ContentApplyController {
 	private final ContentApplyService applyService;
 	private final ContentApplyMapper applyMapper;
 	private final ContentMapper contentMapper;
+	private final MemberService memberService;
+	private final ReviewService reviewService;
 
 	// 게시글에 지원
 	@PostMapping
 	public ResponseEntity postApply(
 		@PathVariable("content-id") @Positive Long contentId) {
 
-	  ContentApply apply = applyService.createApply(contentId);
+		Member applicant = memberService.getCurrentMember();
+		ContentApply apply = applyService.createApply(contentId, applicant);
 		ContentApplyResponseDto.ApplyResponse response = applyMapper.applyToResponse(apply);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -55,7 +64,8 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
-		applyService.acceptApply(applyId, contentId);
+		Member writer = memberService.getCurrentMember();
+		applyService.acceptApply(applyId, contentId, writer);
 
 		return ResponseEntity.ok().build();
 	}
@@ -67,9 +77,19 @@ public class ContentApplyController {
 		@RequestParam @Positive int page) {
 
 		Content content = applyService.getContentByContentId(contentId);
+		Member writer = memberService.getCurrentMember();
+		ContentType type = content.getContentType();
+
 		// 페이지당 출력 수는 15로 고정
-		Page<ContentApply> pageApplies = applyService.findAllApplies(content, page - 1, 15);
-		List<ContentApplyResponseDto.Applicant> applicants = applyMapper.appliesToApplicants(pageApplies.getContent());
+		Page<ContentApply> pageApplies = applyService.findAllApplies(content, writer, page - 1, 15);
+		List<ContentApply> applies = pageApplies.getContent();
+
+		// 지원자의 리뷰, 좋아요 싫어요 갯수를 담은 List
+		List<Map<String, Long>> counts = applies.stream()
+			.map(apply -> reviewService.countApplicantProfile(apply.getApplicant(), type))
+			.collect(Collectors.toList());
+
+		List<ContentApplyResponseDto.Applicant> applicants = applyMapper.appliesToApplicants(applies, counts);
 		ContentResponseDto.SimpleContentResponse simpleContent = contentMapper.contentToSimpleContent(content);
 
 		return ResponseEntity.status(HttpStatus.OK)
@@ -82,8 +102,13 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
-		ContentApply apply = applyService.findApply(applyId);
-		ContentApplyResponseDto.Applicant applicant = applyMapper.applyToApplicant(apply);
+		Member writer = memberService.getCurrentMember();
+		ContentApply apply = applyService.findApply(applyId, contentId, writer);
+
+		Map<String, Long> counts =
+			reviewService.countApplicantProfile(apply.getApplicant(), apply.getContent().getContentType());
+
+		ContentApplyResponseDto.Applicant applicant = applyMapper.applyToApplicant(apply, counts);
 
 		return ResponseEntity.status(HttpStatus.OK).body(new SingleResponseDto<>(applicant));
 	}
@@ -94,7 +119,8 @@ public class ContentApplyController {
 		@PathVariable("content-id") @Positive Long contentId,
 		@PathVariable("content-apply-id") @Positive Long applyId) {
 
-		applyService.deleteApply(applyId);
+		Member applicant = memberService.getCurrentMember();
+		applyService.deleteApply(applyId, contentId, applicant);
 
 		return ResponseEntity.noContent().build();
 	}

@@ -31,21 +31,17 @@ const EditHunting = () => {
 
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setCategory(event.target.value);
-    console.log("category:", event.target.value);
   };
 
   const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setLocation(event.target.value);
-    console.log("location:", event.target.value);
   };
   const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setTag(event.target.value);
-    console.log("tag:", event.target.value);
   };
 
   const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
     setWorkTime(workTime);
-    console.log("worktime:", workTime);
   };
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -56,6 +52,11 @@ const EditHunting = () => {
   };
 
   const handlePayChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    if (!Number(inputValue) || Number(inputValue) < 0) {
+      event.preventDefault();
+      alert("숫자만 입력 가능하고, 음수는 입력할 수 없습니다.");
+    }
     setPay(event.target.value);
   };
 
@@ -65,11 +66,30 @@ const EditHunting = () => {
   const handleDeadlineChange = (deadline: string) => {
     setDeadline(deadline);
   };
+  const validateForm = () => {
+    if (
+      !title ||
+      !workDetail ||
+      !pay ||
+      !location ||
+      !category ||
+      !tag ||
+      !workTime ||
+      !deadline
+    ) {
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = () => {
+    if (!validateForm()) {
+      alert("(선택)을 제외한 모든 창에 입력해주세요.");
+      return;
+    }
     axios
       .post(
-        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/contents",
+        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents",
         {
           title: title,
           contentType: "SELL",
@@ -93,62 +113,73 @@ const EditHunting = () => {
       )
       .then((response) => {
         console.log(response);
+        navigate("/hunting");
       })
       .catch((error) => {
         console.log(error);
       });
-    navigate("/hunting");
   };
 
   return (
     <EditHuntingContainer>
       <TitleContainer>
-        제목
-        <InputBox width="350px" onChange={handleTitleChange} />
-        지원마감일
-        <Deadline onChange={handleDeadlineChange} />
+        <InputSection>
+          <label htmlFor="title">제목</label>
+          <InputBox width="400px" id="title" onChange={handleTitleChange} />
+        </InputSection>
+        <DeadLineSection>
+          <label htmlFor="date">구직마감일</label>
+          <Deadline onChange={handleDeadlineChange} />
+        </DeadLineSection>
       </TitleContainer>
-      <SelectWrapper>
-        카테고리
-        <CategoryWrapper>
-          <select placeholder={"카테고리"} onChange={handleCategoryChange}>
-            {categoryOptions.map(({ value, label }) => (
-              <option key={value} value={value}>
-                {label}
+      <SelectContainer>
+        <InputSection>
+          <label htmlFor="category">카테고리</label>
+          <CategoryWrapper>
+            <select onChange={handleCategoryChange} id={"category"}>
+              <option defaultValue="" hidden>
+                선택
               </option>
-            ))}
-          </select>
-        </CategoryWrapper>
-        태그
-        <TagWrapper>
-          <select onChange={handleTagChange}>
-            <option defaultValue="" hidden>
-              태그
-            </option>
-            {tagOptions.map(({ value, label }) => (
-              <option key={value} value={value}>
-                {label}
+              {categoryOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </CategoryWrapper>
+        </InputSection>
+        <InputSection>
+          <label htmlFor="tag">태그</label>
+          <TagWrapper>
+            <select onChange={handleTagChange} id={"tag"}>
+              <option defaultValue="" hidden>
+                선택
               </option>
-            ))}
-          </select>
-        </TagWrapper>
-      </SelectWrapper>
-      <PossibleTime>
-        희망 업무시간
+              {tagOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </TagWrapper>
+        </InputSection>
         <WorkSchedule
           workTime={workTime}
           onWorkTimeChange={handleWorkTimeChange}
         />
-      </PossibleTime>
+      </SelectContainer>
       <TwoInput>
-        <WithTitle>
-          희망보수
-          <InputBox width="300px" onChange={handlePayChange} />
-        </WithTitle>
-        <WithTitle>
-          희망장소
+        <InputSection>
+          <label htmlFor="num">희망보수</label>
+          <InputBox width="150px" onChange={handlePayChange} id={"num"} />
+        </InputSection>
+        <InputSection>
+          <label htmlFor="location">희망장소</label>
           <LocationWrapper>
-            <select placeholder={"지역"} onChange={handleLocationChange}>
+            <select onChange={handleLocationChange} id={"location"}>
+              <option defaultValue="" hidden>
+                선택
+              </option>
               {locationOptions.map(({ value, label }) => (
                 <option key={value} value={value}>
                   {label}
@@ -156,15 +187,15 @@ const EditHunting = () => {
               ))}
             </select>
           </LocationWrapper>
-        </WithTitle>
+        </InputSection>
       </TwoInput>
       <WithTitle>
-        업무내용
-        <TextArea onChange={handleWorkDetailChange} />
+        <label htmlFor="content">업무내용</label>
+        <TextArea onChange={handleWorkDetailChange} id={"content"} />
       </WithTitle>
       <WithTitle>
-        기타 (선택)
-        <TextArea onChange={handleEtcChange} />
+        <label htmlFor="etc">기타 (선택)</label>
+        <TextArea onChange={handleEtcChange} id={"etc"} />
       </WithTitle>
       <SubmitWrapper>
         <Button className="newhunting-submit" onClick={handleSubmit}>
@@ -176,37 +207,58 @@ const EditHunting = () => {
 };
 
 const EditHuntingContainer = styled.div`
-  padding: 100px 50px 50px 50px;
+  background: #fafafa;
+  max-width: 1060px;
+  margin: auto;
+  padding: 135px 190px 100px 150px;
   display: flex;
   flex-direction: column;
 `;
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 `;
-const PossibleTime = styled.div`
-  margin-top: 10px;
-  margin-left: 5px;
+const InputSection = styled.div`
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  label {
+    margin-left: 1rem;
+  }
+`;
+const DeadLineSection = styled.div`
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  margin-right: 19px;
+  label {
+    margin-left: 1rem;
+  }
 `;
 
 const WithTitle = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  margin-bottom: 16px;
+  label {
+    margin-left: 1rem;
+  }
 `;
 const TwoInput = styled.div`
   display: flex;
   flex-direction: row;
-  margin-left: 50px;
+  margin-bottom: 16px;
 `;
-const SelectWrapper = styled.div`
+const SelectContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-left: 70px;
+  justify-content: space-between;
 `;
 const CategoryWrapper = styled.div`
-  margin: 10px;
-  padding: 10px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
@@ -214,8 +266,7 @@ const CategoryWrapper = styled.div`
   }
 `;
 const LocationWrapper = styled.div`
-  width: 150px;
-  padding: 10px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
@@ -223,8 +274,7 @@ const LocationWrapper = styled.div`
   }
 `;
 const TagWrapper = styled.div`
-  margin: 10px;
-  padding: 10px;
+  margin: 8px 16px;
   select {
     width: 150px;
     height: 2.5rem;
@@ -232,9 +282,16 @@ const TagWrapper = styled.div`
   }
 `;
 const SubmitWrapper = styled.div`
+  display: flex;
+  justify-content: right;
+  margin: 32px 0;
   .newhunting-submit {
-    margin-left: 330px;
     width: 300px;
+    background-color: #6f38c5;
+    &:hover {
+      background-color: #fcc72c;
+      transition: all 0.5s;
+    }
   }
 `;
 export default EditHunting;

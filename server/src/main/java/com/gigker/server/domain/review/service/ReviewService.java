@@ -1,5 +1,7 @@
 package com.gigker.server.domain.review.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gigker.server.domain.common.ContentType;
+import com.gigker.server.domain.common.LikeType;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.service.ContentApplyService;
@@ -36,24 +39,25 @@ public class ReviewService {
 	private final ContentApplyService applyService;
 
 	@Transactional
-	public Review writeReview(Review review) {
-		// Writer, Recipient 할당
+	public Review writeReview(Review review, Member member) {
+		// Apply, Content, Recipient 할당
 		ContentApply apply = applyService.findVerifiedApply(review.getWriter().getContentApplyId());
 		Content content = contentService.findContentByContentId(apply.getContent().getContentId());
-
-		Member writer = memberService.findMemberById(apply.getApplicant().getMemberId());
 		Member recipient = memberService.findMemberById(content.getMember().getMemberId());
 
-		// 로그인한 사용자가 작성자인지 확인
-		applyService.verifyThisMemberIsWriter(writer);
+		// 로그인한 사용자가 지원자(리뷰 작성자)인지 확인
+		if (isMemberEqualsToWriter(apply.getApplicant(), member)) {
+			throw new BusinessLogicException(ExceptionCode.WRITE_NOT_ALLOWED);
+		}
 
 		// Content 및 ContentApply 완료 상태인지 확인
 		verifyContentStatusIsCompleted(content);
 		verifyContentApplyStatusIsCompleted(apply);
 
 		// 이미 리뷰를 작성했는지 확인
-		verifyReviewExist(writer, content);
+		verifyReviewExist(member, content);
 
+		review.setWriter(apply);
 		review.setRecipient(content.getMember());
 		review.setContentType(content.getContentType());
 
@@ -61,12 +65,14 @@ public class ReviewService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-	public void writeSecondReview(Long reviewId, ReviewDto.ReviewPatch patch) {
+	public void writeSecondReview(Long reviewId, ReviewDto.ReviewPatch patch, Member member) {
 		Review review = findVerifyReview(reviewId);
 		Member writer = review.getWriter().getApplicant();
 
 		// 로그인한 사용자가 작성자인지 확인
-		applyService.verifyThisMemberIsWriter(writer);
+		if (isMemberEqualsToWriter(member, writer)) {
+			throw new BusinessLogicException(ExceptionCode.EDIT_NOT_ALLOWED);
+		}
 
 		// 이미 2차 리뷰를 작성했는지 확인
 		if (review.getSecondComment() != null) {
@@ -76,12 +82,14 @@ public class ReviewService {
 		review.writeSecondReview(patch.getSecondComment());
 	}
 
-	public void deleteReview(Long reviewId) {
+	public void deleteReview(Long reviewId, Member member) {
 		Review review = findVerifyReview(reviewId);
 		Member writer = review.getWriter().getApplicant();
 
 		// 로그인한 사용자가 작성자인지 확인
-		applyService.verifyThisMemberIsWriter(writer);
+		if (isMemberEqualsToWriter(member, writer)) {
+			throw new BusinessLogicException(ExceptionCode.DELETE_NOT_ALLOWED);
+		}
 
 		reviewRepository.delete(review);
 	}
@@ -93,21 +101,60 @@ public class ReviewService {
 	}
 
 	// ContentType 에 따른 받은 리뷰 조회
-	public Page<Review> findAllReviewsByRecipient(Content content, Member member, int page, int size) {
-		ContentType type = content.getContentType();
+	public Page<Review> findAllReviewsByRecipient(Member member, ContentType type, int page, int size) {
 
-		return reviewRepository.findAllByRecipientAndContentType(member, type,
+		return reviewRepository.findAllReviewByRecipientAndContentType(member, type,
 			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
 	}
 
 	// ContentType 에 따른 작성한 리뷰 조회
-	public Page<Review> findAllReviewsByWriter(Content content, Member member, int page, int size) {
-		ContentType type = content.getContentType();
+	public Page<Review> findAllReviewsByWriter(Member member, ContentType type, int page, int size) {
 
-		return reviewRepository.findAllByWriterAndContentType(member, type,
+		return reviewRepository.findAllReviewByWriterAndContentType(member, type,
 			PageRequest.of(page, size, Sort.by("lastModifiedAt").descending()));
 	}
 
+	// 해당 회원의 모든 평판 정보를 가져오는 로직
+	public Map<String, Long> countProfiles(Member member) {
+		Map<String, Long> map = new HashMap<>();
+		map.put("totalLikeCount", reviewRepository.countByRecipientAndLikeType(member, LikeType.LIKE));
+		map.put("totalDislikeCount", reviewRepository.countByRecipientAndLikeType(member, LikeType.DISLIKE));
+		map.put("totalReviewCount", reviewRepository.countReviewByRecipient(member));
+
+		return map;
+	}
+
+	// 해당 회원의 평판 정보를 가져오는 로직
+	public Map<String, Long> countProfile(Member member, ContentType type) {
+		Map<String, Long> map = new HashMap<>();
+		map.put("likeCount", reviewRepository.countLike(member, type));
+		map.put("dislikeCount", reviewRepository.countDislike(member, type));
+		map.put("reviewCount", reviewRepository.countReviewByRecipientAndContentType(member, type));
+
+		return map;
+	}
+
+	// 지원자의 평판 정보를 가져오는 로직
+	public Map<String, Long> countApplicantProfile(Member applicant, ContentType type) {
+		switch (type) {
+			case BUY:
+				// 구인 글에 지원한 사람은 구직에 대한 평판 정보를 보여준다.
+				return countProfile(applicant, ContentType.SELL);
+			case SELL:
+				// 구직 글에 지원한 사람은 구인에 대한 평판 정보를 보여준다.
+				return countProfile(applicant, ContentType.BUY);
+			default:
+				throw new BusinessLogicException(ExceptionCode.NOT_FOUND_TYPE);
+		}
+	}
+
+	// == Find ==
+
+	// 로그인한 사용자가 리뷰 작성자가 아닌지 확인
+	private boolean isMemberEqualsToWriter(Member member, Member writer) {
+		return !Objects.equals(member.getMemberId(), writer.getMemberId());
+	}
+  
 	// == Create ==
 
 	// Content 완료 상태인지 확인
@@ -126,7 +173,7 @@ public class ReviewService {
 
 	// 이미 리뷰를 작성했는지 확인
 	private void verifyReviewExist(Member writer, Content content) {
-		Optional<Review> optionalReview = reviewRepository.findByWriterAndContent(writer, content);
+		Optional<Review> optionalReview = reviewRepository.findReviewByWriterAndContent(writer, content);
 
 		if (optionalReview.isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.EXISTS_REVIEW);

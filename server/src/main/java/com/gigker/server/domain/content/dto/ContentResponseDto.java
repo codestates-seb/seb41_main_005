@@ -1,8 +1,6 @@
 package com.gigker.server.domain.content.dto;
 
-import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.common.ContentType;
-import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.common.WorkTimeResponseDto;
 import com.gigker.server.domain.content.entity.Content;
 import lombok.Getter;
@@ -20,6 +18,10 @@ public class ContentResponseDto {
         private long contentId;
         private Long memberId;
         private String nickName;
+        private String pictureUrl;
+        private Long reviewCount;
+        private Long likeCount;
+        private Long dislikeCount;
         private String title;
         private ContentType contentType;
         private Integer recruitingCount;

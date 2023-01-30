@@ -31,7 +31,7 @@ import {
 interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
 
 const SignUpBox = styled.form<FormProps>`
-  margin-top: 20rem;
+  margin: 100px 0;
   width: 30rem;
   height: auto;
   border: 1px solid ${(props) => props.theme.color.back};
@@ -44,8 +44,8 @@ const SignUpBox = styled.form<FormProps>`
 `;
 
 const InputSection = styled.div`
-  margin: 1rem 0 0 0;
-  height: 5rem;
+  margin: 4px 0 0 0;
+  height: 6rem;
   display: flex;
   flex-direction: column;
   label {
@@ -181,7 +181,7 @@ const SignUpForm = () => {
   };
 
   const handleNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const nicknameRegex = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
+    const nicknameRegex = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/i;
     const nickNameCurrent = e.currentTarget.value;
     dispatch(setNickname(nickNameCurrent));
     if (!nicknameRegex.test(nickNameCurrent)) {
@@ -262,7 +262,7 @@ const SignUpForm = () => {
     formData.append("image", signUpImg);
     axios
       .post(
-        "http://ec2-43-201-27-162.ap-northeast-2.compute.amazonaws.com:8080/members",
+        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/members",
         formData,
         {
           headers: {
@@ -355,7 +355,7 @@ const SignUpForm = () => {
         )}
       </InputSection>
       <IntroduceSection>
-        <label htmlFor={"introdution"}>자기소개</label>
+        <label htmlFor={"introduction"}>자기소개</label>
         <StyledTextArea
           id={"introduction"}
           name={"introduction"}

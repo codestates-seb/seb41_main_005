@@ -18,52 +18,48 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 	@Query("select rv from Review rv " +
 		"where rv.writer.applicant = :writer and rv.writer.content = :content")
-	Optional<Review> findByWriterAndContent(@Param("writer") Member writer, @Param("content") Content content);
+	Optional<Review> findReviewByWriterAndContent(@Param("writer") Member writer, @Param("content") Content content);
 
 	// ===== WRITTEN REVIEWS =====
 
 	// 특정 회원이 작성한 리뷰 조회 (타입별)
 	@Query("select rv from Review rv " +
 		"where rv.writer.applicant = :writer and rv.contentType = :contentType")
-	Page<Review> findAllByWriterAndContentType(@Param("writer") Member writer,
+	Page<Review> findAllReviewByWriterAndContentType(@Param("writer") Member writer,
 		@Param("contentType") ContentType contentType, Pageable pageable);
 
 	// 특정 회원이 작성한 리뷰 조회 (전체)
 	@Query("select rv from Review rv where rv.writer.applicant = :writer")
-	Page<Review> findAllByWriter(@Param("writer") Member writer, Pageable pageable);
+	Page<Review> findAllReviewByWriter(@Param("writer") Member writer, Pageable pageable);
 
 	// ===== RECEIVED REVIEWS =====
 
 	// 특정 회원이 받은 리뷰 조회 (타입별)
-	Page<Review> findAllByRecipientAndContentType(Member recipient, ContentType contentType, Pageable pageable);
+	Page<Review> findAllReviewByRecipientAndContentType(Member recipient, ContentType contentType, Pageable pageable);
 
 	// 특정 회원이 받은 리뷰 조회 (전체)
-	Page<Review> findAllByRecipient(Member recipient, Pageable pageable);
+	Page<Review> findAllReviewByRecipient(Member recipient, Pageable pageable);
+
+	// 특정 회원이 받은 리뷰 갯수 조회 (타입별)
+	Long countReviewByRecipientAndContentType(Member recipient, ContentType contentType);
+
+	// 특정 회원이 받은 리뷰 갯수 조회 (전체)
+	Long countReviewByRecipient(Member recipient);
 
 	// ===== RECEIVED LIKES =====
 
 	// 특정 회원의 종합 좋아요 싫어요
-	Long countByLikeTypeAndRecipient(LikeType likeType, Member recipient);
+	Long countByRecipientAndLikeType(Member recipient, LikeType likeType);
 
-	// buyLikeCount 조회
+	// 타입별 LikeCount 조회
 	@Query("select count (rv) from Review rv " +
-		"where rv.recipient = :recipient and rv.likeType = 'LIKE' and rv.contentType = 'BUY'")
-	Long countByBuyLike(@Param("recipient") Member recipient);
+		"where rv.recipient = :recipient and rv.likeType = 'LIKE' and rv.contentType = :type")
+	Long countLike(@Param("recipient") Member recipient, @Param("type") ContentType type);
 
-	// buyDislikeCount 조회
+	// 타입별 DislikeCount 조회
 	@Query("select count (rv) from Review rv " +
-		"where rv.recipient = :recipient and rv.likeType = 'DISLIKE' and rv.contentType = 'BUY'")
-	Long countByBuyDislike(@Param("recipient") Member recipient);
-
-	// sellLikeCount 조회
-	@Query("select count (rv) from Review rv " +
-		"where rv.recipient = :recipient and rv.likeType = 'LIKE' and rv.contentType = 'SELL'")
-	Long countBySellLike(@Param("recipient") Member recipient);
-
-	// sellDislikeCount 조회
-	@Query("select count (rv) from Review rv " +
-		"where rv.recipient = :recipient and rv.likeType = 'DISLIKE' and rv.contentType = 'SELL'")
-	Long countBySellDislike(@Param("recipient") Member recipient);
+		"where rv.recipient = :recipient and rv.likeType = 'DISLIKE' and rv.contentType = :type")
+	Long countDislike(@Param("recipient") Member recipient, @Param("type") ContentType type);
 
 	// ===== TEMPORARY =====
 

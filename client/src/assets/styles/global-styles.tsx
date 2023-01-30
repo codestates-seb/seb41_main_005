@@ -8,11 +8,20 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
+  body, html {
+    height: 100%;
+  }
+
   body {
     font-family: 'Noto Sans KR', sans-serif;
-    height: 100rem;
+<<<<<<< HEAD
+=======
+    overflow-y: scroll;
+    line-height: 1.4;
+>>>>>>> 63201111f2ab941dcb3284b8aa360e73701121ca
   }
-  button {
+  
+  a {
     cursor: pointer;
   }
   

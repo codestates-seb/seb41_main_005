@@ -12,6 +12,7 @@ export interface CardProps {
   categories: string;
   tag: string;
   contentId: number;
+  createdAt: string;
 }
 
 //서버에서 오는 데이터의 모양
@@ -30,4 +31,5 @@ export interface ServerData {
     tagName: string;
   }>;
   contentId: number;
+  createdAt: string;
 }

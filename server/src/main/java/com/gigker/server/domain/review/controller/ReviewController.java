@@ -1,6 +1,7 @@
 package com.gigker.server.domain.review.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gigker.server.domain.common.ContentType;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.service.ContentService;
 import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.domain.member.service.MemberService;
 import com.gigker.server.domain.review.dto.ReviewDto;
 import com.gigker.server.domain.review.entity.Review;
 import com.gigker.server.domain.review.mapper.ReviewMapper;
@@ -38,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReviewController {
 	private final ReviewService reviewService;
 	private final ReviewMapper reviewMapper;
+	private final MemberService memberService;
 	private final ContentService contentService;
 
 	// 리뷰 작성
@@ -46,10 +50,11 @@ public class ReviewController {
 		@RequestBody @Valid ReviewDto.ReviewPost post) {
 
 		Review review = reviewMapper.postToReview(post);
-		Review createdReview = reviewService.writeReview(review);
+		Member member = memberService.getCurrentMember();
+		Review createdReview = reviewService.writeReview(review, member);
 		ReviewDto.ReviewResponse response = reviewMapper.reviewToResponse(createdReview);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+		return ResponseEntity.status(HttpStatus.CREATED).body(new SingleResponseDto<>(response));
 	}
 
 	// 2차 리뷰 작성
@@ -58,7 +63,8 @@ public class ReviewController {
 		@PathVariable("review-id") @Positive Long reviewId,
 		@RequestBody @Valid ReviewDto.ReviewPatch patch) {
 
-		reviewService.writeSecondReview(reviewId, patch);
+		Member member = memberService.getCurrentMember();
+		reviewService.writeSecondReview(reviewId, patch, member);
 
 		return ResponseEntity.ok().build();
 	}
@@ -68,7 +74,8 @@ public class ReviewController {
 	public ResponseEntity deleteReview(
 		@PathVariable("review-id") @Positive Long reviewId) {
 
-		reviewService.deleteReview(reviewId);
+		Member member = memberService.getCurrentMember();
+		reviewService.deleteReview(reviewId, member);
 
 		return ResponseEntity.noContent().build();
 	}
@@ -80,11 +87,14 @@ public class ReviewController {
 		@RequestParam @Positive int page) {
 
 		Content content = contentService.findContentByContentId(contentId);
+		ContentType type = content.getContentType();
 		Member member = content.getMember();
 		// 페이지당 출력 수는 15로 고정
-		Page<Review> pageReviews = reviewService.findAllReviewsByRecipient(content, member, page - 1, 15);
+		Page<Review> pageReviews = reviewService.findAllReviewsByRecipient(member, type, page - 1, 15);
 		List<ReviewDto.ReviewResponse> reviews = reviewMapper.reviewsToResponses(pageReviews.getContent());
-		ReviewDto.SimpleMemberResponse simpleMember = reviewMapper.contentToSimpleMember(content);
+
+		Map<String, Long> counts = reviewService.countProfile(member, type);
+		ReviewDto.SimpleMemberResponse simpleMember = reviewMapper.contentToSimpleMember(member, counts);
 
 		return ResponseEntity.ok().body(new MultiResponseDto<>(simpleMember, reviews, pageReviews));
 	}
