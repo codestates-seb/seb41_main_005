@@ -79,20 +79,28 @@ const HireArticle: React.FC = (card) => {
   const selectedTag = useSelector(
     (state: RootState) => state.DropDown.selectedTag
   );
-  const filteredCards = cards.sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
-  selectedCategory === "카테고리" &&
-  selectedLocation === "지역" &&
-  selectedTag === ""
-    ? cards
-    : cards.filter(
-        (card) =>
-          (selectedCategory === "카테고리" ||
-            card.categories === selectedCategory) &&
-          (selectedLocation === "지역" || card.location === selectedLocation) &&
-          (!selectedTag || card.tag === selectedTag)
-      );
+  useEffect(() => {
+    setCards(
+      cards.sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      })
+    );
+  }, [cards]);
+  const filteredCards =
+    selectedCategory === "카테고리" &&
+    selectedLocation === "지역" &&
+    selectedTag === ""
+      ? cards
+      : cards.filter(
+          (card) =>
+            (selectedCategory === "카테고리" ||
+              card.categories === selectedCategory) &&
+            (selectedLocation === "지역" ||
+              card.location === selectedLocation) &&
+            (!selectedTag || card.tag === selectedTag)
+        );
 
   return (
     <ArticleContainer>
