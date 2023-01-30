@@ -41,7 +41,7 @@ const Container = styled.div`
 
 interface ReviewProps {
   data: Array<{
-    nickName: string;
+    writerNickName: string;
     reviewId: number;
     writerId: number;
     recipinetId: number;
