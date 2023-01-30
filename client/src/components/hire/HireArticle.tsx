@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { ReactComponent as LeftArrow } from "../../assets/leftarrow.svg";
 import { ReactComponent as RightArrow } from "../../assets/rightarrow.svg";
+import Nodata from "../../assets/nodata.jpg";
 
 const mapDataToCardProps = (data: ServerData): CardProps => {
   return {
@@ -119,6 +120,7 @@ const HireArticle: React.FC = (card) => {
   return (
     <ArticleContainer>
       <HireArticleContainer>
+<<<<<<< HEAD
         {filteredCards
           .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
           .map((card, index) => (
@@ -140,34 +142,64 @@ const HireArticle: React.FC = (card) => {
                       {new Date(card.workTimes[0].startWorkTime).toLocaleString(
                         "ko-KR",
                         {
+=======
+        {filteredCards.length === 0 ? (
+          <NoResultsContainer>
+            <img src={Nodata} alt="No results found" />
+          </NoResultsContainer>
+        ) : (
+          filteredCards
+            .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+            .map((card, index) => (
+              <Card key={index} onClick={() => handleClick(card.contentId)}>
+                <CardContent>
+                  <CardTitle>{card.title}</CardTitle>
+                  <CardWriter>
+                    <span className="sub-title">작성자</span> {card.nickName}
+                  </CardWriter>
+                  <CardPay>
+                    <span className="sub-title">보수</span>{" "}
+                    {card.price
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    원
+                  </CardPay>
+                  {card.workTimes && (
+                    <>
+                      <CardStart>
+                        <span className="sub-title">시작시간</span>
+                        {new Date(
+                          card.workTimes[0].startWorkTime
+                        ).toLocaleString("ko-KR", {
+>>>>>>> 900654fa9c88c2a89e53245c778c8cef0e3dcc6a
                           year: "numeric",
                           month: "2-digit",
                           day: "2-digit",
                           hour: "2-digit",
                           minute: "2-digit",
                           hour12: false,
-                        }
-                      )}
-                    </CardStart>
-                    <CardEnd>
-                      <span className="sub-title">종료시간</span>
-                      {new Date(card.workTimes[0].endWorkTime).toLocaleString(
-                        "ko-KR",
-                        {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: false,
-                        }
-                      )}
-                    </CardEnd>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                        })}
+                      </CardStart>
+                      <CardEnd>
+                        <span className="sub-title">종료시간</span>
+                        {new Date(card.workTimes[0].endWorkTime).toLocaleString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          }
+                        )}
+                      </CardEnd>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            ))
+        )}
       </HireArticleContainer>
       <PaginateContainer>
         <ReactPaginate
@@ -237,7 +269,7 @@ const HireArticleContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  min-height: 720px;
+  min-height: 200px;
 `;
 
 const Card = styled.div`
@@ -328,6 +360,11 @@ const CardEnd = styled.div`
   .sub-title {
     color: #6667ab;
     padding-right: 5px;
+  }
+`;
+const NoResultsContainer = styled.div`
+  img {
+    width: 1000px;
   }
 `;
 

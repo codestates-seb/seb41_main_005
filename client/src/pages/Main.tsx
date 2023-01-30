@@ -75,12 +75,26 @@ function Main() {
   useEffect(() => {
     const hire = async () => {
       const data = await getDatas("BUY");
-      setHireData(data.slice(-8).map(mapDataToSliderProps));
+      setHireData(
+        data
+          .slice(-8)
+          .map(mapDataToSliderProps)
+          .sort((a: sliderProps, b: sliderProps): number => {
+            return b.contentId - a.contentId;
+          })
+      );
     };
 
     const hunting = async () => {
       const data = await getDatas("SELL");
-      setHuntingData(data.slice(-8).map(mapDataToSliderProps));
+      setHuntingData(
+        data
+          .slice(-8)
+          .map(mapDataToSliderProps)
+          .sort((a: sliderProps, b: sliderProps): number => {
+            return b.contentId - a.contentId;
+          })
+      );
     };
 
     hire();

@@ -183,17 +183,21 @@ const EditHunting = (props: Props) => {
       });
   };
   const handleDelete = () => {
-    axios
-      .delete(
-        `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
-      )
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    navigate("/hunting");
+    const result = confirm("정말 삭제 하시겠습니까?");
+    if (result) {
+      axios
+        .delete(
+          `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
+        )
+        .then((response) => {
+          alert("삭제 되었습니다");
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      navigate("/hunting");
+    }
   };
 
   return (
