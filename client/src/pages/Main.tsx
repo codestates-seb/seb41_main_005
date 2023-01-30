@@ -85,6 +85,7 @@ function Main() {
 
     hire();
     hunting();
+    setHireData(hireData.sort());
   }, []);
 
   return (
