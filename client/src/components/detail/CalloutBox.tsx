@@ -1,6 +1,6 @@
 import Button from "../Buttons";
 import styled from "styled-components";
-import { transDateTime } from "../main/transDateTime";
+import { transDateTime } from "../../util/transDateTime";
 
 const Container = styled.aside`
   width: 340px;

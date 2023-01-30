@@ -3,7 +3,7 @@ import styled from "styled-components";
 import MainSlider from "../components/main/MainSlider";
 import { getDatas } from "../api/getDatas";
 import { sliderProps, serverData } from "../util/sliderData";
-import { transDateTime } from "../components/main/transDateTime";
+import { transDateTime } from "../util/transDateTime";
 import richIMG from "../assets/richIMG.jpg";
 
 const Container = styled.div`
