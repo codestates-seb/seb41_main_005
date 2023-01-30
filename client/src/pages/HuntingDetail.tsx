@@ -99,8 +99,6 @@ const Container = styled.div`
 function HuntingDetail() {
   const [datas, setDatas] = useState<huntingDetailProps>();
 
-  const contentId = useParams().content_id;
-  const memberId = datas?.memberId;
   const reviewCount = datas?.reviewCount;
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
   const applicantId = useSelector((state: RootState) => state.LogIn.logInMID);
