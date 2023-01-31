@@ -16,14 +16,9 @@ import {
 interface ExistingData {
   title: string;
   cityName: string;
-  contentTags: Array<{
-    tagName: string;
-  }>;
+  contentTags: { tagName: string }[];
   price: number;
-  workTimes: Array<{
-    startWorkTime: string;
-    endWorkTime: string;
-  }>;
+  workTimes: { startWorkTime: string; endWorkTime: string }[];
   categoryName: string;
   workContent: string;
   recruitingCount: number;
@@ -108,6 +103,13 @@ const EditHire = (props: Props) => {
   };
 
   const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setExistingInfo({
+      ...existingInfo,
+      contentTags: [
+        ...existingInfo.contentTags,
+        { tagName: event.target.value },
+      ],
+    });
     setTag(event.target.value);
   };
 
@@ -167,13 +169,15 @@ const EditHire = (props: Props) => {
   };
 
   const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
+    setExistingInfo({ ...existingInfo, workTimes: workTime });
     setWorkTime(workTime);
   };
   const handleDeadlineChange = (deadline: string) => {
+    setExistingInfo({ ...existingInfo, deadLine: deadline });
     setDeadline(deadline);
   };
   const validateForm = () => {
-    if (!location || !category || !tag || !workTime || !deadline) {
+    if (!tag || !workTime || !deadline) {
       return false;
     }
     return true;
@@ -181,9 +185,7 @@ const EditHire = (props: Props) => {
 
   const handleSubmit = () => {
     if (!validateForm()) {
-      alert(
-        "지원마감일, 카테고리, 태그, 업무시간, 지역 창을 반드시 입력해주세요."
-      );
+      alert("지원마감일, 태그, 업무시간 창을 반드시 입력해주세요.");
       return;
     }
     const updatedData = {
