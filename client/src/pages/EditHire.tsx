@@ -16,14 +16,9 @@ import {
 interface ExistingData {
   title: string;
   cityName: string;
-  contentTags: Array<{
-    tagName: string;
-  }>;
+  contentTags: { tagName: string }[];
   price: number;
-  workTimes: Array<{
-    startWorkTime: string;
-    endWorkTime: string;
-  }>;
+  workTimes: { startWorkTime: string; endWorkTime: string }[];
   categoryName: string;
   workContent: string;
   recruitingCount: number;
@@ -61,7 +56,9 @@ const EditHire = (props: Props) => {
   const [category, setCategory] = useState(existingData?.categoryName || "");
   const [workTime, setWorkTime] = useState<any>([]);
   const [tag, setTag] = useState(existingData?.contentTags[0]?.tagName || "");
-  const [deadline, setDeadline] = useState("");
+  const [deadline, setDeadline] = useState(
+    existingData ? existingData.deadLine : ""
+  );
 
   const [existingInfo, setExistingInfo] = useState<ExistingData>(
     existingData || {
@@ -106,7 +103,6 @@ const EditHire = (props: Props) => {
       });
     }
     setTag(newTag);
-    console.log("New tag state:", newTag);
   };
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setExistingInfo({ ...existingInfo, title: event.target.value });
@@ -176,7 +172,6 @@ const EditHire = (props: Props) => {
       ),
     });
     setWorkTime(workTime);
-    console.log("New work time state:", workTime);
   };
   const handleDeadlineChange = (deadline: string) => {
     setExistingInfo({ ...existingInfo, deadLine: deadline });
@@ -194,8 +189,8 @@ const EditHire = (props: Props) => {
       alert("지원마감일, 업무시간 창을 반드시 입력해주세요.");
       return;
     }
-    console.log("tag:", tag);
-    console.log("workTime:", workTime);
+    // console.log("tag:", tag);
+    // console.log("workTime:", workTime);
     axios
       .patch(
         `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
