@@ -18,14 +18,16 @@ const StyledSlider = styled.div`
     width: 28px;
     height: 28px;
   }
-  .swiper-slide {
-    padding: 0px 28px 0px 28px;
+  .swiper-container {
+    padding: 20px 5px 0px 5px;
   }
   .swiper-button-next {
+    transform: translate(0px, -160px);
     border: none;
     background-color: transparent;
   }
   .swiper-button-prev {
+    transform: translate(975px, -160px);
     border: none;
     background-color: transparent;
   }
@@ -47,7 +49,7 @@ const MainSlider = ({ datas }: { datas: sliderProps[] }) => {
           prevEl: ".swiper-button-prev",
         }}
         slidesPerView={4}
-        spaceBetween={0}
+        spaceBetween={25}
         effect={"fade"}
         loop={false}
         speed={300}
@@ -57,7 +59,7 @@ const MainSlider = ({ datas }: { datas: sliderProps[] }) => {
         </button>
         {datas.map((item, idx) => {
           return (
-            <SwiperSlide key={idx} className="swiper-slide">
+            <SwiperSlide key={idx} className="swiper-slider">
               <SliderItem
                 contentType={item.contentType}
                 contentId={item.contentId}
