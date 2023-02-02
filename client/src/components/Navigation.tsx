@@ -1,8 +1,8 @@
-import React from "react"; // eslint-disable-line no-unused-vars
+import React, { useEffect } from "react"; // eslint-disable-line no-unused-vars
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import Button from "./Buttons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../util/redux";
 import { MdOutlineEditCalendar } from "react-icons/md";
@@ -113,8 +113,21 @@ const LogInContainer = styled.div`
 const Navigation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
   const tabNum = useSelector((state: RootState) => state.LogIn.tabNum);
+
+  useEffect(() => {
+    if (location.pathname.includes("hire")) {
+      dispatch(setTabNum(2));
+    } else if (location.pathname.includes("hunting")) {
+      dispatch(setTabNum(3));
+    } else if (location.pathname === "/") {
+      dispatch(setTabNum(1));
+    } else {
+      dispatch(setTabNum(0));
+    }
+  }, [location]);
 
   // 로그아웃 함수
   const handleLogOut = async () => {
@@ -141,71 +154,41 @@ const Navigation = () => {
   return (
     <Block>
       <NavBar>
-        <ImgWrapper href={"/"} onClick={() => dispatch(setTabNum(0))}>
+        <ImgWrapper href={"/"}>
           <Logo width={65} height={65} />
         </ImgWrapper>
         <LinkContainer>
           <UnderLineLink to={"/"}>
-            <TapWrapper
-              isHere={tabNum === 0}
-              onClick={() => dispatch(setTabNum(0))}
-            >
-              홈
-            </TapWrapper>
+            <TapWrapper isHere={tabNum === 1}>홈</TapWrapper>
           </UnderLineLink>
           <UnderLineLink to={"/hire"}>
-            <TapWrapper
-              isHere={tabNum === 1}
-              onClick={() => dispatch(setTabNum(1))}
-            >
-              구인
-            </TapWrapper>
+            <TapWrapper isHere={tabNum === 2}>구인</TapWrapper>
           </UnderLineLink>
           <UnderLineLink to={"/hunting"}>
-            <TapWrapper
-              isHere={tabNum === 2}
-              onClick={() => dispatch(setTabNum(2))}
-            >
-              구직
-            </TapWrapper>
+            <TapWrapper isHere={tabNum === 3}>구직</TapWrapper>
           </UnderLineLink>
         </LinkContainer>
         <LogInContainer>
           {isLogIn ? (
             <>
-              <Link to={"/mypage"} onClick={() => dispatch(setTabNum(4))}>
+              <Link to={"/mypage"}>
                 <Profile width={"40px"} height={"40px"} />
               </Link>
-              <Link to={"/schedule"} onClick={() => dispatch(setTabNum(4))}>
+              <Link to={"/schedule"}>
                 <SvgContainer>
                   <MdOutlineEditCalendar className={"schedule"} size={42} />
                 </SvgContainer>
               </Link>
-              <Button
-                color={"#6F38C5"}
-                width={"5rem"}
-                onClick={() => {
-                  handleLogOut();
-                  dispatch(setTabNum(4));
-                }}
-              >
+              <Button color={"#6F38C5"} width={"5rem"} onClick={handleLogOut}>
                 로그아웃
               </Button>
             </>
           ) : (
             <>
-              <ButtonLink
-                onClick={() => dispatch(setTabNum(4))}
-                to={"/login"}
-                color={"#6667AB"}
-              >
+              <ButtonLink to={"/login"} color={"#6667AB"}>
                 로그인
               </ButtonLink>
-              <ButtonLink
-                onClick={() => dispatch(setTabNum(4))}
-                to={"/signup"}
-                color={"#6F38C5"}
-              >
+              <ButtonLink to={"/signup"} color={"#6F38C5"}>
                 회원가입
               </ButtonLink>
             </>

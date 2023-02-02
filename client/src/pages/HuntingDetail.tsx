@@ -8,10 +8,9 @@ import Warning from "../components/detail/Warning";
 import { getDetailData } from "../api/getDetail";
 import { getMemberData } from "../api/getMember";
 import { huntingDetailProps } from "../util/huntingDetailData";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../util/redux";
 import Button from "../components/Buttons";
-import { setTabNum } from "../util/redux/LogIn";
 
 const Container = styled.div`
   display: block;
@@ -104,7 +103,6 @@ function HuntingDetail() {
   const isLogIn = useSelector((state: RootState) => state.LogIn.isLogIn);
   const applicantId = useSelector((state: RootState) => state.LogIn.logInMID);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const detailAPI = useCallback(async () => {
     const data = await getDetailData(Number(contentId));
@@ -124,7 +122,6 @@ function HuntingDetail() {
       navigate("/newhunting");
     } else {
       alert("로그인 후 이용하세요.");
-      dispatch(setTabNum(4));
       navigate("/login");
     }
   };

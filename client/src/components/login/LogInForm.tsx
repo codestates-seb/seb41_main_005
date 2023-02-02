@@ -15,7 +15,6 @@ import {
   setLogInNickname,
   setLogInIntroduction,
   setLogInMID,
-  setTabNum,
 } from "../../util/redux/LogIn";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -96,7 +95,6 @@ const LogInForm = () => {
         dispatch(setLogInNickname(res.data.nickName));
         dispatch(setLogInIntroduction(res.data.about));
         dispatch(setLogInMID(res.data.memberId));
-        dispatch(setTabNum(0));
         alert(`어서오세요 ${res.data.nickName}님 :)`);
         navigate("/", { replace: true });
       })
