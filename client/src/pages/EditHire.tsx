@@ -106,6 +106,7 @@ const EditHire = (props: Props) => {
       });
     }
     setTag(newTag);
+    console.log("New tag state:", newTag);
   };
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setExistingInfo({ ...existingInfo, title: event.target.value });
@@ -163,8 +164,19 @@ const EditHire = (props: Props) => {
   };
 
   const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
-    setExistingInfo({ ...existingInfo, workTimes: workTime });
+    setExistingInfo({
+      ...existingInfo,
+      workTimes: workTime.map(
+        (schedule: { startWorkTime: any; endWorkTime: any }) => {
+          return {
+            startWorkTime: schedule.startWorkTime,
+            endWorkTime: schedule.endWorkTime,
+          };
+        }
+      ),
+    });
     setWorkTime(workTime);
+    console.log("New work time state:", workTime);
   };
   const handleDeadlineChange = (deadline: string) => {
     setExistingInfo({ ...existingInfo, deadLine: deadline });
@@ -182,6 +194,8 @@ const EditHire = (props: Props) => {
       alert("지원마감일, 업무시간 창을 반드시 입력해주세요.");
       return;
     }
+    console.log("tag:", tag);
+    console.log("workTime:", workTime);
     axios
       .patch(
         `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
