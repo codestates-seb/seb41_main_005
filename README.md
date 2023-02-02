@@ -19,9 +19,11 @@
 
 ## 👨‍👩‍👧‍👦 팀원 소개
 
-|![](https://user-images.githubusercontent.com/110897995/215503535-94b0808a-b3e8-4272-b2cd-0c57a7eef194.jpg)<br>[권해정 : FE (부팀장)](https://github.com/dongrri22)|![](https://user-images.githubusercontent.com/110897995/215503541-9a04d9b3-9d26-4605-933a-ca7c83de997d.jpg)<br>[심지원 : FE](https://github.com/jannyshim)|![](https://user-images.githubusercontent.com/110897995/215503550-bac210e5-3a00-4dfc-8183-fa514d21bbf7.jpg)<br>[채효병 : FE](https://github.com/hyob12)|
+|![](https://user-images.githubusercontent.com/110897995/215503535-94b0808a-b3e8-4272-b2cd-0c57a7eef194.jpg)|![](https://user-images.githubusercontent.com/110897995/215503541-9a04d9b3-9d26-4605-933a-ca7c83de997d.jpg)|![](https://user-images.githubusercontent.com/110897995/215503550-bac210e5-3a00-4dfc-8183-fa514d21bbf7.jpg)|
 |:-:|:-:|:-:|
-|![](https://user-images.githubusercontent.com/110897995/215503501-e8dbadbf-4c7a-4981-b893-31d3cda9d27e.jpg)<br>[**김현성 : BE (팀장)**](https://github.com/harrisonk213)|![](https://user-images.githubusercontent.com/110897995/215503520-78518036-6c73-48f0-9beb-1dfba54e2351.jpg)<br>[**김도형 : BE**](https://github.com/maam6073)|![](https://user-images.githubusercontent.com/110897995/215503529-3f89ea96-4102-4462-9027-3f78e1720562.jpg)<br>[**홍정완 : BE**](https://github.com/H-JWANNA)|
+|[권해정 : FE (부팀장)](https://github.com/dongrri22)|[심지원 : FE](https://github.com/jannyshim)|[채효병 : FE](https://github.com/hyob12)|
+|![](https://user-images.githubusercontent.com/110897995/215503501-e8dbadbf-4c7a-4981-b893-31d3cda9d27e.jpg)|![](https://user-images.githubusercontent.com/110897995/215503520-78518036-6c73-48f0-9beb-1dfba54e2351.jpg)|![](https://user-images.githubusercontent.com/110897995/215503529-3f89ea96-4102-4462-9027-3f78e1720562.jpg)|
+|[김현성 : BE (팀장)](https://github.com/harrisonk213)|[김도형 : BE](https://github.com/maam6073)|[홍정완 : BE](https://github.com/H-JWANNA)|
 
 <br>
 
