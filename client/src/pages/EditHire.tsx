@@ -16,9 +16,14 @@ import {
 interface ExistingData {
   title: string;
   cityName: string;
-  contentTags: { tagName: string }[];
+  contentTags: Array<{
+    tagName: string;
+  }>;
   price: number;
-  workTimes: { startWorkTime: string; endWorkTime: string }[];
+  workTimes: Array<{
+    startWorkTime: string;
+    endWorkTime: string;
+  }>;
   categoryName: string;
   workContent: string;
   recruitingCount: number;
@@ -41,48 +46,38 @@ const EditHire = (props: Props) => {
   const { existingData } = props;
   const navigate = useNavigate();
   const contentId = useParams().content_id;
-  const [title, setTitle] = useState(existingData ? existingData.title : "");
-  const [workDetail, setWorkDetail] = useState(
-    existingData ? existingData.workContent : ""
-  );
+  const [title, setTitle] = useState(existingData?.title || "");
+  const [workDetail, setWorkDetail] = useState(existingData?.workContent || "");
   const [volume, setVolume] = useState(existingData?.recruitingCount || 0);
   const [pay, setPay] = useState(existingData?.price || 0);
   const [qualification, setQualification] = useState(
-    existingData ? existingData.qualification : ""
+    existingData?.qualification || ""
   );
   const [preferential, setPreferential] = useState(
-    existingData ? existingData.preference : ""
+    existingData?.preference || ""
   );
-  const [etc, setEtc] = useState(existingData ? existingData.other : "");
-  const [location, setLocation] = useState(
-    existingData ? existingData.cityName : ""
-  );
-  const [category, setCategory] = useState(
-    existingData ? existingData.categoryName : ""
-  );
+  const [etc, setEtc] = useState(existingData?.other || "");
+  const [location, setLocation] = useState(existingData?.cityName || "");
+  const [category, setCategory] = useState(existingData?.categoryName || "");
   const [workTime, setWorkTime] = useState<any>([]);
-  const [tag, setTag] = useState("");
-  const [deadline, setDeadline] = useState(
-    existingData ? existingData.deadLine : ""
-  );
+  const [tag, setTag] = useState(existingData?.contentTags[0]?.tagName || "");
+  const [deadline, setDeadline] = useState("");
+
   const [existingInfo, setExistingInfo] = useState<ExistingData>(
-    Object.assign(
-      {
-        title: existingData?.title || "",
-        categoryName: existingData?.categoryName || "",
-        workTimes: existingData?.workTimes || [],
-        recruitingCount: existingData?.recruitingCount || 0,
-        price: existingData?.price || 0,
-        cityName: existingData?.cityName || "",
-        workContent: existingData?.workContent || "",
-        qualification: existingData?.qualification || "",
-        preference: existingData?.preference || "",
-        other: existingData?.other || "",
-        contentTags: existingData?.contentTags || [],
-        deadLine: existingData?.deadLine || "",
-      },
-      existingData ?? {}
-    )
+    existingData || {
+      title: "",
+      categoryName: "",
+      workTimes: [],
+      recruitingCount: 0,
+      price: 0,
+      cityName: "",
+      workContent: "",
+      qualification: "",
+      preference: "",
+      other: "",
+      contentTags: [],
+      deadLine: "",
+    }
   );
 
   useEffect(() => {
@@ -103,16 +98,15 @@ const EditHire = (props: Props) => {
   };
 
   const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setExistingInfo({
-      ...existingInfo,
-      contentTags: [
-        ...existingInfo.contentTags,
-        { tagName: event.target.value },
-      ],
-    });
-    setTag(event.target.value);
+    const newTag = event.target.value;
+    if (existingInfo.contentTags[0].tagName !== newTag) {
+      setExistingInfo({
+        ...existingInfo,
+        contentTags: [{ tagName: newTag }],
+      });
+    }
+    setTag(newTag);
   };
-
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setExistingInfo({ ...existingInfo, title: event.target.value });
     setTitle(event.target.value);
@@ -177,7 +171,7 @@ const EditHire = (props: Props) => {
     setDeadline(deadline);
   };
   const validateForm = () => {
-    if (!tag || !workTime || !deadline) {
+    if (!workTime || !deadline) {
       return false;
     }
     return true;
@@ -185,34 +179,9 @@ const EditHire = (props: Props) => {
 
   const handleSubmit = () => {
     if (!validateForm()) {
-      alert("지원마감일, 태그, 업무시간 창을 반드시 입력해주세요.");
+      alert("지원마감일, 업무시간 창을 반드시 입력해주세요.");
       return;
     }
-    const updatedData = {
-      ...existingInfo,
-      title: title,
-      contentType: "BUY",
-      recruitingCount: volume,
-      workContent: workDetail,
-      qualification: qualification,
-      preference: preferential,
-      categoryName: category,
-      workTimes: workTime.map(
-        (schedule: { startWorkTime: any; endWorkTime: any }) => {
-          return {
-            startWorkTime: schedule.startWorkTime,
-            endWorkTime: schedule.endWorkTime,
-          };
-        }
-      ),
-      contentTags: [{ tagName: tag }],
-      price: pay,
-      cityName: location,
-      other: etc,
-      isPremium: false,
-      deadLine: deadline,
-    };
-
     axios
       .patch(
         `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
@@ -285,7 +254,15 @@ const EditHire = (props: Props) => {
         <InputSection>
           <label htmlFor="tag">태그</label>
           <TagWrapper>
-            <select onChange={handleTagChange} id={"tag"}>
+            <select
+              value={
+                existingInfo.contentTags && existingInfo.contentTags.length
+                  ? existingInfo.contentTags[0].tagName
+                  : ""
+              }
+              onChange={handleTagChange}
+              id={"tag"}
+            >
               <option defaultValue="" hidden>
                 선택
               </option>
