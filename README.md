@@ -22,7 +22,9 @@
 |![](https://user-images.githubusercontent.com/110897995/215503535-94b0808a-b3e8-4272-b2cd-0c57a7eef194.jpg)|![](https://user-images.githubusercontent.com/110897995/215503541-9a04d9b3-9d26-4605-933a-ca7c83de997d.jpg)|![](https://user-images.githubusercontent.com/110897995/215503550-bac210e5-3a00-4dfc-8183-fa514d21bbf7.jpg)|
 |:-:|:-:|:-:|
 |[권해정 : FE (부팀장)](https://github.com/dongrri22)|[심지원 : FE](https://github.com/jannyshim)|[채효병 : FE](https://github.com/hyob12)|
+
 |![](https://user-images.githubusercontent.com/110897995/215503501-e8dbadbf-4c7a-4981-b893-31d3cda9d27e.jpg)|![](https://user-images.githubusercontent.com/110897995/215503520-78518036-6c73-48f0-9beb-1dfba54e2351.jpg)|![](https://user-images.githubusercontent.com/110897995/215503529-3f89ea96-4102-4462-9027-3f78e1720562.jpg)|
+|:-:|:-:|:-:|
 |[김현성 : BE (팀장)](https://github.com/harrisonk213)|[김도형 : BE](https://github.com/maam6073)|[홍정완 : BE](https://github.com/H-JWANNA)|
 
 <br>
@@ -35,7 +37,17 @@
 
 ## 🖥️ 페이지 소개
 
-![]()
+|![](https://user-images.githubusercontent.com/110897995/216250545-b33e0423-27b5-4c23-8249-28a8738cd7f8.jpg)|![](https://user-images.githubusercontent.com/110897995/216250567-d971e42f-2a90-49af-86c4-fd30786acae0.jpg)|![](https://user-images.githubusercontent.com/110897995/216250575-95e11956-9040-4316-8b86-b8215387923c.jpg)|
+|:-:|:-:|:-:|
+|메인 페이지|회원가입|로그인|
+
+|![](https://user-images.githubusercontent.com/110897995/216250554-5fb9c587-8a82-4f05-8892-9e02e47c7739.jpg)|![](https://user-images.githubusercontent.com/110897995/216250559-07a5cdb8-9912-4cf1-8296-899b8a18e4f9.jpg)|![](https://user-images.githubusercontent.com/110897995/216250589-e37d061c-528f-47aa-9f21-da56866348ef.jpg)|
+|:-:|:-:|:-:|
+|전체 글 조회|단일 글 조회|글 작성|
+
+|![](https://user-images.githubusercontent.com/110897995/216250577-8d7666f0-ffa9-469f-8c86-6eadf5d40467.jpg)|![](https://user-images.githubusercontent.com/110897995/216250593-e1b8b6e9-37bb-479c-b11d-64b39221a0c7.jpg)|![](https://user-images.githubusercontent.com/110897995/216250604-44355fd5-96d9-4ad8-b25f-74886b9ae901.jpg)|
+|:-:|:-:|:-:|
+|상세 리뷰 조회|마이페이지|스케쥴 관리|
 
 <br>
 
