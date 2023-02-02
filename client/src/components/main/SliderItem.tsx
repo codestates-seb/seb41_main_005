@@ -85,7 +85,6 @@ const SliderItemContainer = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  cursor: grab;
 `;
 
 const SliderItemContent = styled.div`
