@@ -343,7 +343,7 @@ const LowerWrapper = styled.div`
 const TagWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  width: 500px;
+  max-width: 500px;
   margin: 8px;
   border: none;
   background-color: white;
