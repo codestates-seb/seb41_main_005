@@ -1,13 +1,10 @@
-import { useState, useRef, useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Navigation } from "swiper";
-
-import "swiper/css";
-import "swiper/css/navigation";
-
 import styled from "styled-components";
 import SliderItem from "./SliderItem";
 import { sliderProps } from "../../util/sliderData";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation } from "swiper";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const StyledSlider = styled.div`
   display: flex;
