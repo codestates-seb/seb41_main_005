@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class ContentPostDto {
     private List<ContentTag> contentTags;
     private List<WorkTime> workTimes;
     private String cityName;
+    @Positive
     private int price;
     private LocalDateTime deadLine;
     private Boolean isPremium;

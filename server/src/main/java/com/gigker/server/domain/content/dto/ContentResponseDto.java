@@ -50,6 +50,7 @@ public class ContentResponseDto {
         private Long contentId;
         private String title;
         private int price;
+        private ContentType contentType;
         private List<WorkTimeResponseDto> workTimes;
         private String cityName;
         private String categoryName;
