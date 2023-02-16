@@ -6,10 +6,10 @@ import java.util.List;
 
 import com.gigker.server.domain.category.entity.Category;
 import com.gigker.server.domain.common.ContentType;
-import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentTag;
 import com.gigker.server.domain.location.entity.Location;
+import com.gigker.server.domain.workTime.entity.WorkTime;
 
 public class ContentStubData {
 
