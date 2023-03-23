@@ -15,11 +15,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gigker.server.domain.common.ContentType;
-import com.gigker.server.domain.common.WorkTime;
 import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.repository.ContentApplyRepository;
 import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.domain.workTime.entity.WorkTime;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 

@@ -1,4 +1,4 @@
-package com.gigker.server.domain.common;
+package com.gigker.server.domain.workTime.entity;
 
 import java.time.LocalDateTime;
 

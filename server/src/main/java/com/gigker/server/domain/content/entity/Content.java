@@ -4,18 +4,29 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.gigker.server.domain.category.entity.Category;
-import com.gigker.server.domain.location.entity.Location;
-import lombok.Data;
-import lombok.Getter;
-
 import com.gigker.server.domain.common.BaseEntity;
 import com.gigker.server.domain.common.ContentType;
-import com.gigker.server.domain.common.WorkTime;
+import com.gigker.server.domain.location.entity.Location;
 import com.gigker.server.domain.member.entity.Member;
+import com.gigker.server.domain.workTime.entity.WorkTime;
 
+import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
@@ -29,7 +40,7 @@ public class Content extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
-//	@OnDelete(action = OnDeleteAction.CASCADE)
+	//	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member member;
 
 	@Column(nullable = false)
@@ -66,7 +77,6 @@ public class Content extends BaseEntity {
 	// 태그
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ContentTag> contentTags = new ArrayList<>();
-
 
 	//	// 업무 시간
 	@OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
