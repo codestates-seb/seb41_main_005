@@ -31,7 +31,7 @@ dependencies {
 
 	// aws
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // AWS S3(이미지저장소)
-	//implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'// AWS paramStore
+	implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'// AWS paramStore
 
 	// sql 쿼리 파라미터에 실제 값을 넣기 위한 라이브러리
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1' // 쿼리문을 예쁘게 표시해주는? 설정을 하기 위한 dependency
@@ -60,11 +60,11 @@ dependencies {
 }
 
 //aws paramStore
-//dependencyManagement {
-//	imports {
-//		mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:2.3.3"
-//	}
-//}
+dependencyManagement {
+	imports {
+		mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:2.3.3"
+	}
+}
 
 tasks.named('test') {
 	useJUnitPlatform()

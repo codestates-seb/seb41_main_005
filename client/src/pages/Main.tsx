@@ -3,7 +3,7 @@ import styled from "styled-components";
 import MainSlider from "../components/main/MainSlider";
 import { getDatas } from "../api/getDatas";
 import { sliderProps, serverData } from "../util/sliderData";
-import { transDateTime } from "../components/main/transDateTime";
+import { transDateTime } from "../util/transDateTime";
 import richIMG from "../assets/richIMG.jpg";
 
 const Container = styled.div`
@@ -75,16 +75,31 @@ function Main() {
   useEffect(() => {
     const hire = async () => {
       const data = await getDatas("BUY");
-      setHireData(data.slice(-8).map(mapDataToSliderProps));
+      setHireData(
+        data
+          .slice(-8)
+          .map(mapDataToSliderProps)
+          .sort((a: sliderProps, b: sliderProps): number => {
+            return b.contentId - a.contentId;
+          })
+      );
     };
 
     const hunting = async () => {
       const data = await getDatas("SELL");
-      setHuntingData(data.slice(-8).map(mapDataToSliderProps));
+      setHuntingData(
+        data
+          .slice(-8)
+          .map(mapDataToSliderProps)
+          .sort((a: sliderProps, b: sliderProps): number => {
+            return b.contentId - a.contentId;
+          })
+      );
     };
 
     hire();
     hunting();
+    setHireData(hireData.sort());
   }, []);
 
   return (

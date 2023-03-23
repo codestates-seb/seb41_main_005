@@ -16,14 +16,9 @@ import {
 interface ExistingData {
   title: string;
   cityName: string;
-  contentTags: Array<{
-    tagName: string;
-  }>;
+  contentTags: { tagName: string }[];
   price: number;
-  workTimes: Array<{
-    startWorkTime: string;
-    endWorkTime: string;
-  }>;
+  workTimes: { startWorkTime: string; endWorkTime: string }[];
   categoryName: string;
   workContent: string;
   other: string;
@@ -57,25 +52,22 @@ const EditHunting = (props: Props) => {
     existingData ? existingData.categoryName : ""
   );
   const [workTime, setWorkTime] = useState<any>([]);
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState(existingData?.contentTags[0]?.tagName || "");
   const [deadline, setDeadline] = useState(
     existingData ? existingData.deadLine : ""
   );
   const [existingInfo, setExistingInfo] = useState<ExistingData>(
-    Object.assign(
-      {
-        title: existingData?.title || "",
-        categoryName: existingData?.categoryName || "",
-        workTimes: existingData?.workTimes || [],
-        price: existingData?.price || 0,
-        cityName: existingData?.cityName || "",
-        workContent: existingData?.workContent || "",
-        other: existingData?.other || "",
-        contentTags: existingData?.contentTags || [],
-        deadLine: existingData?.deadLine || "",
-      },
-      existingData ?? {}
-    )
+    existingData || {
+      title: "",
+      categoryName: "",
+      workTimes: [],
+      price: 0,
+      cityName: "",
+      workContent: "",
+      other: "",
+      contentTags: [],
+      deadLine: "",
+    }
   );
   useEffect(() => {
     const detail = async () => {
@@ -96,7 +88,14 @@ const EditHunting = (props: Props) => {
   };
 
   const handleTagChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setTag(event.target.value);
+    const newTag = event.target.value;
+    if (existingInfo.contentTags[0].tagName !== newTag) {
+      setExistingInfo({
+        ...existingInfo,
+        contentTags: [{ tagName: newTag }],
+      });
+    }
+    setTag(newTag);
   };
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -128,31 +127,8 @@ const EditHunting = (props: Props) => {
   };
 
   const handleWorkTimeChange = (workTime: WorkSchedule[]) => {
-    setWorkTime(workTime);
-  };
-  const handleDeadlineChange = (deadline: string) => {
-    setDeadline(deadline);
-  };
-  const validateForm = () => {
-    if (!location || !category || !tag || !workTime || !deadline) {
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = () => {
-    if (!validateForm()) {
-      alert(
-        "지원마감일, 카테고리, 태그, 업무시간, 지역 창을 반드시 입력해주세요."
-      );
-      return;
-    }
-    const updatedData = {
+    setExistingInfo({
       ...existingInfo,
-      title: title,
-      contentType: "SELL",
-      workContent: workDetail,
-      categoryName: category,
       workTimes: workTime.map(
         (schedule: { startWorkTime: any; endWorkTime: any }) => {
           return {
@@ -161,14 +137,27 @@ const EditHunting = (props: Props) => {
           };
         }
       ),
-      contentTags: [{ tagName: tag }],
-      price: pay,
-      cityName: location,
-      other: etc,
-      isPremium: false,
-      deadLine: deadline,
-    };
+    });
+    setWorkTime(workTime);
+  };
+  const handleDeadlineChange = (deadline: string) => {
+    setExistingInfo({ ...existingInfo, deadLine: deadline });
+    setDeadline(deadline);
+  };
+  const validateForm = () => {
+    if (!workTime || !deadline) {
+      return false;
+    }
+    return true;
+  };
 
+  const handleSubmit = () => {
+    if (!validateForm()) {
+      alert("지원마감일, 업무시간 창을 반드시 입력해주세요.");
+      return;
+    }
+    // console.log("tag:", tag);
+    // console.log("workTime:", workTime);
     axios
       .patch(
         `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
@@ -183,17 +172,21 @@ const EditHunting = (props: Props) => {
       });
   };
   const handleDelete = () => {
-    axios
-      .delete(
-        `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
-      )
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    navigate("/hunting");
+    const result = confirm("정말 삭제 하시겠습니까?");
+    if (result) {
+      axios
+        .delete(
+          `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
+        )
+        .then((response) => {
+          alert("삭제 되었습니다");
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      navigate("/hunting");
+    }
   };
 
   return (
@@ -236,7 +229,15 @@ const EditHunting = (props: Props) => {
         <InputSection>
           <label htmlFor="tag">태그</label>
           <TagWrapper>
-            <select onChange={handleTagChange} id={"tag"}>
+            <select
+              value={
+                existingInfo.contentTags && existingInfo.contentTags.length
+                  ? existingInfo.contentTags[0].tagName
+                  : ""
+              }
+              onChange={handleTagChange}
+              id={"tag"}
+            >
               <option defaultValue="" hidden>
                 선택
               </option>
