@@ -209,7 +209,7 @@ const EditForm = () => {
 
     axios
       .patch(
-        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/members",
+        "http://ec2-54-180-116-246.ap-northeast-2.compute.amazonaws.com:8080/members",
         formData,
         {
           headers: {
