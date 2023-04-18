@@ -2,7 +2,7 @@
 
 💸 N잡의 시대, 주말에 돈 벌어볼래? 야 너두 할 수 있어
 
-- #### [배포 링크](http://gigker-front.s3-website.ap-northeast-2.amazonaws.com/)
+- #### [배포 링크](http://gigker-frontend-client.s3-website.ap-northeast-2.amazonaws.com/)
 
 <br>
 
