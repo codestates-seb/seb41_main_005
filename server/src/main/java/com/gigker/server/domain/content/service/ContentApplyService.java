@@ -1,6 +1,5 @@
 package com.gigker.server.domain.content.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -8,7 +7,6 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,7 +17,6 @@ import com.gigker.server.domain.content.entity.Content;
 import com.gigker.server.domain.content.entity.ContentApply;
 import com.gigker.server.domain.content.repository.ContentApplyRepository;
 import com.gigker.server.domain.member.entity.Member;
-import com.gigker.server.domain.workTime.entity.WorkTime;
 import com.gigker.server.global.exception.BusinessLogicException;
 import com.gigker.server.global.exception.ExceptionCode;
 
@@ -134,30 +131,6 @@ public class ContentApplyService {
 		}
 
 		applyRepository.delete(apply);
-	}
-
-	// 30분 마다 완료된 지원과 글을 찾아서 상태를 변경해준다.
-	@Scheduled(cron = "1 0/30 * * * *")
-	public void scheduledCompletion() {
-		List<ContentApply> applies = applyRepository.findAllByApplyStatus(ContentApply.ApplyStatus.MATCH);
-
-		// ContentApply EndWorkTime 이 모두 지났다면 완료
-		for (ContentApply apply : applies) {
-			List<WorkTime> workTimes = apply.getContent().getWorkTimes();
-			long count = -1;
-
-			if (workTimes != null && workTimes.size() != 0) {    // null 체크 (Optional<WorkTime>)
-				count = workTimes.stream()
-					// 완료 시간(0초)이 현재 시간(1초)보다 이후인가?
-					.filter(workTime -> workTime.getEndWorkTime().isAfter(LocalDateTime.now()))
-					.count();
-			}
-
-			if (count == 0) {
-				apply.complete();
-				apply.getContent().setStatus(Content.Status.COMPLETED);
-			}
-		}
 	}
 
 	// 특정 회원의 게시글 타입별 완료 건수 조회
