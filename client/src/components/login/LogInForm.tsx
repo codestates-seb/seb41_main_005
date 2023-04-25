@@ -82,7 +82,7 @@ const LogInForm = () => {
   const handleLogIn = async () => {
     axios
       .post(
-        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/auth/login",
+        "https://api.gigker.shop:443/auth/login",
         {
           username: logInEmail,
           password: logInPassword,

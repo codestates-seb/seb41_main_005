@@ -52,7 +52,7 @@ const HuntingArticle: React.FC = () => {
     const getData = async (contentType: string) => {
       try {
         const response = await axios.get(
-          "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents",
+          "https://api.gigker.shop:443/contents",
           {
             params: {
               contentType: contentType,

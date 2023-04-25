@@ -160,7 +160,7 @@ const EditHunting = (props: Props) => {
     // console.log("workTime:", workTime);
     axios
       .patch(
-        `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`,
+        `https://api.gigker.shop:443/contents/${contentId}`,
         existingInfo
       )
       .then((response) => {
@@ -176,7 +176,7 @@ const EditHunting = (props: Props) => {
     if (result) {
       axios
         .delete(
-          `http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/contents/${contentId}`
+          `https://api.gigker.shop:443/contents/${contentId}`
         )
         .then((response) => {
           alert("삭제 되었습니다");

@@ -262,7 +262,7 @@ const SignUpForm = () => {
     formData.append("image", signUpImg);
     axios
       .post(
-        "http://ec2-3-39-239-42.ap-northeast-2.compute.amazonaws.com:8080/members",
+        "https://api.gigker.shop:443/members",
         formData,
         {
           headers: {
