@@ -118,7 +118,7 @@ const NewHire = () => {
     }
     axios
       .post(
-        "http://ec2-54-180-116-246.ap-northeast-2.compute.amazonaws.com:8080/contents",
+        "https://api.gigker.shop:443/contents",
         {
           title: title,
           contentType: "BUY",
