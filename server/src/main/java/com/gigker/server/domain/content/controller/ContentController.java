@@ -11,13 +11,18 @@ import com.gigker.server.domain.content.service.ContentService;
 import com.gigker.server.domain.location.entity.Location;
 import com.gigker.server.domain.location.service.LocationService;
 import com.gigker.server.domain.review.service.ReviewService;
+import com.gigker.server.global.dto.MultiResponseDto;
 import com.gigker.server.global.dto.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+
 import java.util.List;
 import java.util.Map;
 
@@ -87,6 +92,19 @@ public class ContentController {
         return new ResponseEntity<>(
                 (new SingleResponseDto<>(contentMapper.contentsToSimpleContents(contents))),
                 HttpStatus.OK);
+    }
+
+    @GetMapping("/by")
+    public ResponseEntity getContents(
+        @RequestParam(value = "category", required = false) Category category,
+        @RequestParam(value = "location", required = false) Location location,
+        @RequestParam @Positive int page
+    ) {
+        Page<Content> pageContents = contentService.findAllBy(category, location, page);
+        List<Content> contents = pageContents.getContent();
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(new MultiResponseDto<>(contentMapper.contentsToSimpleContents(contents), pageContents));
     }
 
     @DeleteMapping("/{content_id}")

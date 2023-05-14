@@ -3,6 +3,9 @@ package com.gigker.server.domain.content.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +78,22 @@ public class ContentService {
 		contentRepository.delete(findContent);
 	}
 
-	public List<Content> findContentsByCategory(Category category) {
-		return contentRepository.findContentsByCategory(category);
+	public Page<Content> findAllBy(Category category, Location location, int page) {
+		final int size = 12;
+		Pageable pageable = PageRequest.of(page, size);
+
+		if (category == null && location == null) {
+			return contentRepository.findAll(pageable);
+		}
+
+		if (location == null) {
+			return contentRepository.findAllByCategory(category, pageable);
+		}
+
+		if (category == null) {
+			return contentRepository.findAllByLocation(location, pageable);
+		}
+
+		return contentRepository.findAllByCategoryAndLocation(category, location, pageable);
 	}
 }
