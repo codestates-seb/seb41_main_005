@@ -1,9 +1,10 @@
 import axios from "axios";
+import { BASE_URL } from "./getUrl";
 
 export const getReview = async (contentId: number) => {
   try {
     const response = await axios.get(
-      `https://api.gigker.shop:443/reviews/contents/${contentId}?page=1`
+      `${BASE_URL}reviews/contents/${contentId}?page=1`
     );
     return response.data;
   } catch (err) {

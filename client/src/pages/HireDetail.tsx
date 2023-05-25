@@ -10,6 +10,7 @@ import { hireDetailProps } from "../util/hireDetailData";
 import { useSelector } from "react-redux";
 import { RootState } from "../util/redux";
 import Button from "../components/Buttons";
+import { BASE_URL } from "../api/getUrl";
 
 const Container = styled.div`
   display: block;
@@ -134,10 +135,7 @@ function HireDetail() {
   const handleApplyButton = () => {
     if (memberId !== applicantId) {
       axios
-        .post(
-          `https://api.gigker.shop:443/contents/${contentId}/apply`,
-          { applicantId }
-        )
+        .post(`${BASE_URL}/contents/${contentId}/apply`, { applicantId })
         .then((res) => console.log(res.data));
       alert("지원 완료!");
     } else {

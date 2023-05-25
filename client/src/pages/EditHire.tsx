@@ -12,6 +12,7 @@ import {
   locationOptions,
   tagOptions,
 } from "../components/CateLocaTag";
+import { BASE_URL } from "../api/getUrl";
 
 interface ExistingData {
   title: string;
@@ -192,10 +193,7 @@ const EditHire = (props: Props) => {
     // console.log("tag:", tag);
     // console.log("workTime:", workTime);
     axios
-      .patch(
-        `https://api.gigker.shop:443/contents/${contentId}`,
-        existingInfo
-      )
+      .patch(`${BASE_URL}/contents/${contentId}`, existingInfo)
       .then((response) => {
         console.log(response);
         navigate(`/hireDetail/${contentId}`);
@@ -209,9 +207,7 @@ const EditHire = (props: Props) => {
     const result = confirm("정말 삭제 하시겠습니까?");
     if (result) {
       axios
-        .delete(
-          `https://api.gigker.shop:443/contents/${contentId}`
-        )
+        .delete(`${BASE_URL}/contents/${contentId}`)
         .then((response) => {
           alert("삭제 되었습니다");
           console.log(response);

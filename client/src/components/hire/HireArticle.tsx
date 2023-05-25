@@ -14,6 +14,7 @@ import ReactPaginate from "react-paginate";
 import { ReactComponent as LeftArrow } from "../../assets/leftarrow.svg";
 import { ReactComponent as RightArrow } from "../../assets/rightarrow.svg";
 import Nodata from "../../assets/nodata.jpg";
+import { BASE_URL } from "../../api/getUrl";
 
 const mapDataToCardProps = (data: ServerData): CardProps => {
   return {
@@ -30,7 +31,7 @@ const mapDataToCardProps = (data: ServerData): CardProps => {
   };
 };
 
-const HireArticle: React.FC = (card) => {
+const HireArticle: React.FC = () => {
   const [cards, setCards] = useState<CardProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
@@ -47,14 +48,11 @@ const HireArticle: React.FC = (card) => {
   useEffect(() => {
     const getData = async (contentType: string) => {
       try {
-        const response = await axios.get(
-          "https://api.gigker.shop:443/contents",
-          {
-            params: {
-              contentType: contentType,
-            },
-          }
-        );
+        const response = await axios.get(`${BASE_URL}/contents`, {
+          params: {
+            contentType: contentType,
+          },
+        });
         if (response.data.data) {
           const sortedCards = response.data.data
             .map(mapDataToCardProps)
@@ -79,15 +77,6 @@ const HireArticle: React.FC = (card) => {
     };
     getData("BUY");
   }, []);
-  // useEffect(() => {
-  //   setCards(
-  //     cards.sort((a, b) => {
-  //       return (
-  //         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  //       );
-  //     })
-  //   );
-  // }, [cards]);
 
   const handleClick = (contentId: number) => {
     navigate(`/hireDetail/${contentId}`);

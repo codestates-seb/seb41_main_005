@@ -27,6 +27,7 @@ import {
   setIsIntroduction,
   setIsUpload,
 } from "../../util/redux/Validation";
+import { BASE_URL } from "../../api/getUrl";
 
 interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
 
@@ -261,15 +262,11 @@ const SignUpForm = () => {
     );
     formData.append("image", signUpImg);
     axios
-      .post(
-        "https://api.gigker.shop:443/members",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
+      .post(`${BASE_URL}/members`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
         console.log(res);
         alert(`환영합니다!! ${signUpNickname}님 \n로그인을 해주세요`);

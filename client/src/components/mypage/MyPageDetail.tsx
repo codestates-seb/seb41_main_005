@@ -9,6 +9,7 @@ import axios from "axios";
 import { removeCookie } from "../../util/cookie";
 import { useNavigate } from "react-router-dom";
 import { setIsLogIn } from "../../util/redux/LogIn";
+import { BASE_URL } from "../../api/getUrl";
 
 const SideSection = styled.div`
   display: flex;
@@ -89,9 +90,7 @@ const MyPageDetail = () => {
     const result = confirm("정말 탈퇴 하시겠습니까?");
     if (result) {
       axios
-        .delete(
-          "https://api.gigker.shop:443/members"
-        )
+        .delete(`${BASE_URL}/members`)
         .then((res) => {
           dispatch(setIsLogIn(false));
           localStorage.clear();

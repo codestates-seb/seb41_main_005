@@ -11,6 +11,7 @@ import {
   tagOptions,
 } from "../components/CateLocaTag";
 import axios from "axios";
+import { BASE_URL } from "../api/getUrl";
 
 interface WorkSchedule {
   startWorkTime: string;
@@ -88,29 +89,26 @@ const EditHunting = () => {
       return;
     }
     axios
-      .post(
-        "https://api.gigker.shop:443/contents",
-        {
-          title: title,
-          contentType: "SELL",
-          workContent: workDetail,
-          categoryName: category,
-          workTimes: workTime.map(
-            (schedule: { startWorkTime: any; endWorkTime: any }) => {
-              return {
-                startWorkTime: schedule.startWorkTime,
-                endWorkTime: schedule.endWorkTime,
-              };
-            }
-          ),
-          contentTags: [{ tagName: tag }],
-          price: parseInt(pay), // pay string을 int로
-          cityName: location,
-          other: etc,
-          isPremium: false,
-          deadLine: deadline,
-        }
-      )
+      .post(`${BASE_URL}/contents`, {
+        title: title,
+        contentType: "SELL",
+        workContent: workDetail,
+        categoryName: category,
+        workTimes: workTime.map(
+          (schedule: { startWorkTime: any; endWorkTime: any }) => {
+            return {
+              startWorkTime: schedule.startWorkTime,
+              endWorkTime: schedule.endWorkTime,
+            };
+          }
+        ),
+        contentTags: [{ tagName: tag }],
+        price: parseInt(pay), // pay string을 int로
+        cityName: location,
+        other: etc,
+        isPremium: false,
+        deadLine: deadline,
+      })
       .then((response) => {
         console.log(response);
         navigate("/hunting");

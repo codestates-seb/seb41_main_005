@@ -11,6 +11,7 @@ import { huntingDetailProps } from "../util/huntingDetailData";
 import { useSelector } from "react-redux";
 import { RootState } from "../util/redux";
 import Button from "../components/Buttons";
+import { BASE_URL } from "../api/getUrl";
 
 const Container = styled.div`
   display: block;
@@ -135,10 +136,7 @@ function HuntingDetail() {
   const handleApplyButton = () => {
     if (memberId !== applicantId) {
       axios
-        .post(
-          `https://api.gigker.shop:443/contents/${contentId}/apply`,
-          { applicantId }
-        )
+        .post(`${BASE_URL}/contents/${contentId}/apply`, { applicantId })
         .then((res) => console.log(res.data));
     } else {
       alert("본인이 작성한 게시글에는 지원할 수 없습니다.");

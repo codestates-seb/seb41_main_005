@@ -14,6 +14,7 @@ import ReactPaginate from "react-paginate";
 import { ReactComponent as LeftArrow } from "../../assets/leftarrow.svg";
 import { ReactComponent as RightArrow } from "../../assets/rightarrow.svg";
 import Nodata from "../../assets/nodata.jpg";
+import { BASE_URL } from "../../api/getUrl";
 
 const mapDataToCardProps = (data: ServerData): CardProps => {
   return {
@@ -51,14 +52,11 @@ const HuntingArticle: React.FC = () => {
   useEffect(() => {
     const getData = async (contentType: string) => {
       try {
-        const response = await axios.get(
-          "https://api.gigker.shop:443/contents",
-          {
-            params: {
-              contentType: contentType,
-            },
-          }
-        );
+        const response = await axios.get(`${BASE_URL}/contents`, {
+          params: {
+            contentType: contentType,
+          },
+        });
         if (response.data.data) {
           const sortedCards = response.data.data
             .map(mapDataToCardProps)

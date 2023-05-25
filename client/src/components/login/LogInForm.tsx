@@ -19,6 +19,7 @@ import {
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { onLogInSuccess } from "../../util/logInApi";
+import { BASE_URL } from "../../api/getUrl";
 
 const LoginBox = styled.form`
   width: 25rem;
@@ -81,13 +82,10 @@ const LogInForm = () => {
 
   const handleLogIn = async () => {
     axios
-      .post(
-        "https://api.gigker.shop:443/auth/login",
-        {
-          username: logInEmail,
-          password: logInPassword,
-        }
-      )
+      .post(`${BASE_URL}/auth/login`, {
+        username: logInEmail,
+        password: logInPassword,
+      })
       .then((res) => {
         onLogInSuccess(res);
         dispatch(setIsLogIn(true));

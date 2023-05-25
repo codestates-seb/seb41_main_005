@@ -10,6 +10,7 @@ import Profile from "./Profile";
 import axios from "axios";
 import { removeCookie } from "../util/cookie";
 import { setIsLogIn, setTabNum } from "../util/redux/LogIn";
+import { BASE_URL } from "../api/getUrl";
 
 const Block = styled.div`
   display: block;
@@ -134,9 +135,7 @@ const Navigation = () => {
     const result = confirm("정말 로그아웃 하시겠습니까?");
     if (result) {
       axios
-        .post(
-          "https://api.gigker.shop:443/auth/logout"
-        )
+        .post(`${BASE_URL}/auth/logout`)
         .then((res) => {
           dispatch(setIsLogIn(false));
           localStorage.clear();

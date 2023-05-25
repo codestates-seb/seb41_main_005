@@ -24,6 +24,7 @@ import {
 } from "../../util/redux/LogIn";
 import { useNavigate } from "react-router-dom";
 import { blob } from "stream/consumers";
+import { BASE_URL } from "../../api/getUrl";
 
 interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
 
@@ -208,15 +209,11 @@ const EditForm = () => {
     }
 
     axios
-      .patch(
-        "https://api.gigker.shop:443/members",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
+      .patch(`${BASE_URL}/members`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
         dispatch(setImgUrl(res.data.pictureUrl));
         dispatch(setLogInNickname(res.data.nickName));
